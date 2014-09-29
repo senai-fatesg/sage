@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:composition template="template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+
+		<p:panel header="Formulário" id="panel">
+			<h:panelGrid columns="2">
+				<h:outputText value="Aluno"></h:outputText>
+				<p:inputText value="#{OrientacaoControl.orientacao.aluno }"></p:inputText>
+				<h:outputText value="Professor Orientador"></h:outputText>
+				<p:inputMask value="#{OrientacaoControl.orientacao.professorOrientador }"></p:inputMask>
+				<h:outputText value="Relatar Atendimento"></h:outputText>
+				<p:inputMask value="#{OrientacaoControl.orientacao.informacaoComplementar }"></p:inputMask>
+				<h:outputText value="Data Atendimento"></h:outputText>
+				<p:inputText value="#{OrientacaoControl.orientacao.dataAtendimento}"></p:inputText>
+				<h:outputText value="Horário Atendimento"></h:outputText>
+				<p:inputText value="#{OrientacaoControl.orientacao.dataAtendimento }"></p:inputText>
+				<p:commandButton actionListener="#{EmpresaControl.incluir }" value="Incluir" update="orientacoes, panel"></p:commandButton>
+			</h:panelGrid>
+		</p:panel>
+		<p:dataTable id="orientacoes" value="#{OrientacaoControl.orientacoes}" var="cont"  width="100%" emptyMessage="Sem registros" >
+			<f:facet name="header">
+				<h:outputText value="Lista de Orientações"></h:outputText>
+			</f:facet>
+			<p:column sortBy="#{cont.dataAtendimento }">
+				<f:facet name="header">
+					<h:outputText value="Data"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.dataAtendimento }"></h:outputText>
+			</p:column>	
+			<p:column sortBy="#{cont.tipoAtendimento }">
+				<f:facet name="header">
+					<h:outputText value="Tipo de Atendimento"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.tipoAtendimento }"></h:outputText>
+			</p:column>	
+			<p:column sortBy="#{cont.professorOrientador }">
+				<f:facet name="header">
+					<h:outputText value="Professor orientador"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.professorOrientador }"></h:outputText>
+			</p:column>
+			<p:column sortBy="#{cont.visualizar}">
+				<f:facet name="header">
+					<h:outputText value="Visualizar"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.visualizar }"></h:outputText>
+			</p:column>	
+		</p:dataTable>
+	</ui:define>
+</ui:composition>
