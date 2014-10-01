@@ -2,10 +2,14 @@ package br.com.ambientinformatica.fatesg.sage.entidade;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,20 +21,22 @@ public class Orientacao {
 	@GeneratedValue(generator = "orientacao_seq", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "orientacao_seq", sequenceName = "orientacao_seq", allocationSize = 1, initialValue = 1)
 	private Integer id;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataAtendimento;
-	
-	private String descricao;
-	
-	private String informacaoComplementar;
-	
-	private EnumTipoAtendimento tipoAtendimento;
-	
-	private byte[] arquivo;
 
-	// TODO Verificar dados dos aluno
-	// TODO Verificar professor orientador 
+	private String descricao;
+
+	private String informacaoComplementar;
+
+	@Column(name = "IDF_TIPOATENDIMENTO")
+	@Enumerated(EnumType.ORDINAL)
+	private EnumTipoAtendimento tipoAtendimento;
+
+	@Lob
+	private byte[] arquivo;
+	
+	// TODO Verificar professor orientador
 	public Integer getId() {
 		return id;
 	}
@@ -78,6 +84,5 @@ public class Orientacao {
 	public void setArquivo(byte[] arquivo) {
 		this.arquivo = arquivo;
 	}
-	
-	
+
 }
