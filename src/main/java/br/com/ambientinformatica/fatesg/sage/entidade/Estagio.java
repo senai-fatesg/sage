@@ -1,6 +1,7 @@
 package br.com.ambientinformatica.fatesg.sage.entidade;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,14 +50,12 @@ public class Estagio {
 
 	@Temporal(TemporalType.DATE)
 	private Date dataRelatorioParcial;
-
-	@Temporal(TemporalType.DATE)
 	private Date dataRelatorioFinal;
-
-	@Temporal(TemporalType.DATE)
 	private Date dataRelatorioCd;
 
-	private Documento documento;
+	@OneToMany
+	@JoinColumn(name = "ID_DOCUMENTO")
+	private List<Documento> documento;
 
 	// TODO verificar metodo
 	public void agendarVisita() {
@@ -162,11 +163,12 @@ public class Estagio {
 		this.dataRelatorioCd = dataRelatorioCd;
 	}
 
-	public Documento getDocumento() {
+	public List<Documento> getDocumento() {
 		return documento;
 	}
 
-	public void setDocumento(Documento documento) {
+	public void setDocumento(List<Documento> documento) {
 		this.documento = documento;
 	}
+
 }
