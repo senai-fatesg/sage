@@ -3,7 +3,6 @@ package br.com.ambientinformatica.fatesg.sage.entidade;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
@@ -26,13 +27,11 @@ public class Estagio {
 	@SequenceGenerator(name = "estagio_seq", sequenceName = "estagio_seq", allocationSize = 1, initialValue = 1)
 	private Integer id;
 
+	@ManyToOne
+	@JoinColumn(name = "IDF_EMPRESA")
 	private Empresa empresa;
 
 	private Aluno aluno;
-
-	@Column(name = "IDF_TIPOESTAGIO")
-	@Enumerated(EnumType.ORDINAL)
-	private EnumTipoEstagio tipoEstagio;
 
 	@Temporal(TemporalType.DATE)
 	private Date dataInicio;
@@ -53,6 +52,13 @@ public class Estagio {
 	private Date dataRelatorioFinal;
 	private Date dataRelatorioCd;
 
+	@ManyToMany
+	@JoinColumn(name = "IDF_DOCUMENTO")
+	private List<Documento> documentos;
+	
+	@Enumerated(EnumType.STRING)
+	private EnumTipoEstagio tipoEstagio;
+	
 	@OneToMany
 	@JoinColumn(name = "ID_DOCUMENTO")
 	private List<Documento> documento;
@@ -69,10 +75,6 @@ public class Estagio {
 
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Empresa getEmpresa() {
@@ -93,10 +95,6 @@ public class Estagio {
 
 	public EnumTipoEstagio getTipoEstagio() {
 		return tipoEstagio;
-	}
-
-	public void setTipoEstagio(EnumTipoEstagio tipoEstagio) {
-		this.tipoEstagio = tipoEstagio;
 	}
 
 	public Date getDataInicio() {
@@ -163,12 +161,12 @@ public class Estagio {
 		this.dataRelatorioCd = dataRelatorioCd;
 	}
 
-	public List<Documento> getDocumento() {
-		return documento;
+	public List<Documento> getDocumentos() {
+		return documentos;
 	}
 
-	public void setDocumento(List<Documento> documento) {
-		this.documento = documento;
+	public void setDocumentos(List<Documento> documentos) {
+		this.documentos = documentos;
 	}
 
 }
