@@ -9,7 +9,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,9 +31,12 @@ public class Orientacao {
 
 	private String informacaoComplementar;
 
-	@Column(name = "IDF_TIPOATENDIMENTO")
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	private EnumTipoAtendimento tipoAtendimento;
+	
+	@ManyToOne
+	@JoinColumn(name = "IDF_ESTAGIO")
+	private Estagio estagio;
 
 	@Lob
 	private byte[] arquivo;
@@ -39,10 +44,6 @@ public class Orientacao {
 	// TODO Verificar professor orientador
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Date getDataAtendimento() {
@@ -73,16 +74,20 @@ public class Orientacao {
 		return tipoAtendimento;
 	}
 
-	public void setTipoAtendimento(EnumTipoAtendimento tipoAtendimento) {
-		this.tipoAtendimento = tipoAtendimento;
-	}
-
 	public byte[] getArquivo() {
 		return arquivo;
 	}
 
 	public void setArquivo(byte[] arquivo) {
 		this.arquivo = arquivo;
+	}
+
+	public Estagio getEstagio() {
+		return estagio;
+	}
+
+	public void setEstagio(Estagio estagio) {
+		this.estagio = estagio;
 	}
 
 }

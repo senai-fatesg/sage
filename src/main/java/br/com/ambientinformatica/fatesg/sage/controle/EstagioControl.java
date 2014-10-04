@@ -3,14 +3,15 @@ package br.com.ambientinformatica.fatesg.sage.controle;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import br.com.ambientinformatica.ambientjsf.util.UtilFaces;
+import br.com.ambientinformatica.fatesg.sage.entidade.EnumTipoEstagio;
 import br.com.ambientinformatica.fatesg.sage.entidade.Estagio;
 import br.com.ambientinformatica.fatesg.sage.persistencia.EstagioDao;
 
@@ -48,7 +49,11 @@ public class EstagioControl {
 			UtilFaces.addMensagemFaces(e);
 		}
 	}*/
-
+	
+	public List<SelectItem> getTiposEstagio(){
+		return UtilFaces.getListEnum(EnumTipoEstagio.values());
+	}
+	
 	public Estagio getEstagio() {
 		return estagio;
 	}
