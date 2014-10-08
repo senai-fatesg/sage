@@ -7,12 +7,72 @@
 	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
+		<p:panel header="Cadastrar Novo Estágio" id="panel">
+			<p:panel header="Estagiário" id="panel1">
+				<h:panelGrid columns="2">
+					<h:outputText value="Nome"></h:outputText>
+					<p:inputText value="#{Aluno.nome }"></p:inputText>
+					<h:outputText value="Email"></h:outputText>
+					<p:inputText value="#{Aluno.email }"></p:inputText>
+					<h:outputText value="Telefone"></h:outputText>
+					<p:inputMask value="#{Aluno.telefone }" mask="(99) 9999-9999"></p:inputMask>
+					<h:outputText value="Celular"></h:outputText>
+					<p:inputMask value="#{Aluno.celular }" mask="(99) 9999-9999"></p:inputMask>
+				</h:panelGrid>
+			</p:panel>
 
-		<h:outputText value="Tipo do Estágio"></h:outputText>
-		<h:selectOneMenu value="#{EstagioControl.estagio.tipoEstagio}">
-			<f:selectItem itemLabel="--Nenhum--" itemValue="" />
-			<f:selectItems value="#{EstagioControl.tiposEstagio }" />
-		</h:selectOneMenu>
+			<p:panel header="Empresa" id="panel2">
+				<h:panelGrid columns="2">
+					<h:outputText value="Nome da Empresa"></h:outputText>
+					<p:inputText value="#{EmpresaControl.empresa.nome }"></p:inputText>
+					<h:outputText value="Endereço"></h:outputText>
+					<p:inputText value="#{EmpresaControl.empresa.endereco }"></p:inputText>
+					<h:outputText value="Telefone"></h:outputText>
+					<p:inputMask value="#{EmpresaControl.empresa.telefone }"
+						mask="(99) 9999-9999"></p:inputMask>
+					<h:outputText value="E-mail"></h:outputText>
+					<p:inputText value="#{EmpresaControl.empresa.email }"></p:inputText>
+					<p:panel header="Controle do Estágio" id="panel3">
+						<h:outputText value="Tipo do Estágio"></h:outputText>
+						<h:selectOneMenu value="#{EstagioControl.estagio.tipoEstagio} ">
+							<f:selectItem itemLabel="--Nenhum--" itemValue="" />
+							<f:selectItems value="#{EstagioControl.tiposEstagio }" />
+						</h:selectOneMenu>
+						<h:outputText value="Data Início"></h:outputText>
+						<p:calendar value="#{EstagioControl.estagio.dataInicio }"
+						pattern="dd/MM/yyyy"></p:calendar>
+						<h:outputText value="Data Término"></h:outputText>
+						<p:calendar value="#{EstagioControl.estagio.dataTermino }"
+						pattern="dd/MM/yyyy"></p:calendar>
+					</p:panel>
+				</h:panelGrid>
+			</p:panel>
 
+			<p:panel header="Cronograma de Atividades de Estágio" id="panel4">
+				<h:panelGrid columns="2">
+					<h:outputText value="Professor Orientador"></h:outputText>
+					<p:inputText value="#{EstagioControl.estagio.professorOrientador }"></p:inputText>
+					<h:outputText value="E-mail"></h:outputText>
+					<p:inputText value="#{Aluno.email }"></p:inputText>
+					<h:outputText value="Matricula"></h:outputText>
+					<p:calendar value="#{EstagioControl.estagio.dataMatricula }"
+						pattern="dd/MM/yyyy"></p:calendar>
+					<h:outputText value="Primeira Orientação"></h:outputText>
+					<p:calendar value="#{EstagioControl.estagio.dataPrimeiraOrientacao }"
+						pattern="dd/MM/yyyy"></p:calendar>
+					<h:outputText value="Relatório Parcial"></h:outputText>
+					<p:calendar value="#{EstagioControl.estagio.dataRelatorioParcial }"
+						pattern="dd/MM/yyyy"></p:calendar>
+					<h:outputText value="Relatório Final"></h:outputText>
+					<p:calendar value="#{EstagioControl.estagio.dataRelatorioFinal }"
+						pattern="dd/MM/yyyy"></p:calendar>
+					<h:outputText value="Relatório em CD"></h:outputText>
+					<p:calendar value="#{EstagioControl.estagio.dataRelatorioCd }"
+						pattern="dd/MM/yyyy"></p:calendar>
+				</h:panelGrid>
+			</p:panel>
+			<p:commandButton actionListener="#{EstagioControl.incluir }"
+				value="Incluir"></p:commandButton>
+		</p:panel>
 	</ui:define>
 </ui:composition>
