@@ -7,8 +7,10 @@
 	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
-
+	<p:outputLabel value="Aluno:" for="acAluno" />
+<p:autoComplete id="acAluno" value="#{OrientacaoControl.autocomplete }" completeMethod="#{OrientacaoControl.completeText }" effect="blind"></p:autoComplete>
 		<p:panel header="Formulário" id="panel">
+		
 			<h:panelGrid columns="2">
 				<h:outputText value="Professor Orientador"></h:outputText>
 				<p:inputText

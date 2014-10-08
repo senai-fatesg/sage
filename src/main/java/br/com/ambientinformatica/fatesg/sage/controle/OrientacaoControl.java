@@ -12,9 +12,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import br.com.ambientinformatica.ambientjsf.util.UtilFaces;
+import br.com.ambientinformatica.fatesg.sage.entidade.Aluno;
 import br.com.ambientinformatica.fatesg.sage.entidade.EnumTipoAtendimento;
-import br.com.ambientinformatica.fatesg.sage.entidade.EnumTipoEstagio;
 import br.com.ambientinformatica.fatesg.sage.entidade.Orientacao;
+import br.com.ambientinformatica.fatesg.sage.persistencia.AlunoDao;
 import br.com.ambientinformatica.fatesg.sage.persistencia.OrientacaoDao;
 
 @Controller("OrientacaoControl")
@@ -26,13 +27,18 @@ public class OrientacaoControl {
 	@Autowired
 	private OrientacaoDao orientacaoDao;
 
+	@Autowired
+	private AlunoDao alunoDao;
+
+	private List<Aluno> alunos;
+
 	private List<Orientacao> orientacoes = new ArrayList<Orientacao>();
 
 	@PostConstruct
 	public void init() {
 		listar(null);
 	}
-	
+
 	public void incluir(ActionEvent evt) {
 		try {
 			orientacaoDao.incluir(orientacao);
@@ -43,16 +49,25 @@ public class OrientacaoControl {
 		}
 	}
 
-	public List<SelectItem> getTiposAtendimento(){
+	public List<SelectItem> getTiposAtendimento() {
 		return UtilFaces.getListEnum(EnumTipoAtendimento.values());
 	}
-	
+
 	public void listar(ActionEvent evt) {
 		try {
 			orientacoes = orientacaoDao.listar();
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
+	}
+
+	public List<Aluno> autocomplete(String Query) {
+		try {
+			alunos =  alunoDao.listar();
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
+		}
+		return alunos;
 	}
 
 	public Orientacao getOrientacao() {
@@ -76,7 +91,7 @@ public class OrientacaoControl {
 	}
 
 	public void setOrientacoes(List<Orientacao> orientacoes) {
-		this.orientacoes= orientacoes;
+		this.orientacoes = orientacoes;
 	}
 
 }

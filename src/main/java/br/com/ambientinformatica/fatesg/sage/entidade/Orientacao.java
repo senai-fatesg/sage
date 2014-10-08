@@ -35,8 +35,9 @@ public class Orientacao {
 	private EnumTipoAtendimento tipoAtendimento;
 	
 	@ManyToOne
-	@JoinColumn(name = "IDF_ESTAGIO")
 	private Estagio estagio;
+	
+	private String professor;
 
 	@Lob
 	private byte[] arquivo;
@@ -88,6 +89,14 @@ public class Orientacao {
 
 	public void setEstagio(Estagio estagio) {
 		this.estagio = estagio;
+	}
+
+	public String getProfessor() {
+		return professor;
+	}
+
+	public void setProfessor(String professor) {
+		this.professor = professor;
 	}
 
 }
