@@ -49,7 +49,11 @@ public class Estagio {
 
 	@Temporal(TemporalType.DATE)
 	private Date dataRelatorioParcial;
+	
+	@Temporal(TemporalType.DATE)
 	private Date dataRelatorioFinal;
+	
+	@Temporal(TemporalType.DATE)
 	private Date dataRelatorioCd;
 
 	@ManyToMany
