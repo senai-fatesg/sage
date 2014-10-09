@@ -7,10 +7,35 @@
 	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
-	<p:outputLabel value="Aluno:" for="acAluno" />
-<p:autoComplete id="acAluno" value="#{OrientacaoControl.autocomplete }" completeMethod="#{OrientacaoControl.completeText }" effect="blind"></p:autoComplete>
+		<p:outputLabel value="Aluno:" for="acAluno" />
+		<p:autoComplete id="acAluno"
+			value="#{OrientacaoControl.autocomplete }"
+			completeMethod="#{OrientacaoControl.completeText }" effect="blind"></p:autoComplete>
+		<p:dataTable id="orientacoes" value="#{OrientacaoControl.estagios}"
+			var="cont" width="100%" emptyMessage="Sem registros">
+			<f:facet name="header">
+				<h:outputText value="Estágios"></h:outputText>
+			</f:facet>
+			<p:column sortBy="#{cont.empresa.nome}">
+				<f:facet name="header">
+					<h:outputText value="Empresa"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.empresa.nome}"></h:outputText>
+			</p:column>
+			<p:column sortBy="#{cont.situacao }">
+				<f:facet name="header">
+					<h:outputText value="Situação"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.situacao }"></h:outputText>
+			</p:column>
+			<p:column sortBy="#{cont.professorOrientador }">
+				<f:facet name="header">
+					<h:outputText value="Professor orientador"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.professorOrientador }"></h:outputText>
+			</p:column>
+		</p:dataTable>
 		<p:panel header="Formulário" id="panel">
-		
 			<h:panelGrid columns="2">
 				<h:outputText value="Professor Orientador"></h:outputText>
 				<p:inputText
