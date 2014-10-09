@@ -3,7 +3,6 @@ package br.com.ambientinformatica.fatesg.sage.entidade;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,12 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.ambientinformatica.fatesg.api.Aluno;
+import br.com.ambientinformatica.fatesg.sage.entidade.Aluno;
 
 @Entity
 public class Estagio {
@@ -31,7 +30,9 @@ public class Estagio {
 	@ManyToOne
 	@JoinColumn(name = "IDF_EMPRESA")
 	private Empresa empresa;
-
+	
+	@OneToOne
+	@JoinColumn(name = "IDF_ALUNO")
 	private Aluno aluno;
 
 	@Temporal(TemporalType.DATE)
@@ -63,10 +64,6 @@ public class Estagio {
 	
 	@Enumerated(EnumType.STRING)
 	private EnumTipoEstagio tipoEstagio;
-	
-	@OneToMany
-	@JoinColumn(name = "ID_DOCUMENTO")
-	private List<Documento> documento;
 
 	// TODO verificar metodo
 	public void agendarVisita() {
