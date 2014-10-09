@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 
 import br.com.ambientinformatica.ambientjsf.util.UtilFaces;
 import br.com.ambientinformatica.fatesg.sage.entidade.ColaboradorEmpresa;
-import br.com.ambientinformatica.fatesg.sage.entidade.Empresa;
 import br.com.ambientinformatica.fatesg.sage.persistencia.ColaboradorEmpresaDao;
 
 @Controller("ColaboradorEmpresaControl")

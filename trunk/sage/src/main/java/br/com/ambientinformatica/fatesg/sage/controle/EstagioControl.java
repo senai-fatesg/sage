@@ -22,7 +22,7 @@ import br.com.ambientinformatica.jpa.exception.PersistenciaException;
 @Scope("conversation")
 public class EstagioControl {
 
-	private String txt1;
+	private String txtNomeAluno;
 
 	private Estagio estagio = new Estagio();
 
@@ -38,19 +38,19 @@ public class EstagioControl {
 	 * @PostConstruct public void init() { listar(null); }
 	 */
 
-	public List<Aluno> completeTheme(String query) throws PersistenciaException {
+	public List<Aluno> autoCompleteAluno(String query) throws PersistenciaException {
 
-		List<Aluno> allThemes = alunoDao.listar();
-		List<Aluno> filteredThemes = new ArrayList<Aluno>();
+		List<Aluno> alunos = alunoDao.listar();
+		List<Aluno> filtrarAlunos = new ArrayList<Aluno>();
 
-		for (int i = 0; i < allThemes.size(); i++) {
-			Aluno skin = allThemes.get(i);
-			if (skin.getNome().toLowerCase().startsWith(query)) {
-				filteredThemes.add(skin);
+		for (int i = 0; i < alunos.size(); i++) {
+			Aluno aluno = alunos.get(i);
+			if (aluno.getNome().toLowerCase().startsWith(query)) {
+				filtrarAlunos.add(aluno);
 			}
 		}
 
-		return filteredThemes;
+		return filtrarAlunos;
 
 	}
 
@@ -98,11 +98,12 @@ public class EstagioControl {
 		this.estagios = estagios;
 	}
 
-	public String getTxt1() {
-		return txt1;
+	public String getTxtNomeAluno() {
+		return txtNomeAluno;
 	}
 
-	public void setTxt1(String txt1) {
-		this.txt1 = txt1;
+	public void setTxtNomeAluno(String txtNomeAluno) {
+		this.txtNomeAluno = txtNomeAluno;
 	}
+
 }
