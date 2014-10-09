@@ -5,22 +5,22 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import br.com.ambientinformatica.fatesg.sage.entidade.Estagio;
-import br.com.ambientinformatica.fatesg.sage.persistencia.EstagioDao;
+import br.com.ambientinformatica.fatesg.sage.entidade.Empresa;
+import br.com.ambientinformatica.fatesg.sage.persistencia.EmpresaDao;
 import br.com.ambientinformatica.jpa.exception.PersistenciaException;
 import br.com.ambientinformatica.jpa.util.FabricaAbstrata;
 
 @FacesConverter("empresaConverter")
 public class EmpresaConverter implements Converter {
 	
-	private EstagioDao estagioDao = (EstagioDao) FabricaAbstrata.criarObjeto("estagioDao");
+	private EmpresaDao empresaDao = (EmpresaDao) FabricaAbstrata.criarObjeto("empresaDao");
 
 	@Override
 	public String getAsString(FacesContext facesContext, UIComponent component, Object value) {
 		if (value == null || value.equals("")) {
 			return "";
 		} else {
-			return String.valueOf(((Estagio) value).getId());
+			return String.valueOf(((Empresa) value).getId());
 		}
 	}
 
@@ -28,12 +28,12 @@ public class EmpresaConverter implements Converter {
 	public Object getAsObject(FacesContext context, UIComponent component,
 			String value) {
 		if (value != null && !value.trim().equals("")) {
-			Estagio estagio = new Estagio();
+			Empresa empresa = new Empresa();
 			try {
 				int id = Integer.parseInt(value);
 
 				try {
-					estagio = estagioDao.consultar(id);
+					empresa = empresaDao.consultar(id);
 				} catch (PersistenciaException e) {
 					e.printStackTrace();
 				}
@@ -43,7 +43,7 @@ public class EmpresaConverter implements Converter {
 				// "Message"));
 				return null;
 			}
-			return estagio;
+			return empresa;
 		} else {
 			return null;
 		}
