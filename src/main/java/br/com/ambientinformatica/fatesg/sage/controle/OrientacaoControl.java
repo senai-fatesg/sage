@@ -14,8 +14,10 @@ import org.springframework.stereotype.Controller;
 import br.com.ambientinformatica.ambientjsf.util.UtilFaces;
 import br.com.ambientinformatica.fatesg.sage.entidade.Aluno;
 import br.com.ambientinformatica.fatesg.sage.entidade.EnumTipoAtendimento;
+import br.com.ambientinformatica.fatesg.sage.entidade.Estagio;
 import br.com.ambientinformatica.fatesg.sage.entidade.Orientacao;
 import br.com.ambientinformatica.fatesg.sage.persistencia.AlunoDao;
+import br.com.ambientinformatica.fatesg.sage.persistencia.EstagioDao;
 import br.com.ambientinformatica.fatesg.sage.persistencia.OrientacaoDao;
 
 @Controller("OrientacaoControl")
@@ -29,8 +31,13 @@ public class OrientacaoControl {
 
 	@Autowired
 	private AlunoDao alunoDao;
+	
+
+	@Autowired
+	private EstagioDao estagioDao;
 
 	private List<Aluno> alunos;
+	private List<Estagio> estagios;
 
 	private List<Orientacao> orientacoes = new ArrayList<Orientacao>();
 
@@ -68,6 +75,14 @@ public class OrientacaoControl {
 			UtilFaces.addMensagemFaces(e);
 		}
 		return alunos;
+	}
+	public List<Estagio> listarEstagios(Aluno aluno) {
+		try {
+			estagios = estagioDao.findEstagiosById(aluno);
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
+		}
+		return estagios;
 	}
 
 	public Orientacao getOrientacao() {
