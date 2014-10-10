@@ -11,19 +11,19 @@
 			<p:panel header="Estagiário" id="panel1">
 				<h:panelGrid columns="2">
 					<h:outputText value="Nome"></h:outputText>
-					<p:autoComplete value="#{EstagioControl.txtNomeAluno}"
+					<p:autoComplete value="#{EstagioControl.aluno}"
 						completeMethod="#{EstagioControl.autoCompleteAluno}" var="aluno"
 						itemLabel="#{aluno.nome}" itemValue="#{aluno}"
-						converter="alunoConverter" forceSelection="true">
+						converter="alunoConverter" forceSelection="true" rerender="email">
+						<p:ajax event="itemSelect" update="email, telefone, celular"
+							listener="#{EstagioControl.carregaAluno }" />
 					</p:autoComplete>
-					<h:outputText value="Email"></h:outputText>
-					<p:inputText value="#{EstagioControl.estagio.aluno.email }"></p:inputText>
-					<h:outputText value="Telefone"></h:outputText>
-					<p:inputMask value="#{EstagioControl.estagio.aluno.telefone }"
-						mask="(99) 9999-9999"></p:inputMask>
-					<h:outputText value="Celular"></h:outputText>
-					<p:inputMask value="#{EstagioControl.estagio.aluno.celular }"
-						mask="(99) 9999-9999"></p:inputMask>
+						<h:outputText value="Email"></h:outputText>
+						<p:inputText id="email" value="#{EstagioControl.estagio.aluno.email  }"></p:inputText>
+						<h:outputText value="Telefone"></h:outputText>
+						<p:inputText id="telefone" value="#{EstagioControl.estagio.aluno.telefone  }"></p:inputText>
+						<h:outputText value="Celular"></h:outputText>
+						<p:inputText id="celular" value="#{EstagioControl.estagio.aluno.celular  }"></p:inputText>
 				</h:panelGrid>
 			</p:panel>
 
@@ -84,6 +84,6 @@
 			<p:commandButton actionListener="#{EstagioControl.incluir }"
 				value="Incluir"></p:commandButton>
 		</p:panel>
-			
+
 	</ui:define>
 </ui:composition>

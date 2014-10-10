@@ -6,6 +6,7 @@ import java.util.List;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,10 @@ import br.com.ambientinformatica.jpa.exception.PersistenciaException;
 public class EstagioControl {
 
 	private String txtNomeAluno;
+	private String txtEmailAluno =  "";
 
 	private Estagio estagio = new Estagio();
+	private Aluno aluno = new Aluno();
 
 	@Autowired
 	private EstagioDao estagioDao;
@@ -53,6 +56,10 @@ public class EstagioControl {
 		return filtrarAlunos;
 
 	}
+	
+	public void preencherAluno(){
+		//setTxtEmailAluno("Hellison.oliveira@gmail");
+	}
 
 	public void incluir(ActionEvent evt) {
 		try {
@@ -63,6 +70,11 @@ public class EstagioControl {
 			UtilFaces.addMensagemFaces(e);
 		}
 
+	}
+	
+	public void carregaAluno(SelectEvent event){
+		setAluno((Aluno)event.getObject());
+		
 	}
 
 	/*
@@ -104,6 +116,22 @@ public class EstagioControl {
 
 	public void setTxtNomeAluno(String txtNomeAluno) {
 		this.txtNomeAluno = txtNomeAluno;
+	}
+
+	public String getTxtEmailAluno() {
+		return txtEmailAluno;
+	}
+
+	public void setTxtEmailAluno(String txtEmailAluno) {
+		this.txtEmailAluno = txtEmailAluno;
+	}
+
+	public Aluno getAluno() {
+		return aluno;
+	}
+
+	public void setAluno(Aluno aluno) {
+		getEstagio().setAluno(aluno);
 	}
 
 }
