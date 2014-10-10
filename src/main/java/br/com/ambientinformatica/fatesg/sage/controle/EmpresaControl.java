@@ -53,7 +53,6 @@ public class EmpresaControl {
 		
 		try {
 			//copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
-			//byte[] bytes = Base64.encodeBase64(event.getFile().getContents());
 			documento.setArquivo(Base64.encodeBase64(event.getFile().getContents()));
 			documentoDao.incluir(documento);
 			
