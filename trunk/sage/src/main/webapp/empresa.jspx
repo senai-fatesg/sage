@@ -13,17 +13,28 @@
 				<h:outputText value="Nome"></h:outputText>
 				<p:inputText value="#{EmpresaControl.empresa.nome }"></p:inputText>
 				<h:outputText value="Telefone"></h:outputText>
-				<p:inputMask value="#{EmpresaControl.empresa.telefone }" mask="(99) 9999-9999"></p:inputMask>
+				<p:inputMask value="#{EmpresaControl.empresa.telefone }"
+					mask="(99) 9999-9999"></p:inputMask>
 				<h:outputText value="Celular"></h:outputText>
-				<p:inputMask value="#{EmpresaControl.empresa.celular }" mask="(99) 9999-9999"></p:inputMask>
+				<p:inputMask value="#{EmpresaControl.empresa.celular }"
+					mask="(99) 9999-9999"></p:inputMask>
 				<h:outputText value="Email"></h:outputText>
 				<p:inputText value="#{EmpresaControl.empresa.email }"></p:inputText>
 				<h:outputText value="Endereço"></h:outputText>
 				<p:inputText value="#{EmpresaControl.empresa.endereco }"></p:inputText>
-				<p:commandButton actionListener="#{EmpresaControl.incluir }" value="Incluir" update="empresas, panel"></p:commandButton>
+				<p:commandButton actionListener="#{EmpresaControl.incluir }"
+					value="Incluir" update="empresas, panel"></p:commandButton>
 			</h:panelGrid>
+
+			<h:form id="form">
+				<p:fileUpload fileUploadListener="#{EmpresaControl.upload}"
+					allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000"
+					description="Select Images" />
+			</h:form>
+
 		</p:panel>
-		<p:dataTable id="empresas" value="#{EmpresaControl.empresas }" var="cont"  width="100%" emptyMessage="Sem registros" >
+		<p:dataTable id="empresas" value="#{EmpresaControl.empresas }"
+			var="cont" width="100%" emptyMessage="Sem registros">
 			<f:facet name="header">
 				<h:outputText value="Lista de Empresas"></h:outputText>
 			</f:facet>
@@ -32,19 +43,19 @@
 					<h:outputText value="Nome"></h:outputText>
 				</f:facet>
 				<h:outputText value="#{cont.nome }"></h:outputText>
-			</p:column>	
+			</p:column>
 			<p:column sortBy="#{cont.telefone }">
 				<f:facet name="header">
 					<h:outputText value="Telefone"></h:outputText>
 				</f:facet>
 				<h:outputText value="#{cont.telefone }"></h:outputText>
-			</p:column>	
+			</p:column>
 			<p:column sortBy="#{cont.email }">
 				<f:facet name="header">
 					<h:outputText value="Email"></h:outputText>
 				</f:facet>
 				<h:outputText value="#{cont.email }"></h:outputText>
-			</p:column>	
+			</p:column>
 		</p:dataTable>
 	</ui:define>
 </ui:composition>

@@ -84,5 +84,6 @@
 			<p:commandButton actionListener="#{EstagioControl.incluir }"
 				value="Incluir"></p:commandButton>
 		</p:panel>
+			
 	</ui:define>
 </ui:composition>
