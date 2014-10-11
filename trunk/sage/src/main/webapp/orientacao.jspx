@@ -7,10 +7,13 @@
 	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
-		<p:outputLabel value="Aluno:" for="acAluno" />
-		<p:autoComplete id="acAluno"
-			value="#{OrientacaoControl.autocomplete }"
-			completeMethod="#{OrientacaoControl.completeText }" effect="blind"></p:autoComplete>
+		<h:outputText value="Aluno"></h:outputText>
+		<p:autoComplete value="#{EstagioControl.aluno}"
+			completeMethod="#{EstagioControl.autoCompleteAluno}" var="aluno"
+			itemLabel="#{aluno.nome}" itemValue="#{aluno}"
+			converter="alunoConverter" forceSelection="true">
+			<p:ajax event="itemSelect" listener="#{EstagioControl.carregaAluno }" />
+		</p:autoComplete>
 		<p:dataTable id="orientacoes" value="#{OrientacaoControl.estagios}"
 			var="cont" width="100%" emptyMessage="Sem registros">
 			<f:facet name="header">

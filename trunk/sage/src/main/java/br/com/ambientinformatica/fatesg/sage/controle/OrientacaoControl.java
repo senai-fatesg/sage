@@ -31,11 +31,10 @@ public class OrientacaoControl {
 
 	@Autowired
 	private AlunoDao alunoDao;
-	
 
 	@Autowired
 	private EstagioDao estagioDao;
-
+	
 	private List<Aluno> alunos;
 	private List<Estagio> estagios;
 
