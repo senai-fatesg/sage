@@ -13,9 +13,11 @@ import org.springframework.stereotype.Controller;
 
 import br.com.ambientinformatica.ambientjsf.util.UtilFaces;
 import br.com.ambientinformatica.fatesg.sage.entidade.Aluno;
+import br.com.ambientinformatica.fatesg.sage.entidade.Empresa;
 import br.com.ambientinformatica.fatesg.sage.entidade.EnumTipoEstagio;
 import br.com.ambientinformatica.fatesg.sage.entidade.Estagio;
 import br.com.ambientinformatica.fatesg.sage.persistencia.AlunoDao;
+import br.com.ambientinformatica.fatesg.sage.persistencia.EmpresaDao;
 import br.com.ambientinformatica.fatesg.sage.persistencia.EstagioDao;
 import br.com.ambientinformatica.jpa.exception.PersistenciaException;
 
@@ -23,14 +25,17 @@ import br.com.ambientinformatica.jpa.exception.PersistenciaException;
 @Scope("conversation")
 public class EstagioControl {
 
-	private String txtNomeAluno;
-	private String txtEmailAluno =  "";
-
 	private Estagio estagio = new Estagio();
+	
 	private Aluno aluno = new Aluno();
+	
+	private Empresa empresa = new Empresa();
 
 	@Autowired
 	private EstagioDao estagioDao;
+	
+	@Autowired
+	private EmpresaDao empresaDao;
 
 	@Autowired
 	private AlunoDao alunoDao;
@@ -57,8 +62,19 @@ public class EstagioControl {
 
 	}
 	
-	public void preencherAluno(){
-		//setTxtEmailAluno("Hellison.oliveira@gmail");
+	public List<Empresa> autoCompleteEmpresa(String query)
+			throws PersistenciaException {
+
+		List<Empresa> empresas = empresaDao.listar();
+		List<Empresa> filtrarEmpresas = new ArrayList<Empresa>();
+
+		for (int i = 0; i < empresas.size(); i++) {
+			Empresa empresa = empresas.get(i);
+			if (empresa.getNome().toLowerCase().startsWith(query)) {
+				filtrarEmpresas.add(empresa);
+			}
+		}
+		return filtrarEmpresas;
 	}
 
 	public void incluir(ActionEvent evt) {
@@ -74,13 +90,11 @@ public class EstagioControl {
 	
 	public void carregaAluno(SelectEvent event){
 		setAluno((Aluno)event.getObject());
-		
 	}
-
-	/*
-	 * public void listar() { try { estagios = estagioDao.listar(); } catch
-	 * (Exception e) { UtilFaces.addMensagemFaces(e); } }
-	 */
+	
+	public void carregaEmpresa(SelectEvent event){
+		setEmpresa((Empresa)event.getObject());
+	}
 
 	public List<SelectItem> getTiposEstagio() {
 		return UtilFaces.getListEnum(EnumTipoEstagio.values());
@@ -109,29 +123,21 @@ public class EstagioControl {
 	public void setEstagios(List<Estagio> estagios) {
 		this.estagios = estagios;
 	}
-
-	public String getTxtNomeAluno() {
-		return txtNomeAluno;
-	}
-
-	public void setTxtNomeAluno(String txtNomeAluno) {
-		this.txtNomeAluno = txtNomeAluno;
-	}
-
-	public String getTxtEmailAluno() {
-		return txtEmailAluno;
-	}
-
-	public void setTxtEmailAluno(String txtEmailAluno) {
-		this.txtEmailAluno = txtEmailAluno;
-	}
-
+	
 	public Aluno getAluno() {
 		return aluno;
 	}
 
 	public void setAluno(Aluno aluno) {
 		getEstagio().setAluno(aluno);
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		getEstagio().setEmpresa(empresa);
 	}
 
 }

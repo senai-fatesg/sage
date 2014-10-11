@@ -14,33 +14,42 @@
 					<p:autoComplete value="#{EstagioControl.aluno}"
 						completeMethod="#{EstagioControl.autoCompleteAluno}" var="aluno"
 						itemLabel="#{aluno.nome}" itemValue="#{aluno}"
-						converter="alunoConverter" forceSelection="true" rerender="email">
+						converter="alunoConverter" forceSelection="true">
 						<p:ajax event="itemSelect" update="email, telefone, celular"
 							listener="#{EstagioControl.carregaAluno }" />
 					</p:autoComplete>
-						<h:outputText value="Email"></h:outputText>
-						<p:inputText id="email" value="#{EstagioControl.estagio.aluno.email  }"></p:inputText>
-						<h:outputText value="Telefone"></h:outputText>
-						<p:inputText id="telefone" value="#{EstagioControl.estagio.aluno.telefone  }"></p:inputText>
-						<h:outputText value="Celular"></h:outputText>
-						<p:inputText id="celular" value="#{EstagioControl.estagio.aluno.celular  }"></p:inputText>
+					<h:outputText value="Email"></h:outputText>
+					<p:inputText id="email"
+						value="#{EstagioControl.estagio.aluno.email  }"></p:inputText>
+					<h:outputText value="Telefone"></h:outputText>
+					<p:inputMask id="telefone" value="#{EstagioControl.estagio.aluno.telefone }"
+						mask="(99) 9999-9999"></p:inputMask>
+					<h:outputText value="Celular"></h:outputText>
+					<p:inputMask id="celular" value="#{EstagioControl.estagio.aluno.celular }"
+						mask="(99) 9999-9999"></p:inputMask>
 				</h:panelGrid>
 			</p:panel>
 
 			<p:panel header="Empresa" id="panel2">
 				<h:panelGrid columns="2">
 					<h:outputText value="Nome da Empresa"></h:outputText>
-					<p:autoComplete value="#{EmpresaControl.txtNomeEmpresa}"
-						completeMethod="#{EmpresaControl.autoCompleteEmpresa}"
+					<p:autoComplete value="#{EstagioControl.empresa}"
+						completeMethod="#{EstagioControl.autoCompleteEmpresa}"
 						var="empresa" itemLabel="#{empresa.nome}" itemValue="#{empresa}"
-						converter="empresaConverter" forceSelection="true"></p:autoComplete>
+						converter="empresaConverter" forceSelection="true">
+						<p:ajax event="itemSelect"
+							update="enderecoEmpresa, telefoneEmpresa, emailEmpresa"
+							listener="#{EstagioControl.carregaEmpresa }" />
+					</p:autoComplete>
 					<h:outputText value="Endereço"></h:outputText>
-					<p:inputText value="#{EstagioControl.estagio.empresa.endereco }"></p:inputText>
+					<p:inputText id="enderecoEmpresa"
+						value="#{EstagioControl.estagio.empresa.endereco }"></p:inputText>
 					<h:outputText value="Telefone"></h:outputText>
-					<p:inputMask value="#{EstagioControl.estagio.empresa.telefone }"
-						mask="(99) 9999-9999"></p:inputMask>
+					<p:inputText id="telefoneEmpresa"
+						value="#{EstagioControl.estagio.empresa.telefone }"></p:inputText>
 					<h:outputText value="E-mail"></h:outputText>
-					<p:inputText value="#{EstagioControl.estagio.empresa.email }"></p:inputText>
+					<p:inputText id="emailEmpresa"
+						value="#{EstagioControl.estagio.empresa.email }"></p:inputText>
 					<p:panel header="Controle do Estágio" id="panel3">
 						<h:outputText value="Tipo do Estágio"></h:outputText>
 						<h:selectOneMenu value="#{EstagioControl.estagio.tipoEstagio} ">

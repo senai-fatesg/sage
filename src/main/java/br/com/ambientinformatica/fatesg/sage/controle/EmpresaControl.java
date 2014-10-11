@@ -85,21 +85,6 @@ public class EmpresaControl {
 		}
 	}
 	
-	public List<Empresa> autoCompleteEmpresa(String query)
-			throws PersistenciaException {
-
-		List<Empresa> empresas = empresaDao.listar();
-		List<Empresa> filtrarEmpresas = new ArrayList<Empresa>();
-
-		for (int i = 0; i < empresas.size(); i++) {
-			Empresa empresa = empresas.get(i);
-			if (empresa.getNome().toLowerCase().startsWith(query)) {
-				filtrarEmpresas.add(empresa);
-			}
-		}
-		return filtrarEmpresas;
-	}
-
 	public void incluir(ActionEvent evt) {
 		try {
 			empresaDao.incluir(empresa);
