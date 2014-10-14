@@ -14,7 +14,8 @@
 			converter="alunoConverter" forceSelection="true">
 			<p:ajax event="itemSelect" listener="#{EstagioControl.carregaAluno }" />
 		</p:autoComplete>
-		<p:dataTable id="orientacoes" value="#{OrientacaoControl.estagios}"
+		<p:button value="Listar" ></p:button>
+		<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}"
 			var="cont" width="100%" emptyMessage="Sem registros">
 			<f:facet name="header">
 				<h:outputText value="Estágios"></h:outputText>
