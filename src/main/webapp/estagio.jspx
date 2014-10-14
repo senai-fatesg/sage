@@ -20,13 +20,13 @@
 					</p:autoComplete>
 					<h:outputText value="Email"></h:outputText>
 					<p:inputText id="email"
-						value="#{EstagioControl.estagio.aluno.email  }"></p:inputText>
+						value="#{EstagioControl.estagio.aluno.email  }" readonly="true"></p:inputText>
 					<h:outputText value="Telefone"></h:outputText>
 					<p:inputMask id="telefone" value="#{EstagioControl.estagio.aluno.telefone }"
-						mask="(99) 9999-9999"></p:inputMask>
+						mask="(99) 9999-9999" readonly="true"></p:inputMask>
 					<h:outputText value="Celular"></h:outputText>
 					<p:inputMask id="celular" value="#{EstagioControl.estagio.aluno.celular }"
-						mask="(99) 9999-9999"></p:inputMask>
+						mask="(99) 9999-9999" readonly="true"></p:inputMask>
 				</h:panelGrid>
 			</p:panel>
 
@@ -42,13 +42,13 @@
 							listener="#{EstagioControl.carregaEmpresa }" />
 					</p:autoComplete>
 					<h:outputText value="Endereço"></h:outputText>
-					<p:inputText id="enderecoEmpresa"
+					<p:inputText id="enderecoEmpresa" readonly="true"
 						value="#{EstagioControl.estagio.empresa.endereco }"></p:inputText>
 					<h:outputText value="Telefone"></h:outputText>
-					<p:inputText id="telefoneEmpresa"
+					<p:inputText id="telefoneEmpresa" readonly="true"
 						value="#{EstagioControl.estagio.empresa.telefone }"></p:inputText>
 					<h:outputText value="E-mail"></h:outputText>
-					<p:inputText id="emailEmpresa"
+					<p:inputText id="emailEmpresa" readonly="true"
 						value="#{EstagioControl.estagio.empresa.email }"></p:inputText>
 					<p:panel header="Controle do Estágio" id="panel3">
 						<h:outputText value="Tipo do Estágio"></h:outputText>
