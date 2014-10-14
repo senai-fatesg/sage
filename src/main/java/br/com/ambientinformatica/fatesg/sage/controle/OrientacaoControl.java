@@ -108,4 +108,12 @@ public class OrientacaoControl {
 		this.orientacoes = orientacoes;
 	}
 
+	public List<Estagio> getEstagios() {
+		return estagios;
+	}
+
+	public void setEstagios(List<Estagio> estagios) {
+		this.estagios = estagios;
+	}
+
 }

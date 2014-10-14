@@ -57,7 +57,10 @@ public class Estagio {
 	
 	@Temporal(TemporalType.DATE)
 	private Date dataRelatorioCd;
-
+	
+	@Enumerated(EnumType.STRING)
+	private EnumStatusEstagio statusEstagio;
+	
 	@ManyToMany
 	@JoinColumn(name = "IDF_DOCUMENTO")
 	private List<Documento> documentos;
