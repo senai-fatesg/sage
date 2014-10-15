@@ -38,43 +38,50 @@ public class EmpresaControl {
 
 	private List<Empresa> empresas = new ArrayList<Empresa>();
 
-	private String destino="C:\\AreaDeTrabalho\\Aplicativos\\";
+	private String destino = "C:\\AreaDeTrabalho\\Aplicativos\\";
+
 	private Documento documento = new Documento();
-	
+
 	@Autowired
 	private DocumentoDao documentoDao;
-	
+
+	private List<Documento> documentos = new ArrayList<Documento>();
+
 	@PostConstruct
 	public void init() {
 		listar(null);
-	}
-	public void upload(FileUploadEvent event) throws PersistenciaException {
-		//FacesMessage msg = new FacesMessage("Sucesso! " + event.getFile().getFileName() + " enviado.");
-		
-		try {
-			//copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
-			documento.setArquivo(Base64.encodeBase64(event.getFile().getContents()));
-			documentoDao.incluir(documento);
-			
-			FacesContext.getCurrentInstance().addMessage("Mensagem", new FacesMessage("Sucesso! " + event.getFile().getFileName() + " enviado."));
-		} catch (Exception e) {
-			e.getMessage();
-		}
-		finally{
-			
-		}
-		
+		listarDocumentos();
 	}
 
-	public void copyFile(String fileName, InputStream in) throws PersistenciaException {
+	// Salvar arquivo no banco de dados
+	public void upload(FileUploadEvent event) throws PersistenciaException {
+
 		try {
-			OutputStream out = new FileOutputStream(new File(destino + fileName));
+			documento.setNome(event.getFile().getFileName());
+			documento.setArquivo(event.getFile().getContents());
+			documentoDao.incluir(documento);
+
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().getMessages(e.getMessage());
+		} finally {
+
+		}
+		FacesContext.getCurrentInstance().addMessage(
+				"Mensagem", new FacesMessage("Sucesso! " + event.getFile().getFileName() + " enviado."));
+	}
+
+	// Salvar arquivo no diretorio
+	public void copyFile(String fileName, InputStream in)
+			throws PersistenciaException {
+		try {
+			OutputStream out = new FileOutputStream(
+					new File(destino + fileName));
 			int read = 0;
 			byte[] bytes = new byte[in.read()];
 
 			while ((read = in.read(bytes)) != -1) {
 				out.write(bytes, 0, read);
-			}			
+			}
 			in.close();
 			out.flush();
 			out.close();
@@ -84,7 +91,17 @@ public class EmpresaControl {
 			e.getMessage();
 		}
 	}
-	
+
+	public List<Documento> listarDocumentos() {
+		try {
+			documentos = documentoDao.findDocumentosById();
+		} catch (Exception e) {
+			// handle exception
+			UtilFaces.addMensagemFaces(e);
+		}
+		return documentos;
+	}
+
 	public void incluir(ActionEvent evt) {
 		try {
 			empresaDao.incluir(empresa);
@@ -125,6 +142,38 @@ public class EmpresaControl {
 
 	public void setTxtNomeEmpresa(String txtNomeEmpresa) {
 		this.txtNomeEmpresa = txtNomeEmpresa;
+	}
+
+	public EmpresaDao getEmpresaDao() {
+		return empresaDao;
+	}
+
+	public void setEmpresaDao(EmpresaDao empresaDao) {
+		this.empresaDao = empresaDao;
+	}
+
+	public Documento getDocumento() {
+		return documento;
+	}
+
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
+	}
+
+	public DocumentoDao getDocumentoDao() {
+		return documentoDao;
+	}
+
+	public void setDocumentoDao(DocumentoDao documentoDao) {
+		this.documentoDao = documentoDao;
+	}
+
+	public List<Documento> getDocumentos() {
+		return documentos;
+	}
+
+	public void setDocumentos(List<Documento> documentos) {
+		this.documentos = documentos;
 	}
 
 }

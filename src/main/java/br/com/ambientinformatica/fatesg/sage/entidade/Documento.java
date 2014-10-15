@@ -15,9 +15,11 @@ public class Documento {
 	@SequenceGenerator(name = "documento_seq", sequenceName = "documento_seq", allocationSize = 1, initialValue = 1)
 	private Integer id;
 	
-	
+	@Lob
 	private byte[] arquivo;
 
+	private String nome;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -28,6 +30,14 @@ public class Documento {
 
 	public void setArquivo(byte[] arquivo) {
 		this.arquivo = arquivo;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	
 	

@@ -28,11 +28,30 @@
 
 			<h:form id="form">
 				<p:fileUpload fileUploadListener="#{EmpresaControl.upload}"
-					allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000"
-					description="Select Images" />
+					allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" sizeLimit="100000"
+					mode="advanced" />
 			</h:form>
-
 		</p:panel>
+
+		<p:dataTable id="documentos" value="#{EmpresaControl.documentos}"
+			var="cont" width="100%" emptyMessage="Sem registros">>
+		<f:facet name="header">
+				<h:outputText value="Lista de Documentos"></h:outputText>
+			</f:facet>
+			<p:column sortBy="#{cont.nome }">
+				<f:facet name="header">
+					<h:outputText value="Nome"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.nome }"></h:outputText>
+			</p:column>
+			<p:column sortBy="#{cont.arquivo }">
+				<f:facet name="header">
+					<h:outputText value="Telefone"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{cont.arquivo }"></h:outputText>
+			</p:column>
+		</p:dataTable>
+
 		<p:dataTable id="empresas" value="#{EmpresaControl.empresas }"
 			var="cont" width="100%" emptyMessage="Sem registros">
 			<f:facet name="header">
