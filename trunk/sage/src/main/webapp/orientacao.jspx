@@ -12,31 +12,32 @@
 			completeMethod="#{EstagioControl.autoCompleteAluno}" var="aluno"
 			itemLabel="#{aluno.nome}" itemValue="#{aluno}"
 			converter="alunoConverter" forceSelection="true">
-			<p:ajax event="itemSelect" listener="#{EstagioControl.carregaAluno }" />
+			<p:ajax event="itemSelect"
+				listener="#{EstagioControl.estagioDao.findEstagiosById(EstagioControl.aluno) }"
+				converter="alunoConverter" update="estagios" />
 		</p:autoComplete>
-		<p:button value="Listar" ></p:button>
-		<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}"
+		<p:dataTable id="estagios" value="#{EstagioControl.estagios}"
 			var="cont" width="100%" emptyMessage="Sem registros">
 			<f:facet name="header">
 				<h:outputText value="Estágios"></h:outputText>
 			</f:facet>
-			<p:column sortBy="#{cont.empresa.nome}">
+			<p:column sortBy="#{cont.empresa}">
 				<f:facet name="header">
 					<h:outputText value="Empresa"></h:outputText>
 				</f:facet>
-				<h:outputText value="#{cont.empresa.nome}"></h:outputText>
+				<h:outputText value="#{cont.empresa}" converter="empresaConverter"></h:outputText>
 			</p:column>
-			<p:column sortBy="#{cont.situacao }">
+			<p:column sortBy="#{cont.statusEstagio}">
 				<f:facet name="header">
-					<h:outputText value="Situação"></h:outputText>
+					<h:outputText value="Professor Orientador"></h:outputText>
 				</f:facet>
-				<h:outputText value="#{cont.situacao }"></h:outputText>
+				<h:outputText value="#{cont.statusEstagio.getDescricao() }"></h:outputText>
 			</p:column>
-			<p:column sortBy="#{cont.professorOrientador }">
+			<p:column sortBy="#{cont.professorOrientador}">
 				<f:facet name="header">
-					<h:outputText value="Professor orientador"></h:outputText>
+					<h:outputText value="Professor Orientador"></h:outputText>
 				</f:facet>
-				<h:outputText value="#{cont.professorOrientador }"></h:outputText>
+				<h:outputText value="#{cont.professorOrientador}"></h:outputText>
 			</p:column>
 		</p:dataTable>
 		<p:panel header="Formulário" id="panel">

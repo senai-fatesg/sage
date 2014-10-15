@@ -3,6 +3,7 @@ package br.com.ambientinformatica.fatesg.sage.controle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
@@ -26,14 +27,14 @@ import br.com.ambientinformatica.jpa.exception.PersistenciaException;
 public class EstagioControl {
 
 	private Estagio estagio = new Estagio();
-	
+
 	private Aluno aluno = new Aluno();
-	
+
 	private Empresa empresa = new Empresa();
 
 	@Autowired
 	private EstagioDao estagioDao;
-	
+
 	@Autowired
 	private EmpresaDao empresaDao;
 
@@ -42,11 +43,21 @@ public class EstagioControl {
 
 	private List<Estagio> estagios = new ArrayList<Estagio>();
 
-	/*
-	 * @PostConstruct public void init() { listar(null); }
-	 */
-
-	public List<Aluno> autoCompleteAluno(String query) throws PersistenciaException {
+	@PostConstruct
+	public void init() {
+		listar(null);
+	}
+	
+	public void listar(ActionEvent evt) {
+		try {
+			estagios = estagioDao.listar();
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
+		}
+	}
+	
+	public List<Aluno> autoCompleteAluno(String query)
+	      throws PersistenciaException {
 
 		List<Aluno> alunos = alunoDao.listar();
 		List<Aluno> filtrarAlunos = new ArrayList<Aluno>();
@@ -61,9 +72,9 @@ public class EstagioControl {
 		return filtrarAlunos;
 
 	}
-	
+
 	public List<Empresa> autoCompleteEmpresa(String query)
-			throws PersistenciaException {
+	      throws PersistenciaException {
 
 		List<Empresa> empresas = empresaDao.listar();
 		List<Empresa> filtrarEmpresas = new ArrayList<Empresa>();
@@ -87,13 +98,17 @@ public class EstagioControl {
 		}
 
 	}
-	
-	public void carregaAluno(SelectEvent event){
-		setAluno((Aluno)event.getObject());
+
+	public void carregaAluno(SelectEvent event) {
+		setAluno((Aluno) event.getObject());
 	}
-	
-	public void carregaEmpresa(SelectEvent event){
-		setEmpresa((Empresa)event.getObject());
+
+	public void carregaEstagio(SelectEvent event) {
+		setEstagio((Estagio) event.getObject());
+	}
+
+	public void carregaEmpresa(SelectEvent event) {
+		setEmpresa((Empresa) event.getObject());
 	}
 
 	public List<SelectItem> getTiposEstagio() {
@@ -123,7 +138,7 @@ public class EstagioControl {
 	public void setEstagios(List<Estagio> estagios) {
 		this.estagios = estagios;
 	}
-	
+
 	public Aluno getAluno() {
 		return aluno;
 	}
