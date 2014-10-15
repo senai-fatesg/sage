@@ -174,4 +174,8 @@ public class Estagio {
 		this.documentos = documentos;
 	}
 
+	public EnumStatusEstagio getStatusEstagio() {
+		return statusEstagio;
+	}
+
 }
