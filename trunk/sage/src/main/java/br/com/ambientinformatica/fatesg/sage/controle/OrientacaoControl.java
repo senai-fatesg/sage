@@ -75,6 +75,7 @@ public class OrientacaoControl {
 		}
 		return alunos;
 	}
+	
 	public List<Estagio> listarEstagios(Aluno aluno) {
 		try {
 			estagios = estagioDao.findEstagiosById(aluno);
