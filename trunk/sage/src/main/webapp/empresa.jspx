@@ -46,9 +46,23 @@
 			</p:column>
 			<p:column sortBy="#{cont.arquivo }">
 				<f:facet name="header">
-					<h:outputText value="Telefone"></h:outputText>
+					<h:outputText value="Arquivo"></h:outputText>
 				</f:facet>
 				<h:outputText value="#{cont.arquivo }"></h:outputText>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Visualizar"></h:outputText>
+				</f:facet>
+				<h:commandLink value="Clique aqui"
+					action="#{EmpresaControl.visualizarPdf}" target="_blank" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="downloadLink" value="Download" ajax="false"
+					onclick="PrimeFaces.monitorDownload(start, stop)"
+					icon="ui-icon-arrowthichk-s">
+					<p:fileDownload value="#{EmpresaControl.getFile}" />
+				</p:commandButton>
 			</p:column>
 		</p:dataTable>
 
