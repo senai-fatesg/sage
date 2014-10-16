@@ -11,8 +11,6 @@
 		<p:panel header="Cadastrar Novo Estágio" id="panel">
 			<p:panel header="Estagiário" id="panel1">
 				<h:panelGrid columns="2">
-					<h:outputText value="Nome"></h:outputText>
-
 					<a:field label="Aluno" width="610px" for="consAluno">
 						<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
 							effect="fade" value="#{EstagioControl.estagio.aluno}" var="a"
@@ -38,8 +36,6 @@
 
 			<p:panel header="Empresa" id="panel2">
 				<h:panelGrid columns="2">
-					<h:outputText value="Nome"></h:outputText>
-
 					<a:field label="Empresa" width="510px" for="consEmpresa">
 						<p:autoComplete id="consEmpresa" maxResults="10"
 							minQueryLength="3" effect="fade"

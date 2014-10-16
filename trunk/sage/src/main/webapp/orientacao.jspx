@@ -7,39 +7,48 @@
 	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
-		<h:outputText value="Aluno"></h:outputText>
-		<p:autoComplete value="#{EstagioControl.aluno}"
-			completeMethod="#{EstagioControl.autoCompleteAluno}" var="aluno"
-			itemLabel="#{aluno.nome}" itemValue="#{aluno}"
-			converter="alunoConverter" forceSelection="true">
-			<p:ajax event="itemSelect"
-				listener="#{EstagioControl.estagioDao.findEstagiosById(EstagioControl.aluno) }"
-				converter="alunoConverter" update="estagios" />
-		</p:autoComplete>
-		<p:dataTable id="estagios" value="#{EstagioControl.estagios}"
-			var="cont" width="100%" emptyMessage="Sem registros">
+	
+			<a:field label="Aluno" width="610px" for="consAluno">
+				<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
+					effect="fade" value="#{OrientacaoControl.aluno}}" var="a"
+					itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
+					completeMethod="#{OrientacaoControl.listarAlunos}"
+					forceSelection="true" style="width:610px;">
+					<f:converter converterId="alunoConverter" />
+					<f:facet name="itemtip">
+						<h:panelGrid columns="2" cellpadding="10">
+							<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
+							<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
+						</h:panelGrid>
+					</f:facet>
+				</p:autoComplete>
+			</a:field>
+					
+
+	<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}" var="est" width="100%" emptyMessage="Sem registros">
 			<f:facet name="header">
 				<h:outputText value="Estágios"></h:outputText>
 			</f:facet>
-			<p:column sortBy="#{cont.empresa}">
+			<p:column sortBy="#{est.empresa}">
 				<f:facet name="header">
 					<h:outputText value="Empresa"></h:outputText>
 				</f:facet>
-				<h:outputText value="#{cont.empresa}" converter="empresaConverter"></h:outputText>
+				<h:outputText value="#{est.empresa}" converter="empresaConverter"></h:outputText>
 			</p:column>
-			<p:column sortBy="#{cont.statusEstagio}">
+			<p:column sortBy="#{est.statusEstagio}">
 				<f:facet name="header">
 					<h:outputText value="Professor Orientador"></h:outputText>
 				</f:facet>
-				<h:outputText value="#{cont.statusEstagio.getDescricao() }"></h:outputText>
+				<h:outputText value="#{est.statusEstagio.descricao }"></h:outputText>
 			</p:column>
-			<p:column sortBy="#{cont.professorOrientador}">
+			<p:column sortBy="#{est.professorOrientador}">
 				<f:facet name="header">
 					<h:outputText value="Professor Orientador"></h:outputText>
 				</f:facet>
-				<h:outputText value="#{cont.professorOrientador}"></h:outputText>
+				<h:outputText value="#{est.professorOrientador}"></h:outputText>
 			</p:column>
 		</p:dataTable>
+		
 		<p:panel header="Formulário" id="panel">
 			<h:panelGrid columns="2">
 				<h:outputText value="Professor Orientador"></h:outputText>
