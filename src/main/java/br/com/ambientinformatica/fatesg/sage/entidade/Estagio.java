@@ -61,7 +61,7 @@ public class Estagio extends Entidade{
 	private EnumStatusEstagio statusEstagio;
 	
    @OneToMany(cascade=CascadeType.ALL)
-   @JoinColumn(name="autoinfracao_id")
+   @JoinColumn(name="estagio_id")
 	private List<Documento> documentos = new ArrayList<Documento>();
 	
 	@Enumerated(EnumType.STRING)
