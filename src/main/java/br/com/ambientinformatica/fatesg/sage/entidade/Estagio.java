@@ -178,4 +178,8 @@ public class Estagio {
 		return statusEstagio;
 	}
 
+	public void setTipoEstagio(EnumTipoEstagio tipoEstagio) {
+		this.tipoEstagio = tipoEstagio;
+	}
+
 }

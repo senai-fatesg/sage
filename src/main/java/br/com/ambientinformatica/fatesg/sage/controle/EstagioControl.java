@@ -20,17 +20,12 @@ import br.com.ambientinformatica.fatesg.sage.entidade.Estagio;
 import br.com.ambientinformatica.fatesg.sage.persistencia.AlunoDao;
 import br.com.ambientinformatica.fatesg.sage.persistencia.EmpresaDao;
 import br.com.ambientinformatica.fatesg.sage.persistencia.EstagioDao;
-import br.com.ambientinformatica.jpa.exception.PersistenciaException;
 
 @Controller("EstagioControl")
 @Scope("conversation")
 public class EstagioControl {
 
 	private Estagio estagio = new Estagio();
-
-	private Aluno aluno = new Aluno();
-
-	private Empresa empresa = new Empresa();
 
 	@Autowired
 	private EstagioDao estagioDao;
@@ -45,9 +40,9 @@ public class EstagioControl {
 
 	@PostConstruct
 	public void init() {
-		listar(null);
+		estagio = new Estagio();
 	}
-	
+
 	public void listar(ActionEvent evt) {
 		try {
 			estagios = estagioDao.listar();
@@ -55,37 +50,25 @@ public class EstagioControl {
 			UtilFaces.addMensagemFaces(e);
 		}
 	}
-	
-	public List<Aluno> autoCompleteAluno(String query)
-	      throws PersistenciaException {
 
-		List<Aluno> alunos = alunoDao.listar();
-		List<Aluno> filtrarAlunos = new ArrayList<Aluno>();
-
-		for (int i = 0; i < alunos.size(); i++) {
-			Aluno aluno = alunos.get(i);
-			if (aluno.getNome().toLowerCase().startsWith(query)) {
-				filtrarAlunos.add(aluno);
-			}
+	public List<Aluno> listarAlunos(String query) {
+		List<Aluno> alunos = new ArrayList<Aluno>();
+		try {
+			alunos = alunoDao.listarPorNome(query);
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
 		}
-
-		return filtrarAlunos;
-
+		return alunos;
 	}
 
-	public List<Empresa> autoCompleteEmpresa(String query)
-	      throws PersistenciaException {
-
-		List<Empresa> empresas = empresaDao.listar();
-		List<Empresa> filtrarEmpresas = new ArrayList<Empresa>();
-
-		for (int i = 0; i < empresas.size(); i++) {
-			Empresa empresa = empresas.get(i);
-			if (empresa.getNome().toLowerCase().startsWith(query)) {
-				filtrarEmpresas.add(empresa);
-			}
+	public List<Empresa> listarEmpresas(String query) {
+		List<Empresa> empresas = new ArrayList<Empresa>();
+		try {
+			empresas = empresaDao.listarPorNome(query);
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
 		}
-		return filtrarEmpresas;
+		return empresas;
 	}
 
 	public void incluir(ActionEvent evt) {
@@ -101,14 +84,6 @@ public class EstagioControl {
 
 	public void carregaAluno(SelectEvent event) {
 		setAluno((Aluno) event.getObject());
-	}
-
-	public void carregaEstagio(SelectEvent event) {
-		setEstagio((Estagio) event.getObject());
-	}
-
-	public void carregaEmpresa(SelectEvent event) {
-		setEmpresa((Empresa) event.getObject());
 	}
 
 	public List<SelectItem> getTiposEstagio() {
@@ -140,7 +115,10 @@ public class EstagioControl {
 	}
 
 	public Aluno getAluno() {
-		return aluno;
+		if (getEstagio().getAluno() == null) {
+			getEstagio().setAluno(new Aluno());
+		}
+		return getEstagio().getAluno();
 	}
 
 	public void setAluno(Aluno aluno) {
@@ -148,7 +126,10 @@ public class EstagioControl {
 	}
 
 	public Empresa getEmpresa() {
-		return empresa;
+		if (getEstagio().getEmpresa() == null) {
+			getEstagio().setEmpresa(new Empresa());
+		}
+		return getEstagio().getEmpresa();
 	}
 
 	public void setEmpresa(Empresa empresa) {
