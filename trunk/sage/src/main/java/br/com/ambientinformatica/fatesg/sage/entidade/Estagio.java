@@ -87,10 +87,6 @@ public class Estagio extends Entidade{
 		this.aluno = aluno;
 	}
 
-	public EnumTipoEstagio getTipoEstagio() {
-		return tipoEstagio;
-	}
-
 	public Date getDataInicio() {
 		return dataInicio;
 	}
@@ -165,6 +161,10 @@ public class Estagio extends Entidade{
 
 	public EnumStatusEstagio getStatusEstagio() {
 		return statusEstagio;
+	}
+
+	public EnumTipoEstagio getTipoEstagio() {
+		return tipoEstagio;
 	}
 
 	public void setTipoEstagio(EnumTipoEstagio tipoEstagio) {

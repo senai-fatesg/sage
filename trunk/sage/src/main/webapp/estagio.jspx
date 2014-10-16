@@ -60,11 +60,16 @@
 			</p:panel>
 			<p:panel header="Controle do Estágio" id="panel3">
 				<h:panelGrid columns="2">
-					<h:outputText value="Tipo do Estágio"></h:outputText>
-					<h:selectOneMenu value="#{EstagioControl.estagio.tipoEstagio} ">
-						<f:selectItem itemLabel="--Nenhum--" itemValue="" />
-						<f:selectItems value="#{EstagioControl.tiposEstagio }" />
-					</h:selectOneMenu>
+				
+		            <a:field label="Tipo do Estágio">
+						<p:selectOneMenu value="#{EstagioControl.tipoEstagio }" style="width:170px;">
+							<f:selectItem itemLabel="--Selecione--" itemValue="" />
+							<f:selectItems value="#{EstagioControl.tiposEstagio }"></f:selectItems>
+						</p:selectOneMenu>
+					</a:field>
+					
+					<a:newLine/>
+					
 					<h:outputText value="Data Início"></h:outputText>
 					<p:calendar value="#{EstagioControl.estagio.dataInicio }"
 						pattern="dd/MM/yyyy"></p:calendar>
@@ -96,7 +101,7 @@
 				</h:panelGrid>
 			</p:panel>
 			<p:commandButton actionListener="#{EstagioControl.incluir }"
-					value="Incluir" update="panel, panel2, panel3, panel4"></p:commandButton>
+					value="Incluir" update="panel, panel2, panel3, panel4" ajax="false" icon="ui-icon-plusthick"/>
 		</p:panel>
 
 	</ui:define>
