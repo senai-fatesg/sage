@@ -1,13 +1,16 @@
 package br.com.ambientinformatica.fatesg.sage.entidade;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+import br.com.ambientinformatica.util.Entidade;
+
 @Entity
-public class ColaboradorEmpresa {
+public class ColaboradorEmpresa extends Entidade {
 
 	@Id
 	@GeneratedValue(generator = "colaboradorEmpresa_seq", strategy = GenerationType.SEQUENCE)
@@ -20,6 +23,7 @@ public class ColaboradorEmpresa {
 
 	private String telefone;
 
+	@Column(unique=true, nullable=false)
 	private String cpf;
 
 	public Integer getId() {

@@ -7,8 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 
+import br.com.ambientinformatica.util.Entidade;
+
 @Entity
-public class Documento {
+public class Documento extends Entidade{
 
 	@Id
 	@GeneratedValue(generator = "documento_seq", strategy = GenerationType.SEQUENCE)
@@ -16,7 +18,7 @@ public class Documento {
 	private Integer id;
 	
 	@Lob
-	private byte[] arquivo;
+	private byte[] dados;
 
 	private String nome;
 	
@@ -24,12 +26,12 @@ public class Documento {
 		return id;
 	}
 
-	public byte[] getArquivo() {
-		return arquivo;
+	public byte[] getDados() {
+		return dados;
 	}
 
-	public void setArquivo(byte[] arquivo) {
-		this.arquivo = arquivo;
+	public void setDados(byte[] dados) {
+		this.dados = dados;
 	}
 
 	public String getNome() {
@@ -39,6 +41,5 @@ public class Documento {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
 	
 }

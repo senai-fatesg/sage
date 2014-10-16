@@ -6,8 +6,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+import br.com.ambientinformatica.util.Entidade;
+
 @Entity
-public class Aluno {
+public class Aluno extends Entidade {
 	
 	@Id
 	@GeneratedValue(generator = "aluno_seq", strategy = GenerationType.SEQUENCE)
