@@ -15,7 +15,6 @@ import javax.faces.event.ActionEvent;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.Base64;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -60,31 +59,29 @@ public class EmpresaControl {
 		listarDocumentos();
 	}
 
-	// Salvar arquivo no banco de dados
-	public void upload(FileUploadEvent event) throws PersistenciaException {
-
+	/*
+	 * Salvar arquivo no banco de dados
+	 */
+	public void upload(FileUploadEvent event) {
 		try {
 			documento.setNome(event.getFile().getFileName());
-			documento.setArquivo(event.getFile().getContents());
+			documento.setDados(event.getFile().getContents());
 			documentoDao.incluir(documento);
-
 		} catch (Exception e) {
-			FacesContext.getCurrentInstance().getMessages(e.getMessage());
-		} finally {
-
+			UtilFaces
+			      .addMensagemFaces("Houve um erro ao fazer o Upload do Arquivo.");
 		}
-		FacesContext.getCurrentInstance().addMessage(
-				"Mensagem",
-				new FacesMessage("Sucesso! " + event.getFile().getFileName()
-						+ " enviado."));
+		UtilFaces.addMensagemFaces("Arquivo carregado com sucesso.");
 	}
 
-	// Salvar arquivo no diretorio
-	public void copyFile(String fileName, InputStream in)
-			throws PersistenciaException {
+	/*
+	 *  Salvar arquivo no diretorio
+	 *  
+	 *  //TODO verificar esse método, desconfio em estar errado ou fazendo da forma errada.
+	 */
+	public void copyFile(String fileName, InputStream in) throws PersistenciaException {
 		try {
-			OutputStream out = new FileOutputStream(
-					new File(destino + fileName));
+			OutputStream out = new FileOutputStream(new File(destino + fileName));
 			int read = 0;
 			byte[] bytes = new byte[in.read()];
 
@@ -104,10 +101,11 @@ public class EmpresaControl {
 	public void visualizarPdf() {
 		FacesContext fc = FacesContext.getCurrentInstance();
 
-		// Obtem o HttpServletResponse, objeto responsável pela resposta do
-		// servidor ao browser
-		HttpServletResponse response = (HttpServletResponse) fc
-				.getExternalContext().getResponse();
+		/*
+		 *  Obtem o HttpServletResponse, objeto responsável pela resposta do 
+		 *  servidor ao browser
+		 */
+		HttpServletResponse response = (HttpServletResponse) fc.getExternalContext().getResponse();
 
 		// Limpa o buffer do response
 		response.reset();
@@ -118,17 +116,16 @@ public class EmpresaControl {
 
 		// Seta o tamanho do conteudo no cabecalho da resposta. No caso, o
 		// tamanho em bytes do pdf
-		response.setContentLength(documento.getArquivo().length);
+		response.setContentLength(documento.getDados().length);
 
 		// Seta o nome do arquivo e a disposição: "inline" abre no próprio
 		// navegador
 		// Mude para "attachment" para indicar que deve ser feito um download
-		response.setHeader("Content-disposition",
-				"inline; filename=arquivo.pdf");
+		response.setHeader("Content-disposition", "inline; filename=arquivo.pdf");
 		try {
 
 			// Envia o conteudo do arquivo PDF para o response
-			response.getOutputStream().write(documento.getArquivo());
+			response.getOutputStream().write(documento.getDados());
 
 			// Descarrega o conteudo do stream, forçando a escrita de qualquer
 			// byte ainda em buffer
@@ -147,11 +144,11 @@ public class EmpresaControl {
 
 	// Download do arquivo
 	public StreamedContent getFile() {
-		InputStream stream = ((ServletContext) FacesContext
-				.getCurrentInstance().getExternalContext().getContext())
-				.getResourceAsStream(documento.getArquivo().toString());
+		InputStream stream = ((ServletContext) FacesContext.getCurrentInstance()
+		      .getExternalContext().getContext()).getResourceAsStream(documento
+		      .getDados().toString());
 		file = new DefaultStreamedContent(stream, "application/pdf", ""
-				+ documento.getNome());
+		      + documento.getNome());
 		return file;
 	}
 
