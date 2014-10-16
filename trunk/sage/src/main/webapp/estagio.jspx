@@ -9,14 +9,13 @@
 	<ui:define name="corpo">
 
 		<p:panel header="Cadastrar Novo Estágio" id="panel">
-			<p:panel header="Estagiário" id="panel1">
-				<h:panelGrid columns="2">
-					<a:field label="Aluno" width="610px" for="consAluno">
+			<p:fieldset legend="Estagiário"  id="panel1">
+					<a:field label="Aluno" width="220px" for="consAluno">
 						<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
 							effect="fade" value="#{EstagioControl.estagio.aluno}" var="a"
 							itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
 							completeMethod="#{EstagioControl.listarAlunos}"
-							forceSelection="true" style="width:610px;">
+							forceSelection="true" style="width:220px;" >
 							<f:converter converterId="alunoConverter" />
 							<f:facet name="itemtip">
 								<h:panelGrid columns="2" cellpadding="10">
@@ -24,16 +23,26 @@
 									<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
 								</h:panelGrid>
 							</f:facet>
-							
+							<p:ajax event="itemSelect" update="email, telefone, celular" />
 						</p:autoComplete>
 					</a:field>
-					<h:outputText value="Celular"></h:outputText>
+					<a:field label="Email" spaceLeft="15px" >
+					<p:inputText id="email"
+						value="#{EstagioControl.estagio.aluno.email }"
+						readonly="true" disabled="true"/>
+					</a:field>
+					<a:field label="Telefone" spaceLeft="15px" >
+					<p:inputMask id="telefone"
+						value="#{EstagioControl.estagio.aluno.telefone }"
+						mask="(99) 9999-9999" readonly="true" disabled="true"/>
+					</a:field>
+					<a:field label="Celular" spaceLeft="15px" >
 					<p:inputMask id="celular"
 						value="#{EstagioControl.estagio.aluno.celular }"
-						mask="(99) 9999-9999" readonly="true"></p:inputMask>
-				</h:panelGrid>
-			</p:panel>
-
+						mask="(99) 9999-9999" readonly="true" disabled="true"/>
+					</a:field>
+			</p:fieldset>
+			<a:newLine/>
 			<p:panel header="Empresa" id="panel2">
 				<h:panelGrid columns="2">
 					<a:field label="Empresa" width="510px" for="consEmpresa">
