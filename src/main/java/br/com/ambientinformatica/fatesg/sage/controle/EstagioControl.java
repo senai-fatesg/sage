@@ -37,6 +37,12 @@ public class EstagioControl {
 
 	private List<Estagio> estagios = new ArrayList<Estagio>();
 
+	private EnumTipoEstagio tipoEstagio = EnumTipoEstagio.OBRIGATORIO;
+	
+	public List<SelectItem> getTiposEstagio(){
+		return UtilFaces.getListEnum(EnumTipoEstagio.values());
+	}
+	
 	//TODO verificar metodo
 	public void agendarVisita(ActionEvent evt) {
 
@@ -82,17 +88,17 @@ public class EstagioControl {
 
 	public void incluir(ActionEvent evt) {
 		try {
-			estagioDao.incluir(estagio);
-			// listar(evt);
-			estagio = new Estagio();
+			if(tipoEstagio == null){
+				UtilFaces.addMensagemFaces("Selecione o Tipo de Estagio");
+			}else{
+				estagio.setTipoEstagio(tipoEstagio);
+				estagioDao.alterar(estagio);
+				estagio = new Estagio();
+			}
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
-
-	}
-
-	public List<SelectItem> getTiposEstagio() {
-		return UtilFaces.getListEnum(EnumTipoEstagio.values());
+		UtilFaces.addMensagemFaces("Estagio Incluido com sucesso!");
 	}
 
 	public Estagio getEstagio() {
@@ -119,6 +125,12 @@ public class EstagioControl {
 		this.estagios = estagios;
 	}
 
+	public EnumTipoEstagio getTipoEstagio() {
+		return tipoEstagio;
+	}
 
+	public void setTipoEstagio(EnumTipoEstagio tipoEstagio) {
+		this.tipoEstagio = tipoEstagio;
+	}
 
 }
