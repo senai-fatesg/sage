@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
-import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -92,10 +91,6 @@ public class EstagioControl {
 
 	}
 
-	public void carregaAluno(SelectEvent event) {
-		setAluno((Aluno) event.getObject());
-	}
-
 	public List<SelectItem> getTiposEstagio() {
 		return UtilFaces.getListEnum(EnumTipoEstagio.values());
 	}
@@ -124,26 +119,6 @@ public class EstagioControl {
 		this.estagios = estagios;
 	}
 
-	public Aluno getAluno() {
-		if (getEstagio().getAluno() == null) {
-			getEstagio().setAluno(new Aluno());
-		}
-		return getEstagio().getAluno();
-	}
 
-	public void setAluno(Aluno aluno) {
-		getEstagio().setAluno(aluno);
-	}
-
-	public Empresa getEmpresa() {
-		if (getEstagio().getEmpresa() == null) {
-			getEstagio().setEmpresa(new Empresa());
-		}
-		return getEstagio().getEmpresa();
-	}
-
-	public void setEmpresa(Empresa empresa) {
-		getEstagio().setEmpresa(empresa);
-	}
 
 }

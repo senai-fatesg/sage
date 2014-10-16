@@ -34,8 +34,11 @@ public class OrientacaoControl {
 
 	@Autowired
 	private EstagioDao estagioDao;
-	
-	private List<Aluno> alunos;
+
+	private Aluno aluno;
+
+	private List<Aluno> alunos = new ArrayList<Aluno>();
+
 	private List<Estagio> estagios;
 
 	private List<Orientacao> orientacoes = new ArrayList<Orientacao>();
@@ -67,18 +70,20 @@ public class OrientacaoControl {
 		}
 	}
 
-	public List<Aluno> autocomplete(String Query) {
+	public List<Aluno> listarAlunos(String query) {
+		List<Aluno> alunos = new ArrayList<Aluno>();
 		try {
-			alunos =  alunoDao.listar();
+			alunos = alunoDao.listarPorNome(query);
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
 		return alunos;
 	}
-	
-	public List<Estagio> listarEstagios(Aluno aluno) {
+
+	public List<Estagio> listarEstagiosDoAluno(Aluno aluno) {
 		try {
-			estagios = estagioDao.findEstagiosById(aluno);
+			estagios.clear();
+			estagios = estagioDao.listarEstagiosDoAluno(aluno);
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
@@ -116,5 +121,22 @@ public class OrientacaoControl {
 	public void setEstagios(List<Estagio> estagios) {
 		this.estagios = estagios;
 	}
+
+	public Aluno getAluno() {
+		return aluno;
+	}
+
+	public void setAluno(Aluno aluno) {
+		this.aluno = aluno;
+	}
+
+	public List<Aluno> getAlunos() {
+		return alunos;
+	}
+
+	public void setAlunos(List<Aluno> alunos) {
+		this.alunos = alunos;
+	}
+	
 
 }
