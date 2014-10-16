@@ -7,6 +7,16 @@ import org.springframework.stereotype.Controller;
 @Scope("conversation")
 public class VagaEstagioControl {
 
+
 	
-	//TODO preencher a classe VagaEstagioControl
+	// TODO verificar metodo
+	public void publicarVaga(){
+		
+	}
+	
+	// TODO verificar metodo Alunos List<Alunos>
+	public void enviarEmailVagasDisponiveis(){
+
+	}
+	
 }

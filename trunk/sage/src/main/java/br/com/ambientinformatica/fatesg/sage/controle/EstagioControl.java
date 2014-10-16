@@ -38,6 +38,16 @@ public class EstagioControl {
 
 	private List<Estagio> estagios = new ArrayList<Estagio>();
 
+	//TODO verificar metodo
+	public void agendarVisita(ActionEvent evt) {
+
+	}
+
+	//TODO verificar metodo
+	public void montarProgramaEstagio(ActionEvent evt) {
+
+	}
+	
 	@PostConstruct
 	public void init() {
 		estagio = new Estagio();
