@@ -2,6 +2,7 @@ package br.com.ambientinformatica.fatesg.sage.controle;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -11,9 +12,13 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -47,6 +52,8 @@ public class EmpresaControl {
 
 	private List<Documento> documentos = new ArrayList<Documento>();
 
+	private StreamedContent file;
+
 	@PostConstruct
 	public void init() {
 		listar(null);
@@ -67,7 +74,9 @@ public class EmpresaControl {
 
 		}
 		FacesContext.getCurrentInstance().addMessage(
-				"Mensagem", new FacesMessage("Sucesso! " + event.getFile().getFileName() + " enviado."));
+				"Mensagem",
+				new FacesMessage("Sucesso! " + event.getFile().getFileName()
+						+ " enviado."));
 	}
 
 	// Salvar arquivo no diretorio
@@ -90,6 +99,60 @@ public class EmpresaControl {
 		} catch (Exception e) {
 			e.getMessage();
 		}
+	}
+
+	public void visualizarPdf() {
+		FacesContext fc = FacesContext.getCurrentInstance();
+
+		// Obtem o HttpServletResponse, objeto responsável pela resposta do
+		// servidor ao browser
+		HttpServletResponse response = (HttpServletResponse) fc
+				.getExternalContext().getResponse();
+
+		// Limpa o buffer do response
+		response.reset();
+
+		// Seta o tipo de conteudo no cabecalho da resposta. No caso, indica que
+		// o conteudo sera um documento pdf.
+		response.setContentType("application/pdf");
+
+		// Seta o tamanho do conteudo no cabecalho da resposta. No caso, o
+		// tamanho em bytes do pdf
+		response.setContentLength(documento.getArquivo().length);
+
+		// Seta o nome do arquivo e a disposição: "inline" abre no próprio
+		// navegador
+		// Mude para "attachment" para indicar que deve ser feito um download
+		response.setHeader("Content-disposition",
+				"inline; filename=arquivo.pdf");
+		try {
+
+			// Envia o conteudo do arquivo PDF para o response
+			response.getOutputStream().write(documento.getArquivo());
+
+			// Descarrega o conteudo do stream, forçando a escrita de qualquer
+			// byte ainda em buffer
+			response.getOutputStream().flush();
+
+			// Fecha o stream, liberando seus recursos
+			response.getOutputStream().close();
+
+			// Sinaliza ao JSF que a resposta HTTP para este pedido já foi
+			// gerada
+			fc.responseComplete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Download do arquivo
+	public StreamedContent getFile() {
+		InputStream stream = ((ServletContext) FacesContext
+				.getCurrentInstance().getExternalContext().getContext())
+				.getResourceAsStream(documento.getArquivo().toString());
+		file = new DefaultStreamedContent(stream, "application/pdf", ""
+				+ documento.getNome());
+		return file;
 	}
 
 	public List<Documento> listarDocumentos() {
