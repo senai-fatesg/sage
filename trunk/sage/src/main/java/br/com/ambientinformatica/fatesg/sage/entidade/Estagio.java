@@ -1,8 +1,10 @@
 package br.com.ambientinformatica.fatesg.sage.entidade;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,17 +12,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.ambientinformatica.fatesg.sage.entidade.Aluno;
+import br.com.ambientinformatica.util.Entidade;
 
 @Entity
-public class Estagio {
+public class Estagio extends Entidade{
 
 	@Id
 	@GeneratedValue(generator = "estagio_seq", strategy = GenerationType.SEQUENCE)
@@ -28,11 +29,9 @@ public class Estagio {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "IDF_EMPRESA")
 	private Empresa empresa;
 	
-	@OneToOne
-	@JoinColumn(name = "IDF_ALUNO")
+	@ManyToOne
 	private Aluno aluno;
 
 	@Temporal(TemporalType.DATE)
@@ -61,22 +60,12 @@ public class Estagio {
 	@Enumerated(EnumType.STRING)
 	private EnumStatusEstagio statusEstagio;
 	
-	@ManyToMany
-	@JoinColumn(name = "IDF_DOCUMENTO")
-	private List<Documento> documentos;
+   @OneToMany(cascade=CascadeType.ALL)
+   @JoinColumn(name="autoinfracao_id")
+	private List<Documento> documentos = new ArrayList<Documento>();
 	
 	@Enumerated(EnumType.STRING)
 	private EnumTipoEstagio tipoEstagio;
-
-	// TODO verificar metodo
-	public void agendarVisita() {
-
-	}
-
-	// TODO verificar metodo
-	public void montarProgramaEstagio() {
-
-	}
 
 	public Integer getId() {
 		return id;

@@ -1,7 +1,10 @@
 package br.com.ambientinformatica.fatesg.sage.entidade;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,28 +13,31 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import br.com.ambientinformatica.util.Entidade;
+
 @Entity
-public class Empresa {
+public class Empresa extends Entidade {
 
 	@Id
 	@GeneratedValue(generator = "empresa_seq", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "empresa_seq", sequenceName = "empresa_seq", allocationSize = 1, initialValue = 1)
 	private Integer id;
-	
+
 	private String nome;
 
 	private String endereco;
 
+	@Column(unique=true, nullable=false)
 	private String email;
 
 	private String telefone;
 
 	private String celular;
-	
-	@OneToMany
-	@JoinColumn(name = "ID_COLABORADOREMPRESA")
-	private List<ColaboradorEmpresa> supervisor;
-	
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "empresa_id")
+	private List<ColaboradorEmpresa> supervisores = new ArrayList<ColaboradorEmpresa>();
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -80,12 +86,12 @@ public class Empresa {
 		this.celular = celular;
 	}
 
-	public List<ColaboradorEmpresa> getSupervisor() {
-		return supervisor;
+	public List<ColaboradorEmpresa> getSupervisores() {
+		return supervisores;
 	}
 
-	public void setSupervisor(List<ColaboradorEmpresa> supervisor) {
-		this.supervisor = supervisor;
+	public void setSupervisores(List<ColaboradorEmpresa> supervisores) {
+		this.supervisores = supervisores;
 	}
-	
+
 }

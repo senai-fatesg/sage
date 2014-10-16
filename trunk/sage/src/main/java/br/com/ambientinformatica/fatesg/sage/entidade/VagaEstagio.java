@@ -10,8 +10,10 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.ambientinformatica.util.Entidade;
+
 @Entity
-public class VagaEstagio {
+public class VagaEstagio extends Entidade{
 
 	@Id
 	@GeneratedValue(generator = "vagaestagio_seq", strategy = GenerationType.SEQUENCE)
@@ -21,7 +23,8 @@ public class VagaEstagio {
 	@Temporal(TemporalType.DATE)
 	private Date dataPublicacao;
 
-	private String[] destinatario;
+	//TODO por que um array de String?
+	private String [] destinatario;
 
 	private String remetente;
 	
@@ -31,10 +34,6 @@ public class VagaEstagio {
 
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Date getDataPublicacao() {
@@ -77,13 +76,5 @@ public class VagaEstagio {
 		this.mensagem = mensagem;
 	}
 	
-	// TODO verificar metodo
-	public void publicarVaga(){
-		
-	}
-	
-	// TODO verificar metodo Alunos List<Alunos>
-	public void enviarEmailVagasDisponiveis(){
 
-	}
 }

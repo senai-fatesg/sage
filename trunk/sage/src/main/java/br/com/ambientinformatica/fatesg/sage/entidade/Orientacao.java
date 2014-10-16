@@ -8,14 +8,15 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.ambientinformatica.util.Entidade;
+
 @Entity
-public class Orientacao {
+public class Orientacao extends Entidade {
 
 	@Id
 	@GeneratedValue(generator = "orientacao_seq", strategy = GenerationType.SEQUENCE)
@@ -31,16 +32,15 @@ public class Orientacao {
 
 	@Enumerated(EnumType.STRING)
 	private EnumTipoAtendimento tipoAtendimento;
-	
+
 	@ManyToOne
 	private Estagio estagio;
-	
+
 	private String professor;
 
-	@Lob
-	private byte[] arquivo;
-	
-	// TODO Verificar professor orientador
+	@ManyToOne
+	private Documento arquivo;
+
 	public Integer getId() {
 		return id;
 	}
@@ -73,14 +73,6 @@ public class Orientacao {
 		return tipoAtendimento;
 	}
 
-	public byte[] getArquivo() {
-		return arquivo;
-	}
-
-	public void setArquivo(byte[] arquivo) {
-		this.arquivo = arquivo;
-	}
-
 	public Estagio getEstagio() {
 		return estagio;
 	}
@@ -95,6 +87,14 @@ public class Orientacao {
 
 	public void setProfessor(String professor) {
 		this.professor = professor;
+	}
+
+	public Documento getArquivo() {
+		return arquivo;
+	}
+
+	public void setArquivo(Documento arquivo) {
+		this.arquivo = arquivo;
 	}
 
 }
