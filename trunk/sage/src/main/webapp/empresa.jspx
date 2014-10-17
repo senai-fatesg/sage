@@ -8,87 +8,59 @@
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
 
-		<p:panel header="Formulário" id="panel">
-			<h:panelGrid columns="2">
-				<h:outputText value="Nome"></h:outputText>
-				<p:inputText value="#{EmpresaControl.empresa.nome }"></p:inputText>
-				<h:outputText value="Telefone"></h:outputText>
-				<p:inputMask value="#{EmpresaControl.empresa.telefone }"
-					mask="(99) 9999-9999"></p:inputMask>
-				<h:outputText value="Celular"></h:outputText>
-				<p:inputMask value="#{EmpresaControl.empresa.celular }"
-					mask="(99) 9999-9999"></p:inputMask>
-				<h:outputText value="Email"></h:outputText>
-				<p:inputText value="#{EmpresaControl.empresa.email }"></p:inputText>
-				<h:outputText value="Endereço"></h:outputText>
-				<p:inputText value="#{EmpresaControl.empresa.endereco }"></p:inputText>
+		<p:panel header="Cadastrar Nova Empresa" id="panel">
+			<p:fieldset legend="Empresa" id="panel1">
+				<a:field label="Nome" spaceLeft="15px">
+					<p:inputText id="nome" value="#{EmpresaControl.empresa.nome }"></p:inputText>
+				</a:field>
+				<a:field label="Telefone" spaceLeft="15px">
+					<p:inputMask id="telefone"
+						value="#{EmpresaControl.empresa.telefone }" mask="(99) 9999-9999" />
+				</a:field>
+				<a:field label="Celular" spaceLeft="15px">
+					<p:inputMask id="Celular"
+						value="#{EmpresaControl.empresa.celular }" mask="(99) 9999-9999" />
+				</a:field>
+				<a:newLine />
+				<a:field label="Email" spaceLeft="15px">
+					<p:inputText id="email" value="#{EmpresaControl.empresa.email }"></p:inputText>
+				</a:field>
+				<a:field label="Endereço" spaceLeft="15px">
+					<p:inputText id="endereco"
+						value="#{EmpresaControl.empresa.endereco }"></p:inputText>
+				</a:field>
+				<a:newLine />
+				<a:newLine />
 				<p:commandButton actionListener="#{EmpresaControl.incluir }"
-					value="Incluir" update="empresas, panel"></p:commandButton>
-			</h:panelGrid>
+					value="Incluir" update="panel" ajax="false"
+					icon="ui-icon-plusthick" />
+			</p:fieldset>
 
-			<h:form id="form">
-				<p:fileUpload fileUploadListener="#{EmpresaControl.upload}"
-					allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" sizeLimit="100000"
-					mode="advanced" />
-			</h:form>
+			<a:newLine />
+			<p:fieldset legend="Lista de Empresas" id="panel4">
+				<p:dataTable id="empresas" value="#{EmpresaControl.empresas }"
+					var="cont" width="100%" emptyMessage="Sem registros">
+					<f:facet name="header" />
+					<p:column sortBy="#{cont.nome }">
+						<f:facet name="header">
+							<h:outputText value="Nome"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.nome }"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{cont.telefone }">
+						<f:facet name="header">
+							<h:outputText value="Telefone"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.telefone }"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{cont.email }">
+						<f:facet name="header">
+							<h:outputText value="Email"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.email }"></h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
 		</p:panel>
-
-		<p:dataTable id="documentos" value="#{EmpresaControl.documentos}"
-			var="cont" width="100%" emptyMessage="Sem registros">>
-		<f:facet name="header">
-				<h:outputText value="Lista de Documentos"></h:outputText>
-			</f:facet>
-			<p:column sortBy="#{cont.nome }">
-				<f:facet name="header">
-					<h:outputText value="Nome"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{cont.nome }"></h:outputText>
-			</p:column>
-			<p:column sortBy="#{cont.dados }">
-				<f:facet name="header">
-					<h:outputText value="Arquivo"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{cont.dados }"></h:outputText>
-			</p:column>
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="Visualizar"></h:outputText>
-				</f:facet>
-				<h:commandLink value="Clique aqui"
-					action="#{EmpresaControl.visualizarPdf}" target="_blank" />
-			</p:column>
-			<p:column>
-				<p:commandButton id="downloadLink" value="Download" ajax="false"
-					onclick="PrimeFaces.monitorDownload(start, stop)"
-					icon="ui-icon-arrowthichk-s">
-					<p:fileDownload value="#{EmpresaControl.getFile}" />
-				</p:commandButton>
-			</p:column>
-		</p:dataTable>
-
-		<p:dataTable id="empresas" value="#{EmpresaControl.empresas }"
-			var="cont" width="100%" emptyMessage="Sem registros">
-			<f:facet name="header">
-				<h:outputText value="Lista de Empresas"></h:outputText>
-			</f:facet>
-			<p:column sortBy="#{cont.nome }">
-				<f:facet name="header">
-					<h:outputText value="Nome"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{cont.nome }"></h:outputText>
-			</p:column>
-			<p:column sortBy="#{cont.telefone }">
-				<f:facet name="header">
-					<h:outputText value="Telefone"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{cont.telefone }"></h:outputText>
-			</p:column>
-			<p:column sortBy="#{cont.email }">
-				<f:facet name="header">
-					<h:outputText value="Email"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{cont.email }"></h:outputText>
-			</p:column>
-		</p:dataTable>
 	</ui:define>
 </ui:composition>

@@ -8,47 +8,61 @@
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
 
-		<p:panel header="Formulário" id="panel">
-			<h:panelGrid columns="2">
-				<h:outputText value="Nome"></h:outputText>
-				<p:inputText value="#{ColaboradorEmpresaControl.colaborador.nome }"></p:inputText>
-				<h:outputText value="CPF"></h:outputText>
-				<p:inputMask value="#{ColaboradorEmpresaControl.colaborador.cpf }"
-					mask="999.999.999-99"></p:inputMask>
-				<h:outputText value="Telefone"></h:outputText>
-				<p:inputMask
-					value="#{ColaboradorEmpresaControl.colaborador.telefone }"
-					mask="(99) 9999-9999"></p:inputMask>
-				<h:outputText value="Email"></h:outputText>
-				<p:inputText value="#{ColaboradorEmpresaControl.colaborador.email }"></p:inputText>
-				<p:commandButton actionListener="#{ColaboradorEmpresaControl.incluir }"
+		<p:panel header="Cadastrar Colaborador Empresa" id="panel">
+			<p:fieldset legend="Colaboador Empresa" id="panel1">
+				<a:field label="Nome" spaceLeft="15px">
+					<p:inputText id="nome"
+						value="#{ColaboradorEmpresaControl.colaborador.nome }" />
+				</a:field>
+				<a:newLine />
+				<a:field label="CPF" spaceLeft="15px">
+					<p:inputMask id="cpf"
+						value="#{ColaboradorEmpresaControl.colaborador.cpf }"
+						mask="999.999.999-99" />
+				</a:field>
+				<a:newLine />
+				<a:field label="Telefone" spaceLeft="15px">
+					<p:inputMask id="telefone"
+						value="#{ColaboradorEmpresaControl.colaborador.telefone }"
+						mask="(99) 9999-9999" />
+				</a:field>
+				<a:newLine />
+				<a:field label="Email" spaceLeft="15px">
+					<p:inputText id="email"
+						value="#{ColaboradorEmpresaControl.colaborador.email }" />
+				</a:field>
+				<a:newLine />
+				<a:newLine />
+				<p:commandButton
+					actionListener="#{ColaboradorEmpresaControl.incluir }"
 					value="Incluir" update="colaboradores, panel"></p:commandButton>
-			</h:panelGrid>
+			</p:fieldset>
+
+			<a:newLine />
+			<p:fieldset legend="Colaboradores da Empresa" id="panel2">
+				<p:dataTable id="colaboradores"
+					value="#{ColaboradorEmpresaControl.colaboradores }" var="cont"
+					width="100%" emptyMessage="Sem registros">
+					<p:column sortBy="#{cont.nome }">
+						<f:facet name="header">
+							<h:outputText value="Nome"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.nome }"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{cont.telefone }">
+						<f:facet name="header">
+							<h:outputText value="Telefone"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.telefone }"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{cont.email }">
+						<f:facet name="header">
+							<h:outputText value="Email"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.email }"></h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
 		</p:panel>
-		<p:dataTable id="colaboradores"
-			value="#{ColaboradorEmpresaControl.colaboradores }" var="cont"
-			width="100%" emptyMessage="Sem registros">
-			<f:facet name="header">
-				<h:outputText value="Lista de Empresas"></h:outputText>
-			</f:facet>
-			<p:column sortBy="#{cont.nome }">
-				<f:facet name="header">
-					<h:outputText value="Nome"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{cont.nome }"></h:outputText>
-			</p:column>
-			<p:column sortBy="#{cont.telefone }">
-				<f:facet name="header">
-					<h:outputText value="Telefone"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{cont.telefone }"></h:outputText>
-			</p:column>
-			<p:column sortBy="#{cont.email }">
-				<f:facet name="header">
-					<h:outputText value="Email"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{cont.email }"></h:outputText>
-			</p:column>
-		</p:dataTable>
 	</ui:define>
 </ui:composition>
