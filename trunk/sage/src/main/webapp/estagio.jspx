@@ -9,85 +9,94 @@
 	<ui:define name="corpo">
 
 		<p:panel header="Cadastrar Novo Estágio" id="panel">
-			<p:fieldset legend="Estagiário"  id="panel1">
-					<a:field label="Aluno" width="220px" for="consAluno">
-						<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
-							effect="fade" value="#{EstagioControl.estagio.aluno}" var="a"
-							itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
-							completeMethod="#{EstagioControl.listarAlunos}"
-							forceSelection="true" style="width:220px;" >
-							<f:converter converterId="alunoConverter" />
-							<f:facet name="itemtip">
-								<h:panelGrid columns="2" cellpadding="10">
-									<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
-									<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
-								</h:panelGrid>
-							</f:facet>
-							<p:ajax event="itemSelect" update="email, telefone, celular" />
-						</p:autoComplete>
-					</a:field>
-					<a:field label="Email" spaceLeft="15px" >
+			<p:fieldset legend="Estagiário" id="panel1">
+				<a:field label="Aluno" width="220px" for="consAluno">
+					<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
+						effect="fade" value="#{EstagioControl.estagio.aluno}" var="a"
+						itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
+						completeMethod="#{EstagioControl.listarAlunos}"
+						forceSelection="true" style="width:220px;">
+						<f:converter converterId="alunoConverter" />
+						<f:facet name="itemtip">
+							<h:panelGrid columns="2" cellpadding="10">
+								<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
+								<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
+							</h:panelGrid>
+						</f:facet>
+						<p:ajax event="itemSelect" update="email, telefone, celular" />
+					</p:autoComplete>
+				</a:field>
+				<a:field label="Email" spaceLeft="15px">
 					<p:inputText id="email"
-						value="#{EstagioControl.estagio.aluno.email }"
-						readonly="true" disabled="true"/>
-					</a:field>
-					<a:field label="Telefone" spaceLeft="15px" >
+						value="#{EstagioControl.estagio.aluno.email }" readonly="true"
+						disabled="true" />
+				</a:field>
+				<a:field label="Telefone" spaceLeft="15px">
 					<p:inputMask id="telefone"
 						value="#{EstagioControl.estagio.aluno.telefone }"
-						mask="(99) 9999-9999" readonly="true" disabled="true"/>
-					</a:field>
-					<a:field label="Celular" spaceLeft="15px" >
+						mask="(99) 9999-9999" readonly="true" disabled="true" />
+				</a:field>
+				<a:field label="Celular" spaceLeft="15px">
 					<p:inputMask id="celular"
 						value="#{EstagioControl.estagio.aluno.celular }"
-						mask="(99) 9999-9999" readonly="true" disabled="true"/>
-					</a:field>
+						mask="(99) 9999-9999" readonly="true" disabled="true" />
+				</a:field>
 			</p:fieldset>
-			<a:newLine/>
-			<p:panel header="Empresa" id="panel2">
-				<h:panelGrid columns="2">
-					<a:field label="Empresa" width="510px" for="consEmpresa">
-						<p:autoComplete id="consEmpresa" maxResults="10"
-							minQueryLength="3" effect="fade"
-							value="#{EstagioControl.estagio.empresa}" var="e"
-							itemLabel="#{e.nome}" itemValue="#{e}"
-							completeMethod="#{EstagioControl.listarEmpresas}"
-							forceSelection="true" style="width:510px;">
-							<f:converter converterId="empresaConverter" />
-							<f:facet name="itemtip">
-								<h:panelGrid columns="2" cellpadding="10">
-									<h:outputText id="nomeEmpresaCons" value="#{e.nome}" />
-									<h:outputText id="TelefoneEmpresaCons" value="#{e.telefone}" />
-								</h:panelGrid>
-							</f:facet>
-							
-						</p:autoComplete>
-					</a:field>
-					<h:outputText value="Telefone"></h:outputText>
-					<p:inputText id="telefoneEmpresa" readonly="true"
-						value="#{EstagioControl.estagio.empresa.telefone }"></p:inputText>
-				</h:panelGrid>
-			</p:panel>
-			<p:panel header="Controle do Estágio" id="panel3">
-				<h:panelGrid columns="2">
-				
-		            <a:field label="Tipo do Estágio">
-						<p:selectOneMenu value="#{EstagioControl.tipoEstagio }" style="width:170px;">
-							<f:selectItem itemLabel="--Selecione--" itemValue="" />
-							<f:selectItems value="#{EstagioControl.tiposEstagio }"></f:selectItems>
-						</p:selectOneMenu>
-					</a:field>
-					
-					<a:newLine/>
-					
-					<h:outputText value="Data Início"></h:outputText>
+			<a:newLine />
+			<p:fieldset legend="Empresa" id="panel2">
+				<a:field label="Empresa" width="220px" for="consEmpresa">
+					<p:autoComplete id="consEmpresa" maxResults="10" minQueryLength="3"
+						effect="fade" value="#{EstagioControl.estagio.empresa}" var="e"
+						itemLabel="#{e.nome}" itemValue="#{e}"
+						completeMethod="#{EstagioControl.listarEmpresas}"
+						forceSelection="true" style="width:510px;">
+						<f:converter converterId="empresaConverter" />
+						<f:facet name="itemtip">
+							<h:panelGrid columns="2" cellpadding="10">
+								<h:outputText id="nomeEmpresaCons" value="#{e.nome}" />
+								<h:outputText id="TelefoneEmpresaCons" value="#{e.telefone}" />
+							</h:panelGrid>
+						</f:facet>
+						<p:ajax event="itemSelect"
+							update="telefoneEmpresa, enderecoEmpresa, emailEmpresa" />
+					</p:autoComplete>
+				</a:field>
+				<a:field label="Telefone" spaceLeft="15px">
+					<p:inputText id="telefoneEmpresa"
+						value="#{EstagioControl.estagio.empresa.telefone }"
+						readonly="true" disabled="true" />
+				</a:field>
+				<a:field label="Endereço" spaceLeft="15px">
+					<p:inputText id="enderecoEmpresa"
+						value="#{EstagioControl.estagio.empresa.endereco }"
+						readonly="true" disabled="true" />
+				</a:field>
+				<a:field label="Email" spaceLeft="15px">
+					<p:inputText id="emailEmpresa"
+						value="#{EstagioControl.estagio.empresa.email }" readonly="true"
+						disabled="true" />
+				</a:field>
+			</p:fieldset>
+			<a:newLine />
+			<p:fieldset legend="Controle do Estágio" id="panel3">
+				<a:field label="Tipo do Estágio">
+					<p:selectOneMenu value="#{EstagioControl.tipoEstagio }"
+						style="width:220px;">
+						<f:selectItem itemLabel="--Selecione--" itemValue="" />
+						<f:selectItems value="#{EstagioControl.tiposEstagio }"></f:selectItems>
+					</p:selectOneMenu>
+				</a:field>
+				<a:field label="Data Início" spaceLeft="15px">
 					<p:calendar value="#{EstagioControl.estagio.dataInicio }"
 						pattern="dd/MM/yyyy"></p:calendar>
-					<h:outputText value="Data Término"></h:outputText>
+				</a:field>
+				<a:field label="Data Término" spaceLeft="15px">
 					<p:calendar value="#{EstagioControl.estagio.dataTermino }"
 						pattern="dd/MM/yyyy"></p:calendar>
-				</h:panelGrid>
-			</p:panel>
-			<p:panel header="Cronograma de Atividades de Estágio" id="panel4">
+				</a:field>
+			</p:fieldset>
+			<a:newLine />
+			<p:fieldset legend="Cronograma de Atividades de Estágio" id="panel4">
 				<h:panelGrid columns="2">
 					<h:outputText value="Professor Orientador"></h:outputText>
 					<p:inputText value="#{EstagioControl.estagio.professorOrientador }"></p:inputText>
@@ -108,9 +117,10 @@
 					<p:calendar value="#{EstagioControl.estagio.dataRelatorioCd }"
 						pattern="dd/MM/yyyy"></p:calendar>
 				</h:panelGrid>
-			</p:panel>
+			</p:fieldset>
 			<p:commandButton actionListener="#{EstagioControl.incluir }"
-					value="Incluir" update="panel, panel2, panel3, panel4" ajax="false" icon="ui-icon-plusthick"/>
+				value="Incluir" update="panel, panel2, panel3, panel4" ajax="false"
+				icon="ui-icon-plusthick" />
 		</p:panel>
 
 	</ui:define>
