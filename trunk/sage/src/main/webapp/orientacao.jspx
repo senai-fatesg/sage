@@ -7,25 +7,25 @@
 	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
-	
-			<a:field label="Aluno" width="610px" for="consAluno">
-				<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
-					effect="fade" value="#{OrientacaoControl.aluno}}" var="a"
-					itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
-					completeMethod="#{OrientacaoControl.listarAlunos}"
-					forceSelection="true" style="width:610px;">
-					<f:converter converterId="alunoConverter" />
-					<f:facet name="itemtip">
-						<h:panelGrid columns="2" cellpadding="10">
-							<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
-							<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
-						</h:panelGrid>
-					</f:facet>
-				</p:autoComplete>
-			</a:field>
-					
 
-	<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}" var="est" width="100%" emptyMessage="Sem registros">
+		<a:field label="Alunos" width="220px" for="consAluno">
+			<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
+				effect="fade" value="#{OrientacaoControl.aluno}" var="a"
+				itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
+				completeMethod="#{OrientacaoControl.listarAlunos}"
+				forceSelection="true" style="width:220px;">
+				<f:converter converterId="alunoConverter" />
+				<f:facet name="itemtip">
+					<h:panelGrid columns="2" cellpadding="10">
+						<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
+						<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
+					</h:panelGrid>
+				</f:facet>
+			</p:autoComplete>
+		</a:field>
+		
+		<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}"
+			var="est" width="100%" emptyMessage="Sem registros">
 			<f:facet name="header">
 				<h:outputText value="Estágios"></h:outputText>
 			</f:facet>
@@ -48,7 +48,7 @@
 				<h:outputText value="#{est.professorOrientador}"></h:outputText>
 			</p:column>
 		</p:dataTable>
-		
+
 		<p:panel header="Formulário" id="panel">
 			<h:panelGrid columns="2">
 				<h:outputText value="Professor Orientador"></h:outputText>
