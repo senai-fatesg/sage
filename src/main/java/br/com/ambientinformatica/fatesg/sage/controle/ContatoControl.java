@@ -16,36 +16,42 @@ import br.com.ambientinformatica.fatesg.sage.persistencia.ContatoDao;
 public class ContatoControl {
 
 	private Contato contato = new Contato();
-	
+
 	@Autowired
 	private ContatoDao contatoDao;
-	
-	private List<Contato> contatos = new ArrayList<Contato>();
-	
 
-   @PostConstruct
-   public void init(){
-      listar(null);
-   }
-   
-	public void confirmar(ActionEvent evt){
+	private List<Contato> contatos = new ArrayList<Contato>();
+
+	@PostConstruct
+	public void init() {
+		listar(null);
+	}
+
+	public void confirmar(ActionEvent evt) {
 		try {
-			contatoDao.alterar(contato);
-         listar(evt);
-         contato = new Contato();
+			if (contato == null || contato.getNome().isEmpty()) {
+				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
+
+			} else {
+				contatoDao.alterar(contato);
+				listar(evt);
+				contato = new Contato();
+				
+				UtilFaces.addMensagemFaces("Contato cadastrado com sucesso!");
+			}
 		} catch (Exception e) {
-		   UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces(e);
 		}
 	}
 
-	public void listar(ActionEvent evt){
+	public void listar(ActionEvent evt) {
 		try {
 			contatos = contatoDao.listar();
 		} catch (Exception e) {
-		   UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro ao listar os contatos!");
 		}
 	}
-	
+
 	public Contato getContato() {
 		return contato;
 	}
@@ -53,7 +59,7 @@ public class ContatoControl {
 	public void setContato(Contato contato) {
 		this.contato = contato;
 	}
-	
+
 	public List<Contato> getContatos() {
 		return contatos;
 	}

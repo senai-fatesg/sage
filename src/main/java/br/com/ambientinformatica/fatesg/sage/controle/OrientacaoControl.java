@@ -1,16 +1,11 @@
 package br.com.ambientinformatica.fatesg.sage.controle;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -65,9 +60,9 @@ public class OrientacaoControl {
 
 	private List<Documento> documentos = new ArrayList<Documento>();
 
-	private StreamedContent file;
+	private StreamedContent dadosDocumento;
 
-	//private static final int DEFAULT_BUFFER_SIZE = 10240;
+	// private static final int DEFAULT_BUFFER_SIZE = 10240;
 
 	@PostConstruct
 	public void init() {
@@ -80,14 +75,20 @@ public class OrientacaoControl {
 	 */
 	public void upload(FileUploadEvent event) {
 		try {
-			documento.setNome(event.getFile().getFileName());
-			documento.setDados(event.getFile().getContents());
-			documentoDao.incluir(documento);
+			if (documento == null || documento.getNome().isEmpty()) {
+				UtilFaces.addMensagemFaces("Favor selecione o documento!");
+			} else {
+				documento.setNome(event.getFile().getFileName());
+				documento.setDados(event.getFile().getContents());
+				documentoDao.incluir(documento);
+
+				UtilFaces.addMensagemFaces("Arquivo carregado com sucesso!");
+			}
 		} catch (Exception e) {
 			UtilFaces
-					.addMensagemFaces("Houve um erro ao fazer o Upload do Arquivo.");
+					.addMensagemFaces("Houve um erro ao fazer o Upload do Arquivo!");
 		}
-		UtilFaces.addMensagemFaces("Arquivo carregado com sucesso.");
+
 	}
 
 	public void visualizarPdf() {
@@ -132,41 +133,54 @@ public class OrientacaoControl {
 			// gerada
 			fc.responseComplete();
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces
+					.addMensagemFaces("Houve erro para visualizar o documento!");
 		}
 	}
 
 	/*
 	 * Download do arquivo
 	 */
-	public StreamedContent getFile() {
+	public StreamedContent file() {
 
-		InputStream stream = ((ServletContext) FacesContext
-				.getCurrentInstance().getExternalContext().getContext())
-				.getResourceAsStream(documento.getDados().toString());
-		
-		file = new DefaultStreamedContent(stream, "application/pdf", ""
-				+ documento.getNome());
-		
-		return file;
+		try {
+			ByteArrayInputStream input1 = new ByteArrayInputStream(
+					documento.getDados());
+			// InputStream stream = ((ServletContext) FacesContext
+			// .getCurrentInstance().getExternalContext().getContext())
+			// .getResourceAsStream(input1);
+
+			dadosDocumento = new DefaultStreamedContent(input1,
+					"application/pdf", "" + documento.getNome());
+
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces("Houve erro no Download!");
+		}
+		return dadosDocumento;
 	}
 
 	public List<Documento> listarDocumentos() {
 		try {
 			documentos = documentoDao.findDocumentosById();
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces("Houve erro para lista os documentos.");
+			UtilFaces.addMensagemFaces("Houve erro para lista os documentos!");
 		}
 		return documentos;
 	}
 
 	public void incluir(ActionEvent evt) {
 		try {
-			orientacaoDao.incluir(orientacao);
-			listar(evt);
-			orientacao = new Orientacao();
+			if (orientacao == null || orientacao.getEstagio().getId().equals(null)) {
+				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
+			} else {
+				orientacaoDao.incluir(orientacao);
+				listar(evt);
+				orientacao = new Orientacao();
+				
+				UtilFaces.addMensagemFaces("orientação Cadastrada com sucesso!");
+			}
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces("Houve erro para incluir a orientação.");
+			UtilFaces.addMensagemFaces("Houve erro para incluir a orientação!");
 		}
 	}
 
@@ -178,7 +192,7 @@ public class OrientacaoControl {
 		try {
 			orientacoes = orientacaoDao.listar();
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces("Houve erro para lista as orientações.");
+			UtilFaces.addMensagemFaces("Houve erro para lista as orientações!");
 		}
 	}
 
@@ -187,7 +201,7 @@ public class OrientacaoControl {
 		try {
 			alunos = alunoDao.listarPorNome(query);
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces("Houve erro para lista os alunos.");
+			UtilFaces.addMensagemFaces("Houve erro para lista os alunos!");
 		}
 		return alunos;
 	}
@@ -197,7 +211,7 @@ public class OrientacaoControl {
 			estagios.clear();
 			estagios = estagioDao.listarEstagiosDoAluno(aluno);
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces("Houve erro para lista os estágios.");
+			UtilFaces.addMensagemFaces("Houve erro para lista os estágios!");
 		}
 		return estagios;
 	}

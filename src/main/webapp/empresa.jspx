@@ -21,7 +21,6 @@
 					<p:inputMask id="Celular"
 						value="#{EmpresaControl.empresa.celular }" mask="(99) 9999-9999" />
 				</a:field>
-				<a:newLine />
 				<a:field label="Email" spaceLeft="15px">
 					<p:inputText id="email" value="#{EmpresaControl.empresa.email }"></p:inputText>
 				</a:field>
