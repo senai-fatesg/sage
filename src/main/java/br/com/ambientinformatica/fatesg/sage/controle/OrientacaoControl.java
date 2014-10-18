@@ -3,7 +3,9 @@ package br.com.ambientinformatica.fatesg.sage.controle;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +14,12 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -60,13 +65,14 @@ public class OrientacaoControl {
 
 	private List<Documento> documentos = new ArrayList<Documento>();
 
-	// private FileInputStream file;
+	private StreamedContent file;
 
-	private static final int DEFAULT_BUFFER_SIZE = 10240;
+	//private static final int DEFAULT_BUFFER_SIZE = 10240;
 
 	@PostConstruct
 	public void init() {
 		listar(null);
+		listarDocumentos();
 	}
 
 	/*
@@ -133,71 +139,23 @@ public class OrientacaoControl {
 	/*
 	 * Download do arquivo
 	 */
-	public void getFile() throws IOException {
-		/*
-		 * InputStream stream = ((ServletContext)
-		 * FacesContext.getCurrentInstance()
-		 * .getExternalContext().getContext()).
-		 * getResourceAsStream(documento.getDados().toString()); file = new
-		 * DefaultStreamedContent(stream, "application/pdf", "" +
-		 * documento.getNome()); return file;
-		 */
+	public StreamedContent getFile() {
 
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		ExternalContext externalContext = facesContext.getExternalContext();
-		HttpServletResponse response = (HttpServletResponse) externalContext
-				.getResponse();
-
-		// File file = new File(getFilePath(), getFileName());
-		// BufferedInputStream input = null;
-		ByteArrayInputStream input = null;
-		BufferedOutputStream output = null;
-
-		try {
-			// input = new BufferedInputStream(new
-			// FileInputStream(documento.getDados()), DEFAULT_BUFFER_SIZE);
-
-			input = new ByteArrayInputStream(documento.getDados());
-			response.reset();
-			response.setHeader("Content-Type", "application/pdf");
-			response.setHeader("Content-Length",
-					String.valueOf(documento.getDados().length));
-			response.setHeader("Content-Disposition", "inline; filename=\""
-					+ documento.getNome() + "\"");
-			output = new BufferedOutputStream(response.getOutputStream(),
-					DEFAULT_BUFFER_SIZE);
-
-			// byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-			int length;
-			while ((length = input.read(documento.getDados())) > 0) {
-				output.write(documento.getDados(), 0, length);
-			}
-
-			output.flush();
-		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
-		} finally {
-			close(output);
-			close(input);
-		}
-		facesContext.responseComplete();
-	}
-
-	private static void close(Closeable resource) {
-		if (resource != null) {
-			try {
-				resource.close();
-			} catch (Exception e) {
-				UtilFaces.addMensagemFaces(e);
-			}
-		}
+		InputStream stream = ((ServletContext) FacesContext
+				.getCurrentInstance().getExternalContext().getContext())
+				.getResourceAsStream(documento.getDados().toString());
+		
+		file = new DefaultStreamedContent(stream, "application/pdf", ""
+				+ documento.getNome());
+		
+		return file;
 	}
 
 	public List<Documento> listarDocumentos() {
 		try {
 			documentos = documentoDao.findDocumentosById();
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro para lista os documentos.");
 		}
 		return documentos;
 	}
@@ -208,7 +166,7 @@ public class OrientacaoControl {
 			listar(evt);
 			orientacao = new Orientacao();
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro para incluir a orientação.");
 		}
 	}
 
@@ -220,7 +178,7 @@ public class OrientacaoControl {
 		try {
 			orientacoes = orientacaoDao.listar();
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro para lista as orientações.");
 		}
 	}
 
@@ -229,7 +187,7 @@ public class OrientacaoControl {
 		try {
 			alunos = alunoDao.listarPorNome(query);
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro para lista os alunos.");
 		}
 		return alunos;
 	}
@@ -239,7 +197,7 @@ public class OrientacaoControl {
 			estagios.clear();
 			estagios = estagioDao.listarEstagiosDoAluno(aluno);
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro para lista os estágios.");
 		}
 		return estagios;
 	}

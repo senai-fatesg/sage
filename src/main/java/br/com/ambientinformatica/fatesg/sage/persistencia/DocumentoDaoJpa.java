@@ -21,7 +21,7 @@ public class DocumentoDaoJpa extends PersistenciaJpa<Documento> implements Docum
 		String jpql = "SELECT d from Documento d"; 
 		Query query = em.createQuery(jpql);
 		//query.setParameter("aluno", aluno.getId());
-		List<Documento> estagios = (List<Documento>) query.getResultList();
-		return estagios;
+		List<Documento> documentos = (List<Documento>) query.getResultList();
+		return documentos;
 	}
 }
