@@ -10,21 +10,20 @@
 
 		<p:panel header="Cadastrar Nova Orientação" id="panel">
 			<p:fieldset legend="Orientação" id="panel1">
-				<a:field label="Alunos" width="220px" for="consAluno">
-					<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
-						effect="fade" value="#{OrientacaoControl.aluno}" var="a"
-						itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
-						completeMethod="#{OrientacaoControl.listarAlunos}"
-						forceSelection="true" style="width:220px;">
-						<f:converter converterId="alunoConverter" />
-						<f:facet name="itemtip">
-							<h:panelGrid columns="2" cellpadding="10">
-								<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
-								<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
-							</h:panelGrid>
-						</f:facet>
-					</p:autoComplete>
-				</a:field>
+				<a:field label="Alunos" width="220px" for="consAluno" />
+				<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
+					effect="fade" value="#{OrientacaoControl.aluno}" var="a"
+					itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
+					completeMethod="#{OrientacaoControl.listarAlunos}"
+					forceSelection="true" style="width:220px;">
+					<f:converter converterId="alunoConverter" />
+					<f:facet name="itemtip">
+						<h:panelGrid columns="2" cellpadding="10">
+							<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
+							<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
+						</h:panelGrid>
+					</f:facet>
+				</p:autoComplete>
 			</p:fieldset>
 
 			<a:newLine />
@@ -94,24 +93,11 @@
 						</f:facet>
 						<h:outputText value="#{cont.nome }"></h:outputText>
 					</p:column>
-					<p:column sortBy="#{cont.dados }">
-						<f:facet name="header">
-							<h:outputText value="Arquivo"></h:outputText>
-						</f:facet>
-						<h:outputText value="#{cont.dados }"></h:outputText>
-					</p:column>
 					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Visualizar"></h:outputText>
-						</f:facet>
-						<h:commandLink value="Clique aqui"
-							action="#{OrientacaoControl.visualizarPdf }" target="_blank" />
-					</p:column>
-					<p:column>
-						<p:commandButton id="downloadLink" value="Download" ajax="false"
-							onclick="PrimeFaces.monitorDownload(start, stop)"
+						<p:commandButton id="downloadLink" value="Download"
+							ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"
 							icon="ui-icon-arrowthichk-s">
-							<p:fileDownload value="#{OrientacaoControl.getFile }" />
+							<p:fileDownload value="#{OrientacaoControl.file}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
