@@ -36,7 +36,7 @@ public class Orientacao extends Entidade {
 	@ManyToOne
 	private Estagio estagio;
 
-	private String professor;
+	private String professor = "Professor";
 
 	@ManyToOne
 	private Documento arquivo;

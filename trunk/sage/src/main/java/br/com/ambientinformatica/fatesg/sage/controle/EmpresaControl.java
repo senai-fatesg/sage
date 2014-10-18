@@ -33,13 +33,19 @@ public class EmpresaControl {
 	}
 
 	public void incluir(ActionEvent evt) {
+
 		try {
-			empresaDao.incluir(empresa);
-			listar(evt);
-			empresa = new Empresa();
+			if (empresa == null || empresa.getNome().isEmpty()) {
+				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
+			} else {
+				empresaDao.incluir(empresa);
+				listar(evt);
+				empresa = new Empresa();
+			}
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
+
 	}
 
 	public void listar(ActionEvent evt) {

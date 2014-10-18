@@ -71,7 +71,7 @@ public class EstagioControl {
 		try {
 			alunos = alunoDao.listarPorNome(query);
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro ao listar os alunos!");
 		}
 		return alunos;
 	}
@@ -81,24 +81,26 @@ public class EstagioControl {
 		try {
 			empresas = empresaDao.listarPorNome(query);
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro ao listar as empresas!");
 		}
 		return empresas;
 	}
 
 	public void incluir(ActionEvent evt) {
 		try {
-			if(tipoEstagio == null){
-				UtilFaces.addMensagemFaces("Selecione o Tipo de Estagio");
+			if(estagio == null){
+				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
 			}else{
 				estagio.setTipoEstagio(tipoEstagio);
 				estagioDao.alterar(estagio);
 				estagio = new Estagio();
+				
+				UtilFaces.addMensagemFaces("Estágio Incluido com sucesso!");
 			}
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro ao cadastrar o estágio!");
 		}
-		UtilFaces.addMensagemFaces("Estagio Incluido com sucesso!");
+		
 	}
 
 	public Estagio getEstagio() {

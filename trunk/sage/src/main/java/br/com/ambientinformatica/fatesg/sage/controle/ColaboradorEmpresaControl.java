@@ -32,9 +32,15 @@ public class ColaboradorEmpresaControl {
 
 	public void incluir(ActionEvent evt) {
 		try {
-			colaboradorDao.incluir(colaborador);
-			listar(evt);
-			colaborador = new ColaboradorEmpresa();
+			if (colaborador == null || colaborador.getNome().isEmpty()) {
+				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
+			} else {
+				colaboradorDao.incluir(colaborador);
+				listar(evt);
+				colaborador = new ColaboradorEmpresa();
+				
+				UtilFaces.addMensagemFaces("Colaborador cadastrado com sucesso!");
+			}
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
@@ -44,7 +50,7 @@ public class ColaboradorEmpresaControl {
 		try {
 			colaboradores = colaboradorDao.listar();
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces("Houve erro ao listar os colaboradores!");
 		}
 	}
 
