@@ -10,22 +10,25 @@
 
 		<p:panel header="Cadastrar Nova Orientação" id="panel">
 			<p:fieldset legend="Orientação" id="panel1">
-				<a:field label="Alunos" width="220px" for="consAluno" />
-				<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
-					effect="fade" value="#{OrientacaoControl.aluno}" var="a"
-					itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
-					completeMethod="#{OrientacaoControl.listarAlunos}"
-					forceSelection="true" style="width:220px;">
-					<f:converter converterId="alunoConverter" />
-					<f:facet name="itemtip">
-						<h:panelGrid columns="2" cellpadding="10">
-							<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
-							<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
-						</h:panelGrid>
-					</f:facet>
-				</p:autoComplete>
+				<a:field label="Aluno" width="220px" for="consAluno">
+					<p:autoComplete id="consAluno" maxResults="10" minQueryLength="3"
+						effect="fade" value="#{EstagioControl.estagio.aluno}" var="a"
+						itemLabel="#{a.nome}" itemValue="#{a}" immediate="true"
+						completeMethod="#{EstagioControl.listarAlunos}"
+						forceSelection="true" style="width:220px;">
+						<f:converter converterId="alunoConverter" />
+						<f:facet name="itemtip">
+							<h:panelGrid columns="2" cellpadding="10">
+								<h:outputText id="nomeAlunoCons" value="#{a.nome}" />
+								<h:outputText id="telefoneAlunoCons" value="#{a.celular}" />
+							</h:panelGrid>
+						</f:facet>
+						<p:ajax event="itemSelect"
+							listener="#{OrientacaoControl.listarEstagiosDoAluno }"
+							update="estagios"></p:ajax>
+					</p:autoComplete>
+				</a:field>
 			</p:fieldset>
-
 			<a:newLine />
 			<p:fieldset legend="Estágios" id="panel2">
 				<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}"
@@ -38,7 +41,7 @@
 					</p:column>
 					<p:column sortBy="#{est.statusEstagio}">
 						<f:facet name="header">
-							<h:outputText value="Professor Orientador"></h:outputText>
+							<h:outputText value="Status Estágio"></h:outputText>
 						</f:facet>
 						<h:outputText value="#{est.statusEstagio.descricao }"></h:outputText>
 					</p:column>
@@ -54,21 +57,27 @@
 			<a:newLine />
 			<p:fieldset legend="Orientações" id="panel3">
 				<h:panelGrid columns="2">
-					<h:outputText value="Professor Orientador"></h:outputText>
-					<p:inputText
-						value="#{OrientacaoControl.orientacao.estagio.professorOrientador }"></p:inputText>
-					<h:outputText value="Tipo de Atendimento"></h:outputText>
-					<h:selectOneMenu
-						value="#{OrientacaoControl.orientacao.tipoAtendimento}">
-						<f:selectItem itemLabel="--Nenhum--" itemValue="" />
-						<f:selectItems value="#{OrientacaoControl.tiposAtendimento }" />
-					</h:selectOneMenu>
-					<h:outputText value="Relatar Atendimento"></h:outputText>
-					<p:inputTextarea
-						value="#{OrientacaoControl.orientacao.informacaoComplementar }"></p:inputTextarea>
-					<h:outputText value="Data Atendimento"></h:outputText>
-					<p:calendar value="#{OrientacaoControl.orientacao.dataAtendimento}"
-						pattern="dd/MM/yyyy"></p:calendar>
+					<a:field label="Professor Orientador" spaceLeft="15px">
+						<p:inputText id="telefoneEmpresa"
+							value="#{OrientacaoControl.orientacao.estagio.professorOrientador }" />
+					</a:field>
+					<a:field label="Tipo de Atendimento">
+						<p:selectOneMenu
+							value="#{OrientacaoControl.orientacao.tipoAtendimento }"
+							style="width:220px;">
+							<f:selectItem itemLabel="--Selecione--" itemValue="" />
+							<f:selectItems value="#{OrientacaoControl.tiposAtendimento }"></f:selectItems>
+						</p:selectOneMenu>
+					</a:field>
+					<a:field label="Relatar Atendimento" spaceLeft="15px">
+						<p:inputTextarea
+							value="#{OrientacaoControl.orientacao.informacaoComplementar }"></p:inputTextarea>
+					</a:field>
+					<a:field label="Data Atendimento" spaceLeft="15px">
+						<p:calendar
+							value="#{OrientacaoControl.orientacao.dataAtendimento}"
+							pattern="dd/MM/yyyy"></p:calendar>
+					</a:field>
 					<a:newLine />
 					<p:commandButton actionListener="#{OrientacaoControl.incluir }"
 						value="Incluir" update="orientacoes, panel"></p:commandButton>
@@ -93,12 +102,26 @@
 						</f:facet>
 						<h:outputText value="#{cont.nome }"></h:outputText>
 					</p:column>
+					<p:column sortBy="#{cont.dados }">
+						<f:facet name="header">
+							<h:outputText value="Arquivo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.dados }"></h:outputText>
+					</p:column>
 					<p:column>
-						<p:commandButton id="downloadLink" value="Download"
-							ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"
+						<f:facet name="header">
+							<h:outputText value="Visualizar"></h:outputText>
+						</f:facet>
+						<h:commandLink value="Clique aqui"
+							action="#{OrientacaoControl.visualizarPdf }" target="_blank" />
+					</p:column>
+					<p:column>
+						<p:commandLink id="downloadLink" value="Download" ajax="false"
+							onclick="PrimeFaces.monitorDownload(start, stop)"
 							icon="ui-icon-arrowthichk-s">
-							<p:fileDownload value="#{OrientacaoControl.file}" />
-						</p:commandButton>
+							<p:fileDownload value="#{OrientacaoControl.getFile }" />
+							Download
+						</p:commandLink>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
@@ -134,7 +157,6 @@
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
-
 		</p:panel>
 	</ui:define>
 </ui:composition>
