@@ -48,6 +48,8 @@ public class OrientacaoControl {
 
 	private Aluno aluno;
 
+	private Estagio estagio = new Estagio();
+	
 	private List<Aluno> alunos = new ArrayList<Aluno>();
 
 	private List<Estagio> estagios;
@@ -90,7 +92,7 @@ public class OrientacaoControl {
 		FacesContext fc = FacesContext.getCurrentInstance();
 
 		/*
-		 * Obtem o HttpServletResponse, objeto responsável pela resposta do
+		 * Obtem o HttpServletResponse, objeto responsÃ¡vel pela resposta do
 		 * servidor ao browser
 		 */
 		HttpServletResponse response = (HttpServletResponse) fc
@@ -107,7 +109,7 @@ public class OrientacaoControl {
 		// tamanho em bytes do pdf
 		response.setContentLength(documento.getDados().length);
 
-		// Seta o nome do arquivo e a disposição: "inline" abre no próprio
+		// Seta o nome do arquivo e a disposiÃ§Ã£o: "inline" abre no prÃ³prio
 		// navegador
 		// Mude para "attachment" para indicar que deve ser feito um download
 		response.setHeader("Content-disposition", "inline; filename=arquivo.pdf");
@@ -116,14 +118,14 @@ public class OrientacaoControl {
 			// Envia o conteudo do arquivo PDF para o response
 			response.getOutputStream().write(documento.getDados());
 
-			// Descarrega o conteudo do stream, forçando a escrita de qualquer
+			// Descarrega o conteudo do stream, forÃ§ando a escrita de qualquer
 			// byte ainda em buffer
 			response.getOutputStream().flush();
 
 			// Fecha o stream, liberando seus recursos
 			response.getOutputStream().close();
 
-			// Sinaliza ao JSF que a resposta HTTP para este pedido já foi
+			// Sinaliza ao JSF que a resposta HTTP para este pedido jÃ¡ foi
 			// gerada
 			fc.responseComplete();
 		} catch (Exception e) {
@@ -204,14 +206,18 @@ public class OrientacaoControl {
 
 	public void incluir(ActionEvent evt) {
 		try {
+			orientacao.setProfessor(estagio.getProfessorOrientador());
+			orientacao.setEstagio(estagio);
+			orientacao.setArquivo(null);
 			orientacaoDao.incluir(orientacao);
 			listar(evt);
 			orientacao = new Orientacao();
+			estagio = new Estagio();
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
 	}
-
+	
 	public List<SelectItem> getTiposAtendimento() {
 		return UtilFaces.getListEnum(EnumTipoAtendimento.values());
 	}
@@ -250,6 +256,18 @@ public class OrientacaoControl {
 
 	}
 
+	//PEGA O PROFESSOR ORIENTADOR DA LISTA E PREENCHE NO CAMPO
+	public void professorSelecionado(ActionEvent evt){
+		try{
+			estagio = (Estagio) evt.getComponent().getAttributes().get("professor");
+			FacesContext.getCurrentInstance().getExternalContext()
+			.redirect("orientacao.jsf");
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
+		}
+	}
+	
+	//GTT E STT
 	public Orientacao getOrientacao() {
 		return orientacao;
 	}
@@ -321,4 +339,14 @@ public class OrientacaoControl {
 	public void setDocumentos(List<Documento> documentos) {
 		this.documentos = documentos;
 	}
+
+	public Estagio getEstagio() {
+		return estagio;
+	}
+
+	public void setEstagio(Estagio estagio) {
+		this.estagio = estagio;
+	}
+	
+	
 }
