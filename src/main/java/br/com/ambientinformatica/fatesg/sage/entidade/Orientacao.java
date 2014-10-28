@@ -34,9 +34,9 @@ public class Orientacao extends Entidade {
 	private EnumTipoAtendimento tipoAtendimento;
 
 	@ManyToOne
-	private Estagio estagio;
+	private Estagio estagio = new Estagio();
 
-	private String professor = "Professor";
+	private String professor;
 
 	@ManyToOne
 	private Documento arquivo;
@@ -96,5 +96,11 @@ public class Orientacao extends Entidade {
 	public void setArquivo(Documento arquivo) {
 		this.arquivo = arquivo;
 	}
+
+	public void setTipoAtendimento(EnumTipoAtendimento tipoAtendimento) {
+		this.tipoAtendimento = tipoAtendimento;
+	}
+	
+	
 
 }
