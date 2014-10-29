@@ -1,9 +1,14 @@
 package br.com.ambientinformatica.fatesg.sage.controle;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +17,14 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -48,8 +57,6 @@ public class OrientacaoControl {
 
 	private Aluno aluno;
 
-	private Estagio estagio = new Estagio();
-	
 	private List<Aluno> alunos = new ArrayList<Aluno>();
 
 	private List<Estagio> estagios;
@@ -63,9 +70,9 @@ public class OrientacaoControl {
 
 	private List<Documento> documentos = new ArrayList<Documento>();
 
-	// private FileInputStream file;
+	private StreamedContent file;
 
-	private static final int DEFAULT_BUFFER_SIZE = 10240;
+	private BufferedInputStream input;
 
 	@PostConstruct
 	public void init() {
@@ -83,7 +90,7 @@ public class OrientacaoControl {
 			documentoDao.incluir(documento);
 		} catch (Exception e) {
 			UtilFaces
-			      .addMensagemFaces("Houve um erro ao fazer o Upload do Arquivo.");
+					.addMensagemFaces("Houve um erro ao fazer o Upload do Arquivo.");
 		}
 		UtilFaces.addMensagemFaces("Arquivo carregado com sucesso.");
 	}
@@ -92,11 +99,11 @@ public class OrientacaoControl {
 		FacesContext fc = FacesContext.getCurrentInstance();
 
 		/*
-		 * Obtem o HttpServletResponse, objeto responsÃ¡vel pela resposta do
+		 * Obtem o HttpServletResponse, objeto responsável pela resposta do
 		 * servidor ao browser
 		 */
 		HttpServletResponse response = (HttpServletResponse) fc
-		      .getExternalContext().getResponse();
+				.getExternalContext().getResponse();
 
 		// Limpa o buffer do response
 		response.reset();
@@ -109,23 +116,24 @@ public class OrientacaoControl {
 		// tamanho em bytes do pdf
 		response.setContentLength(documento.getDados().length);
 
-		// Seta o nome do arquivo e a disposiÃ§Ã£o: "inline" abre no prÃ³prio
+		// Seta o nome do arquivo e a disposição: "inline" abre no próprio
 		// navegador
 		// Mude para "attachment" para indicar que deve ser feito um download
-		response.setHeader("Content-disposition", "inline; filename=arquivo.pdf");
+		response.setHeader("Content-disposition",
+				"inline; filename=arquivo.pdf");
 		try {
 
 			// Envia o conteudo do arquivo PDF para o response
 			response.getOutputStream().write(documento.getDados());
 
-			// Descarrega o conteudo do stream, forÃ§ando a escrita de qualquer
+			// Descarrega o conteudo do stream, forçando a escrita de qualquer
 			// byte ainda em buffer
 			response.getOutputStream().flush();
 
 			// Fecha o stream, liberando seus recursos
 			response.getOutputStream().close();
 
-			// Sinaliza ao JSF que a resposta HTTP para este pedido jÃ¡ foi
+			// Sinaliza ao JSF que a resposta HTTP para este pedido já foi
 			// gerada
 			fc.responseComplete();
 		} catch (Exception e) {
@@ -136,63 +144,19 @@ public class OrientacaoControl {
 	/*
 	 * Download do arquivo
 	 */
-	public void getFile() throws IOException {
-		/*
-		 * InputStream stream = ((ServletContext)
-		 * FacesContext.getCurrentInstance() .getExternalContext().getContext()).
-		 * getResourceAsStream(documento.getDados().toString()); file = new
-		 * DefaultStreamedContent(stream, "application/pdf", "" +
-		 * documento.getNome()); return file;
-		 */
-
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		ExternalContext externalContext = facesContext.getExternalContext();
-		HttpServletResponse response = (HttpServletResponse) externalContext
-		      .getResponse();
-
-		// File file = new File(getFilePath(), getFileName());
-		// BufferedInputStream input = null;
-		ByteArrayInputStream input = null;
-		BufferedOutputStream output = null;
-
+	public StreamedContent salvarDocumento() {
 		try {
-			// input = new BufferedInputStream(new
-			// FileInputStream(documento.getDados()), DEFAULT_BUFFER_SIZE);
+			 InputStream stream = ((ServletContext)
+			 FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream(documento.getDados().toString());
+			//input = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).(documento.getDados());			
+			file = new DefaultStreamedContent(input, "application/pdf", "" + documento.getNome());
+			
 
-			input = new ByteArrayInputStream(documento.getDados());
-			response.reset();
-			response.setHeader("Content-Type", "application/pdf");
-			response.setHeader("Content-Length",
-			      String.valueOf(documento.getDados().length));
-			response.setHeader("Content-Disposition", "inline; filename=\""
-			      + documento.getNome() + "\"");
-			output = new BufferedOutputStream(response.getOutputStream(),
-			      DEFAULT_BUFFER_SIZE);
-
-			// byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-			int length;
-			while ((length = input.read(documento.getDados())) > 0) {
-				output.write(documento.getDados(), 0, length);
-			}
-
-			output.flush();
 		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
-		} finally {
-			close(output);
-			close(input);
+			UtilFaces.addMensagemFaces("Houve erro para baixar o documento "
+					+ documento.getNome());
 		}
-		facesContext.responseComplete();
-	}
-
-	private static void close(Closeable resource) {
-		if (resource != null) {
-			try {
-				resource.close();
-			} catch (Exception e) {
-				UtilFaces.addMensagemFaces(e);
-			}
-		}
+		return file;
 	}
 
 	public List<Documento> listarDocumentos() {
@@ -206,18 +170,14 @@ public class OrientacaoControl {
 
 	public void incluir(ActionEvent evt) {
 		try {
-			orientacao.setProfessor(estagio.getProfessorOrientador());
-			orientacao.setEstagio(estagio);
-			orientacao.setArquivo(null);
 			orientacaoDao.incluir(orientacao);
 			listar(evt);
 			orientacao = new Orientacao();
-			estagio = new Estagio();
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
 	}
-	
+
 	public List<SelectItem> getTiposAtendimento() {
 		return UtilFaces.getListEnum(EnumTipoAtendimento.values());
 	}
@@ -244,11 +204,10 @@ public class OrientacaoControl {
 		try {
 			aluno = (Aluno) event.getObject();
 			if (aluno == null) {
-				
+
 			} else {
 				estagios = estagioDao.listarEstagiosDoAluno(aluno);
 			}
-			
 
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
@@ -256,18 +215,6 @@ public class OrientacaoControl {
 
 	}
 
-	//PEGA O PROFESSOR ORIENTADOR DA LISTA E PREENCHE NO CAMPO
-	public void professorSelecionado(ActionEvent evt){
-		try{
-			estagio = (Estagio) evt.getComponent().getAttributes().get("professor");
-			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("orientacao.jsf");
-		} catch (Exception e) {
-			UtilFaces.addMensagemFaces(e);
-		}
-	}
-	
-	//GTT E STT
 	public Orientacao getOrientacao() {
 		return orientacao;
 	}
@@ -339,14 +286,4 @@ public class OrientacaoControl {
 	public void setDocumentos(List<Documento> documentos) {
 		this.documentos = documentos;
 	}
-
-	public Estagio getEstagio() {
-		return estagio;
-	}
-
-	public void setEstagio(Estagio estagio) {
-		this.estagio = estagio;
-	}
-	
-	
 }
