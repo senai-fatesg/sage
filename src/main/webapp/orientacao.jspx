@@ -29,36 +29,51 @@
 					</p:autoComplete>
 				</a:field>
 			</p:fieldset>
+			
 			<a:newLine />
 			<p:fieldset legend="Estágios" id="panel2">
 				<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}"
 					var="est" width="100%" emptyMessage="Sem registros">
+					<p:column sortBy="#{est.empresa}">
+						<f:facet name="header">
+							<h:outputText value="Empresa"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{est.empresa}" converter="empresaConverter"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{est.statusEstagio}">
+						<f:facet name="header">
+							<h:outputText value="Status Estágio"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{est.statusEstagio.descricao }"></h:outputText>
+					</p:column>
 					<p:column sortBy="#{est.professorOrientador}">
 						<f:facet name="header">
 							<h:outputText value="Professor Orientador"></h:outputText>
 						</f:facet>
 						<h:outputText value="#{est.professorOrientador}"></h:outputText>
 					</p:column>
-					<p:column sortBy="#{est.empresa.nome}">
-						<f:facet name="header">
-							<h:outputText value="Empresa"></h:outputText>
-						</f:facet>
-						<h:outputText value="#{est.empresa.nome}"></h:outputText>
-					</p:column>
-					<p:column sortBy="#{est.statusEstagio.descricao}">
-						<f:facet name="header">
-							<h:outputText value="Status Estágio"></h:outputText>
-						</f:facet>
-						<h:outputText value="#{est.statusEstagio.descricao}"></h:outputText>
-					</p:column>
-					<p:column headerText="Selecione">
-						<p:commandButton
-							actionListener="#{OrientacaoControl.professorSelecionado}"
-							icon="ui-icon-search">
-							<f:attribute name="professor" value="#{est}" />
-						</p:commandButton>
-					</p:column>
 				</p:dataTable>
+			</p:fieldset>
+			
+			<a:newLine />
+			<p:fieldset legend="Agendar Visita" id="panel7">
+				<a:field label="Data Visita" spaceLeft="15px">
+						<p:calendar
+							value="#{VisitaControl.visita.dataVisita }"
+							pattern="dd/MM/yyyy"></p:calendar>
+				</a:field>
+				
+				<a:field label="Observação" spaceLeft="30px">
+						<p:inputTextarea
+							value="#{VisitaControl.visita.observacao }">
+						</p:inputTextarea>
+				</a:field>
+				<a:field label="Visita Realizada">										
+					<p:selectBooleanCheckbox value="#{VisitaControl.visita.visitaRealizada }" />	
+				</a:field>
+				<a:newLine />
+				<p:commandButton actionListener="#{VisitaControl.incluir }"
+						value="Incluir" update="orientacoes, panel7"></p:commandButton>
 			</p:fieldset>
 
 			<a:newLine />
@@ -66,7 +81,7 @@
 				<h:panelGrid columns="2">
 					<a:field label="Professor Orientador" spaceLeft="15px">
 						<p:inputText id="professorOrientador"
-							value="#{OrientacaoControl.estagio.professorOrientador }"  disabled="true" readonly="true" />
+							value="#{OrientacaoControl.orientacao.estagio.professorOrientador }" />
 					</a:field>
 					<a:field label="Tipo de Atendimento">
 						<p:selectOneMenu
@@ -78,7 +93,8 @@
 					</a:field>
 					<a:field label="Relatar Atendimento" spaceLeft="15px">
 						<p:inputTextarea
-							value="#{OrientacaoControl.orientacao.informacaoComplementar }"></p:inputTextarea>
+							value="#{OrientacaoControl.orientacao.informacaoComplementar }">
+						</p:inputTextarea>
 					</a:field>
 					<a:field label="Data Atendimento" spaceLeft="15px">
 						<p:calendar
@@ -87,7 +103,7 @@
 					</a:field>
 					<a:newLine />
 					<p:commandButton actionListener="#{OrientacaoControl.incluir }"
-						value="Incluir" update="orientacoes, panel" ajax="false"></p:commandButton>
+						value="Incluir" update="orientacoes, panel"></p:commandButton>
 				</h:panelGrid>
 			</p:fieldset>
 
@@ -97,7 +113,6 @@
 					allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" sizeLimit="100000"
 					mode="advanced" />
 			</p:fieldset>
-
 			<a:newLine />
 			<p:fieldset legend="Lista de Documentos" id="panel5">
 				<p:dataTable id="documentos" value="#{OrientacaoControl.documentos}"
@@ -116,22 +131,16 @@
 						<h:outputText value="#{cont.dados }"></h:outputText>
 					</p:column>
 					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Visualizar"></h:outputText>
-						</f:facet>
-						<h:commandLink value="Clique aqui"
-							action="#{OrientacaoControl.visualizarPdf }" target="_blank" />
-					</p:column>
-					<p:column>
 						<p:commandLink id="downloadLink" value="Download" ajax="false"
 							onclick="PrimeFaces.monitorDownload(start, stop)"
 							icon="ui-icon-arrowthichk-s">
-							<p:fileDownload value="#{OrientacaoControl.getFile }" />
+							<p:fileDownload value="#{OrientacaoControl.input }" />
 							Download
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
+
 
 			<a:newLine />
 			<p:fieldset legend="Lista de Orientações" id="panel6">
@@ -142,9 +151,7 @@
 						<f:facet name="header">
 							<h:outputText value="Data"></h:outputText>
 						</f:facet>
-						<h:outputText value="#{cont.dataAtendimento }">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputText>
+						<h:outputText value="#{cont.dataAtendimento }"></h:outputText>
 					</p:column>
 					<p:column sortBy="#{cont.tipoAtendimento }">
 						<f:facet name="header">
@@ -152,17 +159,17 @@
 						</f:facet>
 						<h:outputText value="#{cont.tipoAtendimento }"></h:outputText>
 					</p:column>
-					<p:column sortBy="#{cont.professor }">
+					<p:column sortBy="#{cont.professorOrientador }">
 						<f:facet name="header">
 							<h:outputText value="Professor orientador"></h:outputText>
 						</f:facet>
-						<h:outputText value="#{cont.professor }"></h:outputText>
+						<h:outputText value="#{cont.professorOrientador }"></h:outputText>
 					</p:column>
-					<p:column>
-						<p:commandButton value="Visualizar"
-							actionListener="#{OrientacaoControl.visualizarPdf }"
-							icon="ui-icon-search">
-						</p:commandButton>
+					<p:column sortBy="#{cont.visualizar}">
+						<f:facet name="header">
+							<h:outputText value="Visualizar"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.visualizar }"></h:outputText>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>

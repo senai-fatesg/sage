@@ -19,32 +19,36 @@ import br.com.ambientinformatica.fatesg.sage.persistencia.VisitaDao;
 public class VisitaControl {
 
 	private Visita visita = new Visita();
-	
+
 	@Autowired
 	private VisitaDao visitaDao;
-	
+
 	private List<Visita> visitas = new ArrayList<Visita>();
 
 	@PostConstruct
-   public void init(){
+	public void init() {
 		listar(null);
-   }
-	
-	public void incluir(ActionEvent evt){
+	}
+
+	public void incluir(ActionEvent evt) {
 		try {
-			visitaDao.incluir(visita);
-			listar(evt);
-         visita = new Visita();
+			if (visita == null) {
+				UtilFaces.addMensagemFaces("Favor Preencher todos os campos da visita!");
+			} else {
+				visitaDao.incluir(visita);
+				listar(evt);
+				visita = new Visita();
+			}
 		} catch (Exception e) {
-		   UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces(e);
 		}
 	}
-	
-	public void listar(ActionEvent evt){
+
+	public void listar(ActionEvent evt) {
 		try {
 			visitas = visitaDao.listar();
 		} catch (Exception e) {
-		   UtilFaces.addMensagemFaces(e);
+			UtilFaces.addMensagemFaces(e);
 		}
 	}
 
