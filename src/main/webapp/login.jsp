@@ -2,7 +2,7 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Título aqui</title>
+<title>Bem Vindo ao SAGE</title>
 
 <link href="css/bootstrap.css" rel="stylesheet" />
 <link href="css/bootstrap-responsive.css" rel="stylesheet" />

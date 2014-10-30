@@ -17,8 +17,9 @@
 				</ul>
 			</div>
 			<div class="row pull-right">
-				<a class="btn btn-primary btn-large" href="#"><i
-					class="ui-icon-user"></i>Sair</a>
+				<form action="j_spring_security_logout" method="post">
+						<input class="btn btn-large btn-primary btnSignup" type="submit" value="Sair"/>
+				</form>
 			</div>
 		</div>
 

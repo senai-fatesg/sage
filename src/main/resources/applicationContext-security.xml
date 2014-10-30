@@ -16,7 +16,7 @@
 		<intercept-url pattern="/login.jsp*" filters="none" />
 		<intercept-url pattern="/**.jsf" access="USUARIO" />
 		<form-login authentication-failure-url="/login.jsp?msg=erro" login-page="/login.jsp"  default-target-url="/inicio.jsf"/>
-		<logout logout-success-url="/inicio.jsf" />
+		<logout logout-success-url="/inicio.jsf" logout-url="/j_spring_security_logout" invalidate-session="true"/>
 	</http>
 
 	<beans:bean id="accessDecisionManager"
