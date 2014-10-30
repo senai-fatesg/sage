@@ -36,4 +36,32 @@ public class EmpresaDaoJpa extends PersistenciaJpa<Empresa> implements
 		}
 		return empresas;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Empresa> listarAtivos() {
+		List<Empresa> empresas = new ArrayList<Empresa>();
+		try {
+			String sql = "select e from Empresa e where e.ativo = true";
+			Query query = em.createQuery(sql);
+			empresas = query.getResultList();
+		} catch (Exception e) {
+			UtilLog.getLog().error(e.getMessage(), e);
+		}
+		return empresas;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void desativarEmpresa(int id) {
+		try {
+			String sql = "update Empresa e set e.ativo = false where e.id = :id";
+			Query query = em.createQuery(sql);
+			query.setParameter("id", id);
+			query.executeUpdate();
+			//query.getResultList();
+		} catch (Exception e) {
+			UtilLog.getLog().error(e.getMessage(), e);
+		}
+	}
 }

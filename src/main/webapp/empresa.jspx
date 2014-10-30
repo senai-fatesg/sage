@@ -9,7 +9,7 @@
 	<ui:define name="corpo">
 
 		<p:panel header="Cadastrar Nova Empresa" id="panel">
-			<p:fieldset legend="Empresa" id="panel1">
+			<p:fieldset legend="Empresa" id="fieldEmpresa">
 				<a:field label="Nome" spaceLeft="15px">
 					<p:inputText id="nome" value="#{EmpresaControl.empresa.nome }"></p:inputText>
 				</a:field>
@@ -30,9 +30,15 @@
 				</a:field>
 				<a:newLine />
 				<a:newLine />
-				<p:commandButton actionListener="#{EmpresaControl.incluir }"
-					value="Incluir" update="panel" ajax="false"
-					icon="ui-icon-plusthick" />
+				<p:commandButton id="btnIncluir" actionListener="#{EmpresaControl.incluir }"
+					value="Incluir" update="panel" 
+					icon="ui-icon-plusthick" disabled="#{EmpresaControl.btnIncluir }" />
+				<p:commandButton id="btnAlterar" actionListener="#{EmpresaControl.alterar }"
+					value="Alterar" update="panel" ajax="false"
+					icon="ui-icon-plusthick" disabled="#{EmpresaControl.btnAlterar }" />
+				<p:commandButton id="btnExcluir" actionListener="#{EmpresaControl.excluir }"
+					value="Excluir" update="panel" ajax="false"
+					icon="ui-icon-plusthick" disabled="#{EmpresaControl.btnExcluir }" />
 			</p:fieldset>
 
 			<a:newLine />
@@ -57,6 +63,20 @@
 							<h:outputText value="Email"></h:outputText>
 						</f:facet>
 						<h:outputText value="#{cont.email }"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{cont.endereco }">
+						<f:facet name="header">
+							<h:outputText value="Endereço"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{cont.endereco }"></h:outputText>
+					</p:column>
+					<p:column headerText="Selecione">
+						<p:commandButton
+							actionListener="#{EmpresaControl.selecionaEmpresa}"
+							icon="ui-icon-search" update=":formCorpo:fieldEmpresa" >
+							<f:attribute name="empresa" value="#{cont}" />
+							
+						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
