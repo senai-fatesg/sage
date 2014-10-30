@@ -20,6 +20,12 @@ public class EmpresaControl {
 
 	private String txtNomeEmpresa;
 
+	private boolean btnIncluir = false;
+
+	private boolean btnAlterar = true;
+
+	private boolean btnExcluir = true;
+
 	private Empresa empresa = new Empresa();
 
 	@Autowired
@@ -29,6 +35,7 @@ public class EmpresaControl {
 
 	@PostConstruct
 	public void init() {
+		empresa = new Empresa();
 		listar(null);
 	}
 
@@ -38,9 +45,14 @@ public class EmpresaControl {
 			if (empresa == null || empresa.getNome().isEmpty()) {
 				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
 			} else {
+				empresa.setAtivo(true);
 				empresaDao.incluir(empresa);
 				listar(evt);
 				empresa = new Empresa();
+				btnIncluir = true;
+				btnAlterar = false;
+				btnExcluir = false;
+				
 			}
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
@@ -48,9 +60,60 @@ public class EmpresaControl {
 
 	}
 
+	public void alterar(ActionEvent evt) {
+		try {
+			if (empresa != null) {
+				empresaDao.alterar(empresa);
+				listar(evt);
+				empresa = new Empresa();
+				
+				UtilFaces.addMensagemFaces("Empresa alterada com sucesso!");
+				
+				btnIncluir = false;
+				btnAlterar = true;
+				btnExcluir = true;
+			}
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
+		}
+	}
+
+	public void excluir(ActionEvent evt) {
+		try {
+			if (empresa != null) {
+				int id = empresa.getId();
+				empresa.setAtivo(false);
+				empresaDao.desativarEmpresa(id);
+				listar(evt);
+				empresa = new Empresa();
+
+				UtilFaces.addMensagemFaces("Empresa excluida com sucesso!");
+				
+				btnIncluir = false;
+				btnAlterar = true;
+				btnExcluir = true;
+			}
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
+		}
+	}
+
 	public void listar(ActionEvent evt) {
 		try {
-			empresas = empresaDao.listar();
+			empresas = empresaDao.listarAtivos();
+			// empresas = empresaDao.listar();
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
+		}
+	}
+
+	// PEGA A EMPRESA E PREENCHE NA TELA
+	public void selecionaEmpresa(ActionEvent evt) {
+		try {
+			empresa = (Empresa) evt.getComponent().getAttributes().get("empresa");
+			btnIncluir = true;
+			btnAlterar = false;
+			btnExcluir = false;
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
@@ -87,4 +150,29 @@ public class EmpresaControl {
 	public void setEmpresaDao(EmpresaDao empresaDao) {
 		this.empresaDao = empresaDao;
 	}
+
+	public boolean isBtnIncluir() {
+		return btnIncluir;
+	}
+
+	public void setBtnIncluir(boolean btnIncluir) {
+		this.btnIncluir = btnIncluir;
+	}
+
+	public boolean isBtnAlterar() {
+		return btnAlterar;
+	}
+
+	public void setBtnAlterar(boolean btnAlterar) {
+		this.btnAlterar = btnAlterar;
+	}
+
+	public boolean isBtnExcluir() {
+		return btnExcluir;
+	}
+
+	public void setBtnExcluir(boolean btnExcluir) {
+		this.btnExcluir = btnExcluir;
+	}
+
 }

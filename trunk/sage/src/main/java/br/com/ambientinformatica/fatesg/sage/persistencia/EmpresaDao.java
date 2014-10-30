@@ -7,7 +7,11 @@ import br.com.ambientinformatica.jpa.persistencia.Persistencia;
 
 public interface EmpresaDao extends Persistencia<Empresa>{
 
-	List<Empresa> listarPorNome(String query);
+	List<Empresa> listarPorNome(String nome);
+	
+	List<Empresa> listarAtivos();
+	
+	void desativarEmpresa(int id);
 	
 }
 

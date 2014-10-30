@@ -33,6 +33,8 @@ public class Empresa extends Entidade {
 	private String telefone;
 
 	private String celular;
+	
+	private Boolean ativo;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "empresa_id")
@@ -92,6 +94,14 @@ public class Empresa extends Entidade {
 
 	public void setSupervisores(List<ColaboradorEmpresa> supervisores) {
 		this.supervisores = supervisores;
+	}
+
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
 	}
 
 }
