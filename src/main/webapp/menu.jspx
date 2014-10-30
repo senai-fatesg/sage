@@ -1,0 +1,27 @@
+
+<div class="header">
+	<div class="container">
+		<div class="row branding">
+			<div class="span6">
+				<h1 class="pull-left">
+					<a href="index.html"><strong>Sage</strong></a>
+				</h1>
+			</div>
+		</div>
+		<div class="row navigation">
+			<div class="span115">
+				<ul class="nav nav-tabs">
+					<li><a href="colaboradorempresa.jsf">Colaborador</a></li>
+					<li><a href="empresa.jsf">Empresa</a></li>
+					<li><a href="estagio.jsf">Estagio</a></li>
+				</ul>
+			</div>
+			<div class="row pull-right">
+				<a class="btn btn-primary btn-large" href="#"><i
+					class="ui-icon-user"></i>Sair</a>
+			</div>
+		</div>
+
+
+	</div>
+</div>

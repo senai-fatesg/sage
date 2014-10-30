@@ -7,11 +7,20 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-
-
+	<link rel="shortcut icon" href="./imagem/favicon_sf.ico"/>
+	<link href="css/bootstrap.css" rel="stylesheet" />
+	<link href="css/bootstrap-responsive.css" rel="stylesheet" />
+	<link href="css/styles.css" rel="stylesheet" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Cache-Control"
+		content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
 </h:head>
 <h:body>
-
+	<ui:insert name="menu">
+		<ui:include src="menu.jspx" />
+	</ui:insert>
 	<h:form id="formCorpo">
 		<p:growl autoUpdate="true"></p:growl>
 		<ui:insert name="corpo" />
