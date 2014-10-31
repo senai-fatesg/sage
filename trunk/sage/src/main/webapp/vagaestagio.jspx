@@ -9,7 +9,7 @@
 	<ui:define name="corpo">
 		<p:panel header="Cadastrar Nova Vaga de Estágio" id="panel">
 			<p:fieldset legend="Vaga Estágio" id="panel1">
-				<a:field label="VagaEstagio" width="220px" for="consVagaEstagio">
+				<a:field label="Empresa do estágio" width="220px" for="consVagaEstagio">
 					<p:autoComplete id="consVagaEstagio" maxResults="10"
 						minQueryLength="3" effect="fade"
 						value="#{EstagioControl.estagio.empresa}" var="e"
@@ -27,8 +27,7 @@
 				</a:field>
 			</p:fieldset>
 			<a:newLine />
-			<p:fieldset legend="Vaga de Estágio" id="panel2">
-				<a:field label="VagaDeEstágio">
+			<p:fieldset legend="Informações da Vaga de Estágio" id="panel2">
 					<a:field label="Data Publicação" spaceLeft="15px">
 						<p:calendar
 							value="#{VagaEstagioControl.vagaEstagio.dataPublicacao }"
@@ -43,7 +42,6 @@
 					<a:field label="Mensagem" spaceLeft="15px">
 						<p:inputText value="#{VagaEstagioControl.vagaEstagio.mensagem }"></p:inputText>
 					</a:field>
-				</a:field>
 			</p:fieldset>
 		</p:panel>
 	</ui:define>

@@ -29,28 +29,35 @@
 					</p:autoComplete>
 				</a:field>
 			</p:fieldset>
-
+			
 			<a:newLine />
 			<p:fieldset legend="Estágios" id="panel2">
 				<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}"
 					var="est" width="100%" emptyMessage="Sem registros">
-					<p:column sortBy="#{est.empresa}">
-						<f:facet name="header">
-							<h:outputText value="Empresa"></h:outputText>
-						</f:facet>
-						<h:outputText value="#{est.empresa}" converter="empresaConverter"></h:outputText>
-					</p:column>
-					<p:column sortBy="#{est.statusEstagio}">
-						<f:facet name="header">
-							<h:outputText value="Status Estágio"></h:outputText>
-						</f:facet>
-						<h:outputText value="#{est.statusEstagio.descricao }"></h:outputText>
-					</p:column>
 					<p:column sortBy="#{est.professorOrientador}">
 						<f:facet name="header">
 							<h:outputText value="Professor Orientador"></h:outputText>
 						</f:facet>
 						<h:outputText value="#{est.professorOrientador}"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{est.empresa.nome}">
+						<f:facet name="header">
+							<h:outputText value="Empresa"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{est.empresa.nome}"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{est.statusEstagio.descricao}">
+						<f:facet name="header">
+							<h:outputText value="Status Estágio"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{est.statusEstagio.descricao}"></h:outputText>
+					</p:column>
+					<p:column headerText="Selecione">
+						<p:commandButton
+							actionListener="#{OrientacaoControl.professorSelecionado}"
+							icon="ui-icon-search">
+							<f:attribute name="professor" value="#{est}" />
+						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
@@ -79,7 +86,8 @@
 				<h:panelGrid columns="2">
 					<a:field label="Professor Orientador" spaceLeft="15px">
 						<p:inputText id="professorOrientador"
-							value="#{OrientacaoControl.orientacao.estagio.professorOrientador }" />
+							value="#{OrientacaoControl.estagio.professorOrientador }"
+							disabled="true" readonly="true" />
 					</a:field>
 					<a:field label="Tipo de Atendimento">
 						<p:selectOneMenu
@@ -101,7 +109,7 @@
 					</a:field>
 					<a:newLine />
 					<p:commandButton actionListener="#{OrientacaoControl.incluir }"
-						value="Incluir" update="orientacoes, panel"></p:commandButton>
+						value="Incluir" update="orientacoes, panel" ajax="false"></p:commandButton>
 				</h:panelGrid>
 			</p:fieldset>
 
@@ -111,6 +119,7 @@
 					allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" sizeLimit="100000"
 					mode="advanced" />
 			</p:fieldset>
+
 			<a:newLine />
 			<p:fieldset legend="Lista de Documentos" id="panel5">
 				<p:dataTable id="documentos" value="#{OrientacaoControl.documentos}"
@@ -132,12 +141,11 @@
 						<p:commandButton id="downloadLink" value="Download"
 							ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"
 							icon="ui-icon-arrowthichk-s">
-							<p:fileDownload value="#{OrientacaoControl.getRealizarDownload}" />
+							<p:fileDownload value="#{OrientacaoControl.realizarDownload}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
-
 
 			<a:newLine />
 			<p:fieldset legend="Lista de Orientações" id="panel6">
@@ -148,7 +156,9 @@
 						<f:facet name="header">
 							<h:outputText value="Data"></h:outputText>
 						</f:facet>
-						<h:outputText value="#{cont.dataAtendimento }"></h:outputText>
+						<h:outputText value="#{cont.dataAtendimento }">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
 					</p:column>
 					<p:column sortBy="#{cont.tipoAtendimento }">
 						<f:facet name="header">
@@ -156,17 +166,17 @@
 						</f:facet>
 						<h:outputText value="#{cont.tipoAtendimento }"></h:outputText>
 					</p:column>
-					<p:column sortBy="#{cont.professorOrientador }">
+					<p:column sortBy="#{cont.professor }">
 						<f:facet name="header">
 							<h:outputText value="Professor orientador"></h:outputText>
 						</f:facet>
-						<h:outputText value="#{cont.professorOrientador }"></h:outputText>
+						<h:outputText value="#{cont.professor }"></h:outputText>
 					</p:column>
-					<p:column sortBy="#{cont.visualizar}">
-						<f:facet name="header">
-							<h:outputText value="Visualizar"></h:outputText>
-						</f:facet>
-						<h:outputText value="#{cont.visualizar }"></h:outputText>
+					<p:column>
+						<p:commandButton value="Visualizar"
+							actionListener="#{OrientacaoControl.visualizarPdf }"
+							icon="ui-icon-search">
+						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
