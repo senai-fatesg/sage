@@ -11,6 +11,7 @@
 		<div class="row navigation">
 			<div class="span115">
 				<ul class="nav nav-tabs">
+					<li><a href="colaboradorempresa.jsf">Colaborador</a></li>
 					<li><a href="empresa.jsf">Empresa</a></li>
 					<li><a href="estagio.jsf">Estagio</a></li>
 					<li><a href="orientacao.jsf">Orientacao</a></li>
