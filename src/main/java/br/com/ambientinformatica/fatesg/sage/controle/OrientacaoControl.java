@@ -1,6 +1,7 @@
 package br.com.ambientinformatica.fatesg.sage.controle;
 
 import java.io.File;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -49,6 +51,8 @@ public class OrientacaoControl {
 	private EstagioDao estagioDao;
 
 	private Aluno aluno;
+
+	private Estagio estagio = new Estagio();
 
 	private List<Aluno> alunos = new ArrayList<Aluno>();
 
@@ -133,16 +137,14 @@ public class OrientacaoControl {
 			UtilFaces.addMensagemFaces(e);
 		}
 	}
-
 	/*
 	 * Download do arquivo
 	 */
+
 	public StreamedContent getRealizarDownload() {
 		try {
-
 			Documento documento = (Documento) FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestMap()
-					.get("documento");
+			.getExternalContext().getRequestMap().get("documento");
 			OrientacaoControl.criaArquivo(documento.getDados(),
 					documento.getNome());
 
@@ -154,14 +156,15 @@ public class OrientacaoControl {
 			return file;
 		}
 		/*
-		* InputStream stream = ((ServletContext) FacesContext
-		* .getCurrentInstance().getExternalContext().getContext())
-		* .getResourceAsStream(documento.getDados().toString());
-		* input = ((ServletContext)
-		* FacesContext.getCurrentInstance().getExternalContext().getContext()).(documento.getDados());
-		* file = new DefaultStreamedContent(input, "application/pdf", ""
-		* + documento.getNome());		
-		*/
+		 * InputStream stream = ((ServletContext) FacesContext
+		 * .getCurrentInstance().getExternalContext().getContext())
+		 * .getResourceAsStream(documento.getDados().toString()); input =
+		 * ((ServletContext)
+		 * FacesContext.getCurrentInstance().getExternalContext
+		 * ().getContext()).(documento.getDados()); file = new
+		 * DefaultStreamedContent(input, "application/pdf", "" +
+		 * documento.getNome());
+		 */
 		catch (Exception e) {
 			UtilFaces.addMensagemFaces("Houve erro para baixar o documento ");
 			return null;
@@ -182,7 +185,6 @@ public class OrientacaoControl {
 			File file = new File(scontext.getRealPath("\\Documento") + "/"
 					+ nomeTemporario);
 			fos = new FileOutputStream(file);
-
 			/*
 			 * This logic will check whether the file exists or not. If the file
 			 * is not found at the specified location it would create a new file
@@ -216,9 +218,13 @@ public class OrientacaoControl {
 
 	public void incluir(ActionEvent evt) {
 		try {
+			orientacao.setProfessor(estagio.getProfessorOrientador());
+			orientacao.setEstagio(estagio);
+			orientacao.setArquivo(null);
 			orientacaoDao.incluir(orientacao);
 			listar(evt);
 			orientacao = new Orientacao();
+			estagio = new Estagio();
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
@@ -258,9 +264,21 @@ public class OrientacaoControl {
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
-
 	}
 
+	// PEGA O PROFESSOR ORIENTADOR DA LISTA E PREENCHE NO CAMPO
+	public void professorSelecionado(ActionEvent evt) {
+		try {
+			estagio = (Estagio) evt.getComponent().getAttributes()
+					.get("professor");
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect("orientacao.jsf");
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces(e);
+		}
+	}
+
+	// GTT E STT
 	public Orientacao getOrientacao() {
 		return orientacao;
 	}
@@ -331,5 +349,13 @@ public class OrientacaoControl {
 
 	public void setDocumentos(List<Documento> documentos) {
 		this.documentos = documentos;
+	}
+
+	public Estagio getEstagio() {
+		return estagio;
+	}
+
+	public void setEstagio(Estagio estagio) {
+		this.estagio = estagio;
 	}
 }
