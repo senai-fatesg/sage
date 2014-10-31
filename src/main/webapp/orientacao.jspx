@@ -29,7 +29,7 @@
 					</p:autoComplete>
 				</a:field>
 			</p:fieldset>
-			
+
 			<a:newLine />
 			<p:fieldset legend="Estágios" id="panel2">
 				<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}"
@@ -54,26 +54,24 @@
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
-			
+
 			<a:newLine />
 			<p:fieldset legend="Agendar Visita" id="panel7">
 				<a:field label="Data Visita" spaceLeft="15px">
-						<p:calendar
-							value="#{VisitaControl.visita.dataVisita }"
-							pattern="dd/MM/yyyy"></p:calendar>
+					<p:calendar value="#{VisitaControl.visita.dataVisita }"
+						pattern="dd/MM/yyyy"></p:calendar>
 				</a:field>
-				
 				<a:field label="Observação" spaceLeft="30px">
-						<p:inputTextarea
-							value="#{VisitaControl.visita.observacao }">
-						</p:inputTextarea>
+					<p:inputTextarea value="#{VisitaControl.visita.observacao }">
+					</p:inputTextarea>
 				</a:field>
-				<a:field label="Visita Realizada">										
-					<p:selectBooleanCheckbox value="#{VisitaControl.visita.visitaRealizada }" />	
+				<a:field label="Visita Realizada">
+					<p:selectBooleanCheckbox
+						value="#{VisitaControl.visita.visitaRealizada }" />
 				</a:field>
 				<a:newLine />
 				<p:commandButton actionListener="#{VisitaControl.incluir }"
-						value="Incluir" update="orientacoes, panel7"></p:commandButton>
+					value="Incluir" update="orientacoes, panel7"></p:commandButton>
 			</p:fieldset>
 
 			<a:newLine />
@@ -131,12 +129,11 @@
 						<h:outputText value="#{cont.dados }"></h:outputText>
 					</p:column>
 					<p:column>
-						<p:commandLink id="downloadLink" value="Download" ajax="false"
-							onclick="PrimeFaces.monitorDownload(start, stop)"
+						<p:commandButton id="downloadLink" value="Download"
+							ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"
 							icon="ui-icon-arrowthichk-s">
-							<p:fileDownload value="#{OrientacaoControl.input }" />
-							Download
-						</p:commandLink>
+							<p:fileDownload value="#{OrientacaoControl.getRealizarDownload}" />
+						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>

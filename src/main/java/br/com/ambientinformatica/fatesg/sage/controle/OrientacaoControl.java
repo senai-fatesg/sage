@@ -1,11 +1,6 @@
 package br.com.ambientinformatica.fatesg.sage.controle;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -24,7 +18,6 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -70,9 +63,9 @@ public class OrientacaoControl {
 
 	private List<Documento> documentos = new ArrayList<Documento>();
 
-	private StreamedContent file;
+	// private StreamedContent file;
 
-	private BufferedInputStream input;
+	// private BufferedInputStream input;
 
 	@PostConstruct
 	public void init() {
@@ -144,19 +137,72 @@ public class OrientacaoControl {
 	/*
 	 * Download do arquivo
 	 */
-	public StreamedContent salvarDocumento() {
+	public StreamedContent getRealizarDownload() {
 		try {
-			 InputStream stream = ((ServletContext)
-			 FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream(documento.getDados().toString());
-			//input = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).(documento.getDados());			
-			file = new DefaultStreamedContent(input, "application/pdf", "" + documento.getNome());
-			
 
-		} catch (Exception e) {
-			UtilFaces.addMensagemFaces("Houve erro para baixar o documento "
-					+ documento.getNome());
+			Documento documento = (Documento) FacesContext.getCurrentInstance()
+					.getExternalContext().getRequestMap()
+					.get("documento");
+			OrientacaoControl.criaArquivo(documento.getDados(),
+					documento.getNome());
+
+			InputStream stream = ((ServletContext) FacesContext
+					.getCurrentInstance().getExternalContext().getContext())
+					.getResourceAsStream("\\Documento" + documento.getNome());
+			StreamedContent file = new DefaultStreamedContent(stream,
+					documento.getNome());
+			return file;
 		}
-		return file;
+		/*
+		* InputStream stream = ((ServletContext) FacesContext
+		* .getCurrentInstance().getExternalContext().getContext())
+		* .getResourceAsStream(documento.getDados().toString());
+		* input = ((ServletContext)
+		* FacesContext.getCurrentInstance().getExternalContext().getContext()).(documento.getDados());
+		* file = new DefaultStreamedContent(input, "application/pdf", ""
+		* + documento.getNome());		
+		*/
+		catch (Exception e) {
+			UtilFaces.addMensagemFaces("Houve erro para baixar o documento ");
+			return null;
+		}
+	}
+
+	public static void criaArquivo(byte[] bytes, String nomeTemporario)
+			throws Exception {
+		FileOutputStream fos = null;
+		try {
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+			ServletContext scontext = (ServletContext) facesContext
+					.getExternalContext().getContext();
+			String arquivo = scontext.getRealPath("\\Documento");
+
+			new File(arquivo).mkdirs();
+
+			File file = new File(scontext.getRealPath("\\Documento") + "/"
+					+ nomeTemporario);
+			fos = new FileOutputStream(file);
+
+			/*
+			 * This logic will check whether the file exists or not. If the file
+			 * is not found at the specified location it would create a new file
+			 */
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fos.write(bytes);
+			fos.flush();
+		} catch (Exception ex) {
+			throw ex;
+		} finally {
+			try {
+				if (fos != null) {
+					fos.close();
+				}
+			} catch (IOException ioe) {
+				throw ioe;
+			}
+		}
 	}
 
 	public List<Documento> listarDocumentos() {
