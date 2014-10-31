@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:composition template="template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<p:panel header="Cadastrar Nova Vaga de Estágio" id="panel">
+			<p:fieldset legend="Vaga Estágio" id="panel1">
+				<a:field label="VagaEstagio" width="220px" for="consVagaEstagio">
+					<p:autoComplete id="consVagaEstagio" maxResults="10"
+						minQueryLength="3" effect="fade"
+						value="#{EstagioControl.estagio.empresa}" var="e"
+						itemLabel="#{e.nome}" itemValue="#{e}"
+						completeMethod="#{EstagioControl.listarEmpresas}"
+						forceSelection="true" style="width:510px;">
+						<f:converter converterId="empresaConverter" />
+						<f:facet name="itemtip">
+							<h:panelGrid columns="2" cellpadding="10">
+								<h:outputText id="nomeEmpresaCons" value="#{e.nome}" />
+								<h:outputText id="TelefoneEmpresaCons" value="#{e.telefone}" />
+							</h:panelGrid>
+						</f:facet>
+					</p:autoComplete>
+				</a:field>
+			</p:fieldset>
+			<a:newLine />
+			<p:fieldset legend="Vaga de Estágio" id="panel2">
+				<a:field label="VagaDeEstágio">
+					<a:field label="Data Publicação" spaceLeft="15px">
+						<p:calendar
+							value="#{VagaEstagioControl.vagaEstagio.dataPublicacao }"
+							pattern="dd/MM/yyyy"></p:calendar>
+					</a:field>
+					<a:field label="Remetente" spaceLeft="15px">
+						<p:inputText value="#{VagaEstagioControl.vagaEstagio.remetente }"></p:inputText>
+					</a:field>
+					<a:field label="Assunto" spaceLeft="15px">
+						<p:inputText value="#{VagaEstagioControl.vagaEstagio.assunto }"></p:inputText>
+					</a:field>
+					<a:field label="Mensagem" spaceLeft="15px">
+						<p:inputText value="#{VagaEstagioControl.vagaEstagio.mensagem }"></p:inputText>
+					</a:field>
+				</a:field>
+			</p:fieldset>
+		</p:panel>
+	</ui:define>
+</ui:composition>

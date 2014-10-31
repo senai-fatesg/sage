@@ -11,16 +11,15 @@
 		<div class="row navigation">
 			<div class="span115">
 				<ul class="nav nav-tabs">
-					<li><a href="colaboradorempresa.jsf">Colaborador</a></li>
 					<li><a href="empresa.jsf">Empresa</a></li>
-					<li><a href="estagio.jsf">Estágio</a></li>
-					<li><a href="orientacao.jsf">Orientação</a></li>
-					
+					<li><a href="estagio.jsf">Estagio</a></li>
+					<li><a href="orientacao.jsf">Orientacao</a></li>
 				</ul>
 			</div>
 			<div class="row pull-right">
 				<form action="j_spring_security_logout" method="post">
-						<input class="btn btn-large btn-primary btnSignup" type="submit" value="Sair"/>
+					<input class="btn btn-large btn-primary btnSignup" type="submit"
+						value="Sair" />
 				</form>
 			</div>
 		</div>
