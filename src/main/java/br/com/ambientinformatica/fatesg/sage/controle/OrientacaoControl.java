@@ -89,7 +89,7 @@ public class OrientacaoControl {
 			documentoDao.incluir(documento);
 		} catch (Exception e) {
 			UtilFaces
-			      .addMensagemFaces("Houve um erro ao fazer o Upload do Arquivo.");
+					.addMensagemFaces("Houve um erro ao fazer o Upload do Arquivo.");
 		}
 		UtilFaces.addMensagemFaces("Arquivo carregado com sucesso.");
 	}
@@ -102,7 +102,7 @@ public class OrientacaoControl {
 		 * servidor ao browser
 		 */
 		HttpServletResponse response = (HttpServletResponse) fc
-		      .getExternalContext().getResponse();
+				.getExternalContext().getResponse();
 
 		// Limpa o buffer do response
 		response.reset();
@@ -118,7 +118,8 @@ public class OrientacaoControl {
 		// Seta o nome do arquivo e a disposição: "inline" abre no próprio
 		// navegador
 		// Mude para "attachment" para indicar que deve ser feito um download
-		response.setHeader("Content-disposition", "inline; filename=arquivo.pdf");
+		response.setHeader("Content-disposition",
+				"inline; filename=arquivo.pdf");
 		try {
 
 			// Envia o conteudo do arquivo PDF para o response
@@ -146,26 +147,16 @@ public class OrientacaoControl {
 	public StreamedContent getRealizarDownload() {
 		try {
 			Documento documento = (Documento) FacesContext.getCurrentInstance()
-			      .getExternalContext().getRequestMap().get("documento");
+					.getExternalContext().getRequestMap().get("documento");
 			criaArquivo(documento.getDados(), documento.getNome());
 
 			InputStream stream = ((ServletContext) FacesContext
-			      .getCurrentInstance().getExternalContext().getContext())
-			      .getResourceAsStream("\\Documento" + documento.getNome());
+					.getCurrentInstance().getExternalContext().getContext())
+					.getResourceAsStream("/documento/" + documento.getNome());
 			StreamedContent file = new DefaultStreamedContent(stream,
-			      documento.getNome());
+					documento.getNome());
 			return file;
-		}
-		/*
-		 * InputStream stream = ((ServletContext) FacesContext
-		 * .getCurrentInstance().getExternalContext().getContext())
-		 * .getResourceAsStream(documento.getDados().toString()); input =
-		 * ((ServletContext) FacesContext.getCurrentInstance().getExternalContext
-		 * ().getContext()).(documento.getDados()); file = new
-		 * DefaultStreamedContent(input, "application/pdf", "" +
-		 * documento.getNome());
-		 */
-		catch (Exception e) {
+		} catch (Exception e) {
 			UtilFaces.addMensagemFaces("Houve erro para baixar o documento ");
 			return null;
 		}
@@ -177,8 +168,8 @@ public class OrientacaoControl {
 			criaArquivo(documento.getDados(), documento.getNome());
 
 			InputStream stream = ((ServletContext) FacesContext
-			      .getCurrentInstance().getExternalContext().getContext())
-			      .getResourceAsStream("\\Documento" + documento.getNome());
+					.getCurrentInstance().getExternalContext().getContext())
+					.getResourceAsStream("/documento/" + documento.getNome());
 			file = new DefaultStreamedContent(stream, documento.getNome());
 			return file;
 
@@ -189,22 +180,22 @@ public class OrientacaoControl {
 	}
 
 	public static void criaArquivo(byte[] bytes, String nomeTemporario)
-	      throws Exception {
+			throws Exception {
 		FileOutputStream fos = null;
 		try {
 			FacesContext facesContext = FacesContext.getCurrentInstance();
 			ServletContext scontext = (ServletContext) facesContext
-			      .getExternalContext().getContext();
-			String arquivo = scontext.getRealPath("\\Documento");
+					.getExternalContext().getContext();
+			String arquivo = scontext.getRealPath("/documento/");
 
 			new File(arquivo).mkdirs();
 
-			File file = new File(scontext.getRealPath("\\Documento") + "/"
-			      + nomeTemporario);
+			File file = new File(scontext.getRealPath("/documento/") + "/"
+					+ nomeTemporario);
 			fos = new FileOutputStream(file);
 			/*
-			 * This logic will check whether the file exists or not. If the file is
-			 * not found at the specified location it would create a new file
+			 * This logic will check whether the file exists or not. If the file
+			 * is not found at the specified location it would create a new file
 			 */
 			if (!file.exists()) {
 				file.createNewFile();
@@ -287,9 +278,9 @@ public class OrientacaoControl {
 	public void professorSelecionado(ActionEvent evt) {
 		try {
 			estagio = (Estagio) evt.getComponent().getAttributes()
-			      .get("professor");
+					.get("professor");
 			FacesContext.getCurrentInstance().getExternalContext()
-			      .redirect("orientacao.jsf");
+					.redirect("orientacao.jsf");
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}

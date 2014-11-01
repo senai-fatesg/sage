@@ -141,7 +141,7 @@
 						<p:commandButton id="downloadLink" value="Download"
 							ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"
 							icon="ui-icon-arrowthichk-s">
-							<p:fileDownload value="#{OrientacaoControl.file}" />
+							<p:fileDownload value="#{OrientacaoControl.file()}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
