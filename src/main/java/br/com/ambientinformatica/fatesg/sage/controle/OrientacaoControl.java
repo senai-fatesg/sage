@@ -62,16 +62,12 @@ public class OrientacaoControl {
 
 	private Documento documento = new Documento();
 
-	private StreamedContent file;
-
 	@Autowired
 	private DocumentoDao documentoDao;
 
 	private List<Documento> documentos = new ArrayList<Documento>();
 
-	// private StreamedContent file;
-
-	// private BufferedInputStream input;
+	private StreamedContent file;
 
 	@PostConstruct
 	public void init() {
@@ -87,6 +83,7 @@ public class OrientacaoControl {
 			documento.setNome(event.getFile().getFileName());
 			documento.setDados(event.getFile().getContents());
 			documentoDao.incluir(documento);
+			
 		} catch (Exception e) {
 			UtilFaces
 					.addMensagemFaces("Houve um erro ao fazer o Upload do Arquivo.");
@@ -147,32 +144,15 @@ public class OrientacaoControl {
 	public StreamedContent getRealizarDownload() {
 		try {
 			Documento documento = (Documento) FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestMap().get("documento");
+					.getExternalContext().getRequestMap().get("cont");
 			criaArquivo(documento.getDados(), documento.getNome());
 
 			InputStream stream = ((ServletContext) FacesContext
 					.getCurrentInstance().getExternalContext().getContext())
 					.getResourceAsStream("/documento/" + documento.getNome());
-			StreamedContent file = new DefaultStreamedContent(stream,
+			file = new DefaultStreamedContent(stream, "application/pdf",
 					documento.getNome());
 			return file;
-		} catch (Exception e) {
-			UtilFaces.addMensagemFaces("Houve erro para baixar o documento ");
-			return null;
-		}
-	}
-
-	public StreamedContent getFile() {
-		try {
-			Documento documento = documentos.get(0);
-			criaArquivo(documento.getDados(), documento.getNome());
-
-			InputStream stream = ((ServletContext) FacesContext
-					.getCurrentInstance().getExternalContext().getContext())
-					.getResourceAsStream("/documento/" + documento.getNome());
-			file = new DefaultStreamedContent(stream, documento.getNome());
-			return file;
-
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces("Houve erro para baixar o documento ");
 			return null;
@@ -226,13 +206,18 @@ public class OrientacaoControl {
 
 	public void incluir(ActionEvent evt) {
 		try {
-			orientacao.setProfessor(estagio.getProfessorOrientador());
-			orientacao.setEstagio(estagio);
-			orientacao.setArquivo(null);
-			orientacaoDao.incluir(orientacao);
-			listar(evt);
-			orientacao = new Orientacao();
-			estagio = new Estagio();
+			if (orientacao == null
+					|| estagio.getProfessorOrientador().isEmpty()) {
+				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
+			} else {
+				orientacao.setProfessor(estagio.getProfessorOrientador());
+				orientacao.setEstagio(estagio);
+				orientacao.setArquivo(null);
+				orientacaoDao.incluir(orientacao);
+				listar(evt);
+				orientacao = new Orientacao();
+				estagio = new Estagio();
+			}
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
