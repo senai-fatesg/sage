@@ -6,8 +6,16 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
 	xmlns:p="http://primefaces.org/ui">
-	<ui:define name="corpo">
+	<script type="text/javascript">
+		function start() {
+	      PF('statusDialog').show();
+      }
 
+      function stop() {
+	      PF('statusDialog').hide();
+      }
+	</script>
+	<ui:define name="corpo">
 		<p:panel header="Cadastrar Nova Orientação" id="panel">
 			<p:fieldset legend="Orientação" id="panel1">
 				<a:field label="Aluno" width="220px" for="consAluno">
@@ -29,7 +37,7 @@
 					</p:autoComplete>
 				</a:field>
 			</p:fieldset>
-			
+
 			<a:newLine />
 			<p:fieldset legend="Estágios" id="panel2">
 				<p:dataTable id="estagios" value="#{OrientacaoControl.estagios}"
@@ -116,32 +124,27 @@
 			<a:newLine />
 			<p:fieldset legend="Documento" id="panel4">
 				<p:fileUpload fileUploadListener="#{OrientacaoControl.upload}"
-					allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" sizeLimit="100000"
-					mode="advanced" />
-			</p:fieldset>
+					mode="advanced" dragDropSupport="false" update="messages"
+					sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/" />
 
+				<p:growl id="messages" showDetail="true" />
+			</p:fieldset>
 			<a:newLine />
 			<p:fieldset legend="Lista de Documentos" id="panel5">
 				<p:dataTable id="documentos" value="#{OrientacaoControl.documentos}"
-					var="cont" width="100%" emptyMessage="Sem registros">>
+					var="cont" width="100%" emptyMessage="Sem registros">
 					<f:facet name="header" />
-					<p:column sortBy="#{cont.nome }">
+					<p:column width="80" sortBy="#{cont.nome }">
 						<f:facet name="header">
 							<h:outputText value="Nome"></h:outputText>
 						</f:facet>
 						<h:outputText value="#{cont.nome }"></h:outputText>
 					</p:column>
-					<p:column sortBy="#{cont.dados }">
-						<f:facet name="header">
-							<h:outputText value="Arquivo"></h:outputText>
-						</f:facet>
-						<h:outputText value="#{cont.dados }"></h:outputText>
-					</p:column>
 					<p:column>
-						<p:commandButton id="downloadLink" value="Download"
-							ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"
-							icon="ui-icon-arrowthichk-s">
-							<p:fileDownload value="#{OrientacaoControl.file()}" />
+						<p:commandButton id="downloadLink" title="Download" ajax="false"
+							onclick="PrimeFaces.monitorDownload(start, stop)"
+							value="Download" icon="ui-icon-arrowthick-1-s">
+							<p:fileDownload value="#{OrientacaoControl.realizarDownload}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
