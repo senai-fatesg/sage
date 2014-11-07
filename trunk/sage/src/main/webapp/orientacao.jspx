@@ -6,15 +6,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a="http://www.ambientinformatica.com.br/jsf2"
 	xmlns:p="http://primefaces.org/ui">
-	<script type="text/javascript">
-		function start() {
-	      PF('statusDialog').show();
-      }
-
-      function stop() {
-	      PF('statusDialog').hide();
-      }
-	</script>
 	<ui:define name="corpo">
 		<p:panel header="Cadastrar Nova Orientação" id="panel">
 			<p:fieldset legend="Orientação" id="panel1">
@@ -33,7 +24,7 @@
 						</f:facet>
 						<p:ajax event="itemSelect"
 							listener="#{OrientacaoControl.listarEstagiosDoAluno }"
-							update="estagios"></p:ajax>
+							update="estagios, documentos"></p:ajax>
 					</p:autoComplete>
 				</a:field>
 			</p:fieldset>
@@ -63,31 +54,35 @@
 					<p:column headerText="Selecione">
 						<p:commandButton
 							actionListener="#{OrientacaoControl.professorSelecionado}"
-							icon="ui-icon-search">
+							icon="ui-icon-search" value="Selecionar">
 							<f:attribute name="professor" value="#{est}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</p:fieldset>
-
+			<p:commandButton value="Modal" type="button" onclick="dlg2.show();" />
+			<p:dialog header="Cadastrar Visita" widgetVar="dlg2" modal="true"
+				height="340" width="800"  >
+				<p:fieldset legend="Agendar Visita" id="panel7">
+					<a:field label="Data Visita" spaceLeft="15px">
+						<p:calendar value="#{VisitaControl.visita.dataVisita }"
+							pattern="dd/MM/yyyy"></p:calendar>
+					</a:field>
+					<a:field label="Observação" spaceLeft="30px">
+						<p:inputTextarea value="#{VisitaControl.visita.observacao }">
+						</p:inputTextarea>
+					</a:field>
+					<a:field label="Visita Realizada">
+						<p:selectBooleanCheckbox
+							value="#{VisitaControl.visita.visitaRealizada }" />
+					</a:field>
+					<a:newLine />
+					<p:commandButton actionListener="#{VisitaControl.incluir }"
+						value="Incluir" update="orientacoes, panel7"></p:commandButton>
+				</p:fieldset>
+			</p:dialog>
 			<a:newLine />
-			<p:fieldset legend="Agendar Visita" id="panel7">
-				<a:field label="Data Visita" spaceLeft="15px">
-					<p:calendar value="#{VisitaControl.visita.dataVisita }"
-						pattern="dd/MM/yyyy"></p:calendar>
-				</a:field>
-				<a:field label="Observação" spaceLeft="30px">
-					<p:inputTextarea value="#{VisitaControl.visita.observacao }">
-					</p:inputTextarea>
-				</a:field>
-				<a:field label="Visita Realizada">
-					<p:selectBooleanCheckbox
-						value="#{VisitaControl.visita.visitaRealizada }" />
-				</a:field>
-				<a:newLine />
-				<p:commandButton actionListener="#{VisitaControl.incluir }"
-					value="Incluir" update="orientacoes, panel7"></p:commandButton>
-			</p:fieldset>
+
 
 			<a:newLine />
 			<p:fieldset legend="Orientações" id="panel3">

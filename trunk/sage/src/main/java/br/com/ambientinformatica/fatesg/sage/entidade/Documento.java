@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 import br.com.ambientinformatica.util.Entidade;
@@ -19,6 +20,9 @@ public class Documento extends Entidade{
 	
 	@Lob
 	private byte[] dados;
+	
+	@OneToOne
+	private Estagio estagio;
 
 	private String nome;
 	
@@ -40,6 +44,14 @@ public class Documento extends Entidade{
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public Estagio getEstagio() {
+		return estagio;
+	}
+
+	public void setEstagio(Estagio estagio) {
+		this.estagio = estagio;
 	}
 	
 }
