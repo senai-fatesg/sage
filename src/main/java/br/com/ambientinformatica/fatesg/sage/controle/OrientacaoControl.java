@@ -1,7 +1,6 @@
 package br.com.ambientinformatica.fatesg.sage.controle;
 
 import java.io.File;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -71,8 +69,8 @@ public class OrientacaoControl {
 
 	@PostConstruct
 	public void init() {
-		listar(null);
-		listarDocumentos();
+		//listar(null);
+		
 	}
 
 	/*
@@ -212,7 +210,7 @@ public class OrientacaoControl {
 			} else {
 				orientacao.setProfessor(estagio.getProfessorOrientador());
 				orientacao.setEstagio(estagio);
-				orientacao.setArquivo(null);
+				orientacao.setArquivo(documento);
 				orientacaoDao.incluir(orientacao);
 				listar(evt);
 				orientacao = new Orientacao();
@@ -252,6 +250,7 @@ public class OrientacaoControl {
 
 			} else {
 				estagios = estagioDao.listarEstagiosDoAluno(aluno);
+				
 			}
 
 		} catch (Exception e) {
@@ -264,6 +263,7 @@ public class OrientacaoControl {
 		try {
 			estagio = (Estagio) evt.getComponent().getAttributes()
 					.get("professor");
+			documentos = documentoDao.listarDocumentosEstagio(estagio);
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect("orientacao.jsf");
 		} catch (Exception e) {
