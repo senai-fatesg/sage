@@ -37,7 +37,7 @@ import br.com.ambientinformatica.fatesg.sage.persistencia.OrientacaoDao;
 @Scope("conversation")
 public class OrientacaoControl {
 
-	private Orientacao orientacao = new Orientacao();
+	private Orientacao orientacao;
 
 	@Autowired
 	private OrientacaoDao orientacaoDao;
@@ -69,7 +69,7 @@ public class OrientacaoControl {
 
 	@PostConstruct
 	public void init() {
-		//listar(null);
+		orientacao = new Orientacao();
 		
 	}
 
@@ -210,9 +210,9 @@ public class OrientacaoControl {
 			} else {
 				orientacao.setProfessor(estagio.getProfessorOrientador());
 				orientacao.setEstagio(estagio);
-				orientacao.setArquivo(documento);
+				orientacao.setArquivo(null);
 				orientacaoDao.incluir(orientacao);
-				listar(evt);
+				listar(estagio);
 				orientacao = new Orientacao();
 				estagio = new Estagio();
 			}
@@ -225,9 +225,9 @@ public class OrientacaoControl {
 		return UtilFaces.getListEnum(EnumTipoAtendimento.values());
 	}
 
-	public void listar(ActionEvent evt) {
+	public void listar(Estagio estagio) {
 		try {
-			orientacoes = orientacaoDao.listar();
+			orientacoes = orientacaoDao.listarOrientacoesEstagio(estagio);
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces(e);
 		}
@@ -264,6 +264,7 @@ public class OrientacaoControl {
 			estagio = (Estagio) evt.getComponent().getAttributes()
 					.get("professor");
 			documentos = documentoDao.listarDocumentosEstagio(estagio);
+			orientacoes = orientacaoDao.listarOrientacoesEstagio(estagio);
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect("orientacao.jsf");
 		} catch (Exception e) {

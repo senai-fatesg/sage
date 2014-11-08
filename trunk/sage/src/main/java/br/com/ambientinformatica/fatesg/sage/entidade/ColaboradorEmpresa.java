@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import br.com.ambientinformatica.util.Entidade;
@@ -22,6 +23,9 @@ public class ColaboradorEmpresa extends Entidade {
 	private String email;
 
 	private String telefone;
+	
+	@ManyToOne
+	private Empresa empresa;
 
 	@Column(unique=true, nullable=false)
 	private String cpf;
@@ -60,6 +64,14 @@ public class ColaboradorEmpresa extends Entidade {
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 }
