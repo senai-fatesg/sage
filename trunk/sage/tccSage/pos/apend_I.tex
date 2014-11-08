@@ -1,0 +1,427 @@
+\chapter{Apache Mahout}
+\label{apend:1}
+
+
+\section{A arquitetura do \textit{Mahout} - como se divide os módulos}
+\label{modulosArquiteturaMahout}
+
+\textit{Mahout} é uma biblioteca que tem como objetivo oferecer ferramentas para
+aprendizado de máquina escaláveis sob a licença Apache. O objetivo é a
+construção de algoritmos de aprendizado de máquina práticos e escaláveis
+prontos para utilização em produção para, mas não limitados a,
+\textit{clustering}, classificação e filtragem colaborativa. O \textit{Mahout}
+utiliza outra ferramenta conhecida como \textit{Hadoop} para garantir a escalabilidade
+para várias implementações, mas não depende só dele. Muitos algoritmos de
+aprendizado de máquina simplesmente não se adequam ao modelo de \textit{Map
+Reduce}, desta maneira é utilizado outros meios quando apropriado.
+\cite{Owen2011}
+
+\begin{figure}[!htb]
+     \centering
+     \includegraphics[scale=0.4]{././imagens/projetoMahout.png}
+     \caption{Apache Mahout e os projetos que o deram origem. \textit{(Apache
+     Software Foundation)}}
+     \label{img:apacheMahoutProjetos}
+\end{figure}
+
+
+As principais características que estão incluídas no lançamento inicial do
+\textit{Mahout} são:
+
+\begin{itemize}
+  \item \textit{Taste Collaborative Filtering} - Baseado no projeto
+  \textit{Taste} que foi incorporado ao \textit{Mahout}, incluindo exemplos e
+  aplicações de demonstração
+  \item Implementações de \textit{Clustering} Distribuídas - Muitos algoritmos
+  de \textit{clustering} como \textit{k-Means, Fuzzy k-Means, Dirchlet, Mean-Shift
+  e Canopy} são fornecidos, bem como exemplos de como utilizá-los
+  \item Implementações de \textit{Naive Bayes} - Implementações das duas
+  tradicionais classificações \textit{Bayesian} e \textit{Complementary
+  Bayesian} estão incluídas
+  \item Implementação \textit{Watchmaker} Distribuído - Uma implementação
+  distribuída de função de \textit{fitness} (aptidão) usando a biblioteca
+  \textit{Watchmaker}, junto com exemplos de uso
+  \item Integração com o \textit{Apache Hadoop} - Muitas implementações são
+  construídas utilizando o \textit{Hadoop} para escalabilidade
+  \item Ferramentas básicas de matrizes e vetores - Implementações esparsas e
+  densas tanto de matrizes como de vetores são fornecidas
+\end{itemize}
+
+\begin{figure}[!htb]
+     \centering
+     \includegraphics[scale=0.8]{././imagens/dependenciaSimpleRecomendacaoBaseadaUsuario.png}
+     \caption{Uma ilustração de dependências em um sistema recommender simples
+     baseada no usuário, e a ordem na qual os componentes atualização suas
+     estruturas de dados}
+     \label{img:dependenciaSimpleRecomendacaoBaseadaUsuario.png}
+\end{figure}
+
+Os pacotes abaixo definem as \textit{interfaces} do \textit{Mahout}, você pode
+observar na figura \ref{img:dependenciaSimpleRecomendacaoBaseadaUsuario.png} a estrutura de dados
+de um recomendador simples baseada no usuário. \textit{Mahout} é um conjunto de
+bibliotecas Java. Ele não fornece uma interface de usuário ou um instalador. É
+um quadro de instrumentos destinados a ser utilizados por desenvolvedores:
+
+\begin{itemize}
+  \item DataModel - implementado via Arquivo, memória, Banco de dados e JNDI
+  \item UserSimilarity - implementado via \textit{UserSimilarity}
+  \item ItemSimilarity - implementado via \textit{ItemSimilarity}
+  \item UserNeighborhood - Definição do conjunto de Vizinhos
+  \item Recommender - Motor de Recomendação (Até o momento utilizei o
+  GenericUser - BasedRecommender)
+\end{itemize}
+
+As classes do pacote \textit{org.apache.mahout.cf.taste.impl} realização
+implementações dessas \textit{interfaces}. Estas classes são as peças que os
+desenvolvedores utilizaram para contruir seus próprios recomendadores. A figura
+\ref{img:arquiteturaMahout} abaixo demonstra a arquitetura do \textit{Mahout}.
+\begin{figure}[!htb]
+     \centering
+     \includegraphics[scale=0.4]{././imagens/taste-architecture.png}
+     \caption{Este diagrama mostra a relação entre os vários componentes
+     \textit{Mahout} em um Recomendador baseado no usuário. Um sistema de
+     Recomendação baseado no Item é, exceto que não haverá
+     \textit{PreferenceInferrers} ou algoritmos de Bairros envolvidos.}
+     \label{img:arquiteturaMahout}
+\end{figure}
+
+\subsection{Exemplos}
+\label{Exemplos}
+Nas próximas subseções são demonstrados como instanciar as classes que estão no
+pacote de implementação do Mahout.
+
+\subsubsection{Recomendação Baseada no Usuário}
+\label{user-basedRecommender}
+O estilo convencional dos Recomendadores são os baseado no usuário. No Mahout
+eles podem produzir boas recomendações quando ajustado corretamente, note que
+eles não são necessariamente os sistemas mais rápidos de recomendação e são,
+portanto, adequada para pequenos conjuntos de dados. Para o nosso exemplo, vamos
+criar um DataModel baseado em arquivo. O arquivo deve estar no formato CSV, com
+o layout na formato de ``userID'', ``itemID'', ``prefValue'' (por exemplo,
+``3854,564,3.5''):
+
+\begin{verbatim}
+DataModel model = new FileDataModel (new File(``data.txt''));
+\end{verbatim}
+
+Podemos utilizar a correlação de \textit{Pearson} para definir um modelo de
+similaridade entre os usuários:
+
+\begin{verbatim}
+UserSimilarity userSimilarity =
+   new PearsonCorrelationSimilarity(model);
+// Opcional:
+userSimilarity.setPreferenceInferrer(
+   new AveragingPreferenceInferrer());
+\end{verbatim}
+
+Agora vamos criar um algoritmo para definir um conjunto de vizinhos. Aqui usamos
+os três mais próximos:
+\begin{verbatim}
+UserNeighborhood neighborhood = 
+   new NearestNUserNeighborhood(3, userSimilarity,model);
+\end{verbatim}
+
+Agora podemos criar a nossa Recomendação e adiciona-la ao \textit{cache}:
+\begin{verbatim}
+Recommender recommender =
+   new GenericUserBasedRecommender(
+     model, neighborhood,userSimilarity);
+Recommender cachingRecommender =
+   new CachingRecommender(recommender);
+\end{verbatim}
+
+Agora obteremos $10$ recomendações para o usuário com id ``1234'':
+\begin{verbatim}
+List<RecommendedItem> recomendacoes =
+   cachingRecommender.recommend(1234, 10);
+\end{verbatim}
+
+
+\subsubsection{Recomendação Baseada no Item}
+\label{item-basedRecommender}
+
+A recomendação baseada no item trabalha na similaridade entre itens.
+Vamos começar novamente com um FileDataModel:
+\begin{verbatim}
+DataModel modelo = new FileDataModel(
+   new File ("data.txt"));
+\end{verbatim}
+
+Para definir o quanto um item é similar a outro utilizaremos a classe
+\textit{ItemSimilarity}. Poderíamos usar a classe
+\textit{PearsonCorrelationSimilarity}, que calcula semelhança item em tempo
+real, mas este é demasiadamente lento. Em vez disso, em um aplicativo real, você
+poderia alimentar uma lista de correlações pré-calculadas e atribuir a um
+\textit{GenericItemSimilarity}:
+
+\begin{verbatim}
+// Constroi uma lista com correlações pré-calculadas
+Collection<GenericItemSimilarity.ItemItemSimilarity>
+   correlations = ...;
+ItemSimilarity itemSimilarity =
+   new GenericItemSimilarity(correlations);
+\end{verbatim}
+
+Então, podemos produzir recomendações:
+\begin{verbatim}
+Recommender recommender =
+   new GenericItemBasedRecommender(model, itemSimilarity);
+Recommender cachingRecommender =
+   new CachingRecommender(recommender);
+...
+List<RecommendedItem> recommendations =
+   cachingRecommender.recommend(1234, 10);
+\end{verbatim}
+
+
+\subsubsection{Algoritmos para determinação de vizinhos}
+\label{algoritmosDeterminacaoVizinhos}
+
+Em um recomendador baseada no usuário, as recomendações são produzidos à
+partir da definição primeiramente da ``vizinhança'' - o quanto um usuário é
+similar a outro agrupando-os em um conjunto de tamanho pré-definido. A
+classe \textit{``UserNeighborhood''} define um meio de determinar esta
+\textit{``vizinhança''} - por exemplo os 10 mais próximos usuários.
+Para implementar uma solução dessa forma geralmente é necessário utilizar uma
+outra classe que define os critérios de avalição de similaridade, no exemplo
+da listagem \ref{apend:2} é utilizado a classe
+\textit{``UserSimilarity''} e a implementação dada através da classe
+\textit{``PearsonCorrelationSimilarity''}.
+
+\lstinputlisting[language=JAVA, label=recommenderIntro,
+caption={Na linha 15 através da classe \textit{UserNeighborhood} é demonstrado a
+implementação da definição de um conjunto de vizinhos agrupados dois à dois.}]{././imagens/RecommenderIntro.java}
+
+No momento, as recomendações do código na listagem \ref{apend:2} são derivadas de
+um bairro de 2 usuários mais similar. A decisão de usar apenas 2 usuários cuja
+semelhança é maior, a fim de fazer recomendações é arbitrária. E se o melhor
+para este caso fosse 10? Poderia ocorrer recomendações que seria baseada em
+usuários mais semelhantes, não excluindo alguns usuários menos
+similares de consideração. Veja a visualização de um bairro definido dessa
+maneira na figura \ref{img:definindoUmaVizinhanca.png}.
+
+\begin{figure}[!htb]
+	 \centering
+     \includegraphics[scale=0.4]{././imagens/definindoUmaVizinhanca.png}
+     \caption{Uma ilustração da definição de um bairro de usuários mais
+     semelhantes ao escolher um número fixo de vizinhos mais próximos. }
+     \label{img:definindoUmaVizinhanca.png}
+\end{figure}
+
+No momento, nosso exemplo usa um padrão de correlação de Pearson como a métrica
+de similaridade. Podemos melhorar essa relação alterando a linha 15 da
+listagem \ref{recommenderIntro} para o seguinte código:
+\begin{verbatim}
+UserSimilarity similarity =
+   new ThresholdUserNeighborhood(0.7, similarity, model)
+\end{verbatim}
+
+Sabemos que em uma correlação o valor de $0,7$ ou acima é uma correlação alta e
+constitui uma sensível definição de muito semelhante (Este valor é dado entre o
+intervalor 0 e 1). A figura \ref{img:definindoVizinhancaPeloLimiar.png} destaca
+a maneira como o nosso algoritmo forma a vizinhança utilizando uma taxa de
+limite entre usuários deixando nosso algoritmo sensível a esta definição de
+similaridade.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[scale=0.4]{././imagens/definindoVizinhancaPeloLimiar.png}
+	\caption{Definição de um bairro de maioria dos usuários semelhantes com um
+	limiar de similaridade}
+	\label{img:definindoVizinhancaPeloLimiar.png}
+\end{figure}
+
+\section{Representação dos dados no recomendador}
+\label{sec:representacaoDadosRecomendador}
+
+A entrada para o algoritmo é o quanto um usuário gosta de um item, demonstrando
+isso através da avaliação do produto. Isto é feito de maneira simples tendo a
+seguinte estrutura: ID do usuário, ID do item e a avaliação. Desta forma é
+criado um objeto na memória pelo qual tem a responsabilidade de representar a
+preferência do usuário para um ITEM. As avaliações dos produtos podem ser
+criados dentro do \textit{Mahout} instanciado a classe GenericPreference e passando os
+parametros na seguinte ordem: id do usuário, id do produto e a avaliação. Um
+exemplo seria escrito da seguinte forma: \textit{new
+GenericPreference($123$,$456$,$3.0$f)}, aqui é criado uma preferência de $3$
+para o item $456$ feito pelo usuário $123$. A implentação pode ser observado na
+listagem \ref{inserirRecuperarObjetoMatriz}, onde é criado uma avaliação e logo
+em seguida demonstrado como acessar as informações do objeto.
+
+\lstinputlisting[language=JAVA, label=inserirRecuperarObjetoMatriz,
+caption={Classe exemplo de como inserir e
+recuperar objetos na matriz de Recomendação
+utilizando a classe \textit{GenericPreference}}]{././imagens/SettingPreference.java}
+
+\subsection{Como um conjunto de PREFERENCIAS são representados no \textit{Mahout}?}
+\label{comoConjutoPreferenciaSaoRepresentados}
+
+Geralmente pensamos em representar conjunto de dados utilizando as coleções do
+Java (\textit{Collection}) ou através de uma matriz (\textit{array []}),
+pensando dessa forma estaremos errados na maioria dos casos no \textit{Mahout}.
+Matrizes e Coleções acabam sendo muito ineficiente para representar um grande
+número de objetos.  Caso nunca tenha estudado sobre sobrecarga de um objeto em
+JAVA prepare-se então para se surpreender. Uma única \textit{GenericPreference}
+contém $20$ \textit{bytes} de dados úteis, dividido da seguinte forma: um
+ID para o usuário de $8$ \textit{bytes (long)}, um ID para o item de $8$
+\textit{bytes (long)}, e um campo de $4$ \textit{bytes (float)} para armazenar o
+valor da preferência, totalizando assim os \textit{20 bytes}. Caso este objeto
+fosse criado através de uma Coleção haveria a quantidade surpreendente de
+sobrecarga de: $28$ \textit{bytes}! Neste valor estão inclusos $8$
+\textit{bytes} de referência para o objeto em questão e os mesmos $20$
+\textit{bytes} para a representação do objeto em si. Assim qualquer objeto
+consome $140$ por cento a mais do que precisamos, apenas, devido à sobrecarga.
+Esse valor real de sobrecarga varia dependendo da implementação da JVM.
+
+
+A classe \textit{PreferenceArray}, representa uma interface cuja implementação
+representa uma coleção de preferências utilizando matriz. Por
+exemplo, \textit{GenericUser-PreferenceArray} representa todas preferências
+associadas a um usuário. Internamente, ela mantém um ID de usuário único, uma
+matriz de IDs de itens, e uma matriz de valores preferenciais. A memória
+marginal necessária por preferência nesta representação é de apenas $12$
+\textit{bytes} (um ID para o item de $8$ \textit{bytes} e um campo para
+armazenar o valor de preferência $4$ \textit{byte} em um array). Compare isso
+com os cerca de $48$ \textit{bytes} necessários para um objeto de preferência
+integral. As economias de memória é cerca de quatro vezes e por si só justifica
+esta implementação especial, porém o ganho de desempenho ainda é pequeno,
+porque os objetos muito pequenos devem ser alocados e examinadas pelo coletor de
+lixo do Java. Compare as figuras \ref{representacaoIneficiente} e
+\ref{representacaoEficiente} para entender como as economias são realizadas.
+
+\begin{figure}[!htb]
+     \centering
+     \includegraphics[scale=0.4]{././imagens/representacaoIneficiente.png}
+     \caption{Uma representação menos eficiente de preferências utilizando uma
+     matriz de objetos preferenciais. As áreas em cinza representam, a grosso
+     modo, a sobrecarga de Objeto. As áreas brancas são dados, incluindo
+     referências a objetos.}
+     \label{representacaoIneficiente}
+     
+     \includegraphics[scale=0.4]{././imagens/representacaoEficiente.png}
+     \caption{Uma representação mais eficiente usando
+     \textit{GenericUserPreferenceArray}.}
+     \label{representacaoEficiente}
+\end{figure}
+
+
+\section{Algoritmos do \textit{Mahout}}
+\label{algoritmosMahout}
+Esta seção contém os principais algoritmos implementados pelo Mahout. É
+possível obter mais informações sobre estes algoritmos no site
+\textit{https://cwiki.apache.org/confluence/display/MAHOUT/Algorithms}. Os
+algoritmos serão agrupados abaixo pela aplicabilidade:
+
+\subsection{Classificação}
+\label{classificacao}
+
+Uma introdução geral aos algoritmos de classificação mais comuns podem ser
+encontrados no
+link:\begin{verbatim}http://answers.google.com/answers/main?cmd=threadview&id=225316.\end{verbatim}
+O Mahout possui (ou em desenvolvimento) as implementações:
+
+\begin{itemize}
+  \item Logistic Regression (SGD)
+  \item Bayesian
+  \item Support Vector Machines (SVM) (aberto: MAHOUT-14, MAHOUT-232 and MAHOUT-334)
+  \item Perceptron and Winnow (aberto: MAHOUT-85)
+  \item Neural Network (aberto, but MAHOUT-228 might help)
+  \item Random Forests (integrado - MAHOUT-122, MAHOUT-140, MAHOUT-145)
+  \item Restricted Boltzmann Machines (aberto, MAHOUT-375, GSOC2010)
+  \item Online Passive Aggressive (integrado, MAHOUT-702)
+  \item Boosting (aguardando correção para \textit{``commit''}, MAHOUT-716)
+  \item Hidden Markov Models (HMM) (MAHOUT-627, MAHOUT-396, MAHOUT-734)
+\end{itemize}
+	
+\subsection{Agrupamento}
+\label{agrupamento}
+\begin{itemize}
+  \item Reference Reading
+  \item Canopy Clustering (MAHOUT-3 - integrado)
+  \item K-Means Clustering (MAHOUT-5 - integrado)
+  \item Fuzzy K-Means (MAHOUT-74 - integrado)
+  \item Expectation Maximization (EM) (MAHOUT-28)
+  \item Mean Shift Clustering (MAHOUT-15 - integrado)
+  \item Hierarchical Clustering (MAHOUT-19)
+  \item Dirichlet Process Clustering (MAHOUT-30 - integrado)
+  \item Latent Dirichlet Allocation (MAHOUT-123 - integrado)
+  \item Spectral Clustering (MAHOUT-363 - integrado)
+  \item Minhash Clustering (MAHOUT-344 - integrado)
+  \item Top Down Clustering (MAHOUT-843 - revisando correções)
+\end{itemize}
+
+\subsection{Pattern Mining}
+\label{PatternMining}
+\begin{itemize}
+  \item Parallel FP Growth Algorithm (Também conhecida como mineração de
+  conjunto de Item (Itemset))
+\end{itemize}
+
+\subsection{Regression}
+\label{Regression}
+\begin{itemize}
+  \item Locally Weighted Linear Regression (aberto)
+\end{itemize}
+
+\subsection{Dimension reduction}
+\label{Dimension reduction}
+\begin{itemize}
+  \item Singular Value Decomposition and other Dimension Reduction Techniques
+  (available since 0.3)
+  \item Stochastic Singular Value Decomposition
+  \item Principal Components Analysis (PCA) (open)
+  \item Independent Component Analysis (open)
+  \item Gaussian Discriminative Analysis (GDA) (open)
+\end{itemize}
+
+\subsection{Evolutionary Algorithms}
+\label{EvolutionaryAlgorithms}
+
+Veja também: MAHOUT-56 (integrado)
+
+Introdução e tutoriais:
+\begin{itemize}
+  \item Introdução a Algoritmos Evolucionários
+  \item Como distribuir a avaliação da aptidão usando Mahout. (Algortimo
+  Genético)
+\end{itemize}
+
+Exemplos:
+\begin{itemize}
+  \item Traveling Salesman
+  \item Class Discovery
+\end{itemize}
+
+
+\subsection{Recommenders / Collaborative Filtering}
+\label{RecommendersCollaborativeFiltering}
+
+
+Mahout contém tanto simples implementações que rodam localmente, quanto as que
+rodam de forma distribuídas utilizando para isso o \textit{Hadoop}.
+\begin{itemize}
+  \item Recomendação não-distribuida ("Taste")
+  \item Filtragem Colaborativa baseada no Item
+  \item Filtragem Colaboratica usando Matriz de Fatoração Paralela First-timer FAQ
+  \item First-timer FAQ
+\end{itemize}
+
+\subsection{Vector Similarity}
+\label{VectorSimilarity}
+Mahout contém implementações que permitem comparar um ou mais vetores com outro
+conjunto de vetores. Isto pode ser útil se por exemplo fosse necessário calcular
+a semelhança entre todos os documentos (ou um subconjunto de documentos) em um
+conjunto.
+\begin{itemize}
+  \item RowSimilarityJob - Constrói um índice invertido e, em seguida, calcula
+  distâncias entre os itens que têm co-ocorrências. Este é um cálculo completamente distribuído.
+  \item VectorDistanceJob
+\end{itemize}
+
+\subsection{Outros}
+\label{outro}
+
+\begin{itemize}
+  \item Collocations - é definida como uma seqüência de palavras ou termos
+  que co-ocorrem com mais frequência do que seria esperado pelo acaso.
+\end{itemize}
