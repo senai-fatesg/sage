@@ -1,5 +1,6 @@
 package br.com.ambientinformatica.fatesg.sage.controle;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.exolab.castor.types.DateTime;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 
 import br.com.ambientinformatica.ambientjsf.util.UtilFaces;
 import br.com.ambientinformatica.fatesg.sage.entidade.Empresa;
-import br.com.ambientinformatica.fatesg.sage.entidade.Estagio;
 import br.com.ambientinformatica.fatesg.sage.entidade.VagaEstagio;
 import br.com.ambientinformatica.fatesg.sage.persistencia.EmpresaDao;
 import br.com.ambientinformatica.fatesg.sage.persistencia.VagaEstagioDao;
@@ -25,7 +24,7 @@ import br.com.ambientinformatica.fatesg.sage.persistencia.VagaEstagioDao;
 @Scope("conversation")
 public class VagaEstagioControl {
 
-	private VagaEstagio vagaEstagio = new VagaEstagio();
+	private VagaEstagio vagaEstagio;
 
 	@Autowired
 	private VagaEstagioDao vagaEstagioDao;
@@ -37,6 +36,7 @@ public class VagaEstagioControl {
 
 	@PostConstruct
 	public void init() {
+		vagaEstagio = new VagaEstagio();
 		//listar(null);
 	}
 	
@@ -75,7 +75,8 @@ public class VagaEstagioControl {
 				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
 			} else {
 				Date d = new Date();
-				vagaEstagio.setDataPublicacao(d);
+				Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
+				vagaEstagio.setDataPublicacao(timeStamp);
 				vagaEstagioDao.incluir(vagaEstagio);
 				listar(evt);
 				vagaEstagio = new VagaEstagio();
@@ -89,7 +90,7 @@ public class VagaEstagioControl {
 	public void selecionarVaga(ActionEvent evt) {
 		try {
 			vagaEstagio = (VagaEstagio) evt.getComponent().getAttributes()
-					.get("vaga");
+					.get("vagaEstagio");
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect("vagaestagio.jsf");
 		} catch (Exception e) {

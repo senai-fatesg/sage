@@ -24,7 +24,7 @@ public class VagaEstagio extends Entidade {
 	@SequenceGenerator(name = "vagaestagio_seq", sequenceName = "vagaestagio_seq", allocationSize = 1, initialValue = 1)
 	private Integer id;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataPublicacao;
 
 	@Override

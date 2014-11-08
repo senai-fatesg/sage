@@ -70,7 +70,7 @@
 					<p:commandButton
 						actionListener="#{VagaEstagioControl.selecionarVaga}"
 						icon="ui-icon-search" value="Selecionar">
-						<f:attribute name="professor" value="#{est}" />
+						<f:attribute name="vagaEstagio" value="#{vag}" />
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
