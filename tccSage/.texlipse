@@ -1,0 +1,14 @@
+#TeXlipse project settings
+#Wed Oct 29 21:48:11 BRST 2014
+markTmpDer=true
+builderNum=2
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=modeloTCC-Senai.tex
+outputFile=modeloTCC-Senai.pdf
+langSpell=en
+markDer=true
+srcDir=
