@@ -13,8 +13,9 @@
 				<ul class="nav nav-tabs">
 					<li><a href="colaboradorempresa.jsf">Colaborador</a></li>
 					<li><a href="empresa.jsf">Empresa</a></li>
-					<li><a href="estagio.jsf">Estagio</a></li>
-					<li><a href="orientacao.jsf">Orientacao</a></li>
+					<li><a href="estagio.jsf">Estágio</a></li>
+					<li><a href="orientacao.jsf">Orientação</a></li>
+					<li><a href="vagaestagio.jsf">Vagas de estágio</a></li>
 				</ul>
 			</div>
 			<div class="row pull-right">
