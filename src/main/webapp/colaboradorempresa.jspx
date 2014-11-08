@@ -10,9 +10,10 @@
 
 		<p:panel header="Cadastrar Colaborador Empresa" id="panel">
 			<p:fieldset legend="Colaborador Empresa" id="panel1">
-			<a:field label="Empresa" width="220px" for="consEmpresa">
+				<a:field label="Empresa" width="220px" for="consEmpresa">
 					<p:autoComplete id="consEmpresa" maxResults="10" minQueryLength="3"
-						effect="fade" value="#{ColaboradorEmpresaControl.colaborador.empresa}" var="e"
+						effect="fade"
+						value="#{ColaboradorEmpresaControl.colaborador.empresa}" var="e"
 						itemLabel="#{e.nome}" itemValue="#{e}"
 						completeMethod="#{ColaboradorEmpresaControl.listarEmpresas}"
 						forceSelection="true" style="width:510px;">
@@ -22,8 +23,8 @@
 								<h:outputText id="nomeEmpresaCons" value="#{e.nome}" />
 							</h:panelGrid>
 						</f:facet>
-						<p:ajax event="itemSelect"
-							update="colaboradores" listener="#{ColaboradorEmpresaControl.listaColaboradores }" />
+						<p:ajax event="itemSelect" update="colaboradores"
+							listener="#{ColaboradorEmpresaControl.listaColaboradores }" />
 					</p:autoComplete>
 				</a:field>
 				<a:field label="Nome" spaceLeft="15px">
@@ -44,8 +45,8 @@
 					<p:inputText id="email"
 						value="#{ColaboradorEmpresaControl.colaborador.email }" />
 				</a:field>
-								<a:newLine />
-				
+				<a:newLine />
+
 				<p:commandButton
 					actionListener="#{ColaboradorEmpresaControl.incluir }"
 					value="Incluir" update="colaboradores, panel"></p:commandButton>

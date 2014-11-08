@@ -8,41 +8,72 @@
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="corpo">
 		<p:panel header="Cadastrar Nova Vaga de Estágio" id="panel">
-			<p:fieldset legend="Vaga Estágio" id="panel1">
-				<a:field label="Empresa do estágio" width="220px" for="consVagaEstagio">
-					<p:autoComplete id="consVagaEstagio" maxResults="10"
-						minQueryLength="3" effect="fade"
-						value="#{EstagioControl.estagio.empresa}" var="e"
-						itemLabel="#{e.nome}" itemValue="#{e}"
-						completeMethod="#{EstagioControl.listarEmpresas}"
-						forceSelection="true" style="width:510px;">
-						<f:converter converterId="empresaConverter" />
-						<f:facet name="itemtip">
-							<h:panelGrid columns="2" cellpadding="10">
-								<h:outputText id="nomeEmpresaCons" value="#{e.nome}" />
-								<h:outputText id="TelefoneEmpresaCons" value="#{e.telefone}" />
-							</h:panelGrid>
-						</f:facet>
-					</p:autoComplete>
-				</a:field>
-			</p:fieldset>
+			<a:field label="Empresa" width="220px" for="consEmpresa">
+				<p:autoComplete id="consEmpresa" maxResults="10" minQueryLength="3"
+					effect="fade" value="#{VagaEstagioControl.vagaEstagio.empresa}"
+					var="e" itemLabel="#{e.nome}" itemValue="#{e}"
+					completeMethod="#{VagaEstagioControl.listarEmpresas}"
+					forceSelection="true" style="width:510px;">
+					<f:converter converterId="empresaConverter" />
+					<f:facet name="itemtip">
+						<h:panelGrid columns="2" cellpadding="10">
+							<h:outputText id="nomeEmpresaCons" value="#{e.nome}" />
+						</h:panelGrid>
+					</f:facet>
+					<p:ajax event="itemSelect" update="vagas "
+						listener="#{VagaEstagioControl.listarVagas }" />
+				</p:autoComplete>
+			</a:field>
 			<a:newLine />
-			<p:fieldset legend="Informações da Vaga de Estágio" id="panel2">
-					<a:field label="Data Publicação" spaceLeft="15px">
-						<p:calendar
-							value="#{VagaEstagioControl.vagaEstagio.dataPublicacao }"
-							pattern="dd/MM/yyyy"></p:calendar>
-					</a:field>
-					<a:field label="Remetente" spaceLeft="15px">
-						<p:inputText value="#{VagaEstagioControl.vagaEstagio.remetente }"></p:inputText>
-					</a:field>
-					<a:field label="Assunto" spaceLeft="15px">
-						<p:inputText value="#{VagaEstagioControl.vagaEstagio.assunto }"></p:inputText>
-					</a:field>
-					<a:field label="Mensagem" spaceLeft="15px">
-						<p:inputText value="#{VagaEstagioControl.vagaEstagio.mensagem }"></p:inputText>
-					</a:field>
+			<p:fieldset legend="Informações da Vaga de Estágio" id="painelVaga">
+				<a:field label="Data Publicação">
+					<p:inputText
+						value="#{VagaEstagioControl.vagaEstagio.dataPublicacao }"
+						readonly="true"></p:inputText>
+				</a:field>
+				<a:field label="Requisito" spaceLeft="15px">
+					<p:inputText value="#{VagaEstagioControl.vagaEstagio.requisito }"></p:inputText>
+				</a:field>
+				<a:field label="Carga Horário" spaceLeft="15px">
+					<p:inputText
+						value="#{VagaEstagioControl.vagaEstagio.cargaHorario }"></p:inputText>
+				</a:field>
+				<a:field label="Dias da trabalho" spaceLeft="15px">
+					<p:inputText value="#{VagaEstagioControl.vagaEstagio.diasSemana }"></p:inputText>
+				</a:field>
+				<a:field label="Horário" spaceLeft="15px">
+					<p:inputText value="#{VagaEstagioControl.vagaEstagio.horario }"></p:inputText>
+				</a:field>
+				<a:field label="Código de Vaga" spaceLeft="15px">
+					<p:inputText value="#{VagaEstagioControl.vagaEstagio.codigoVaga }"></p:inputText>
+				</a:field>
+				<a:field label="Benefícios:" spaceLeft="15px">
+					<p:inputText value="#{VagaEstagioControl.vagaEstagio.beneficios }"></p:inputText>
+				</a:field>
+				<a:field label="Mensagem" spaceLeft="15px">
+					<p:inputTextarea
+						value="#{VagaEstagioControl.vagaEstagio.atividades }"></p:inputTextarea>
+				</a:field>
+				<a:newLine />
+				<p:commandButton actionListener="#{VagaEstagioControl.incluir }"
+					value="Incluir" update="painelVaga"></p:commandButton>
 			</p:fieldset>
+			<p:dataTable id="vagas" value="#{VagaEstagioControl.vagas}" var="vag"
+				width="100%" emptyMessage="Sem registros">
+				<p:column sortBy="#{vag.cargaHorario}">
+					<f:facet name="header">
+						<h:outputText value="Status Estágio"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{vag.requisito}"></h:outputText>
+				</p:column>
+				<p:column headerText="Selecione">
+					<p:commandButton
+						actionListener="#{VagaEstagioControl.selecionarVaga}"
+						icon="ui-icon-search" value="Selecionar">
+						<f:attribute name="professor" value="#{est}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
 		</p:panel>
 	</ui:define>
 </ui:composition>
