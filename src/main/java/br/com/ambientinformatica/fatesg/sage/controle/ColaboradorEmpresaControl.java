@@ -6,13 +6,16 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import br.com.ambientinformatica.ambientjsf.util.UtilFaces;
 import br.com.ambientinformatica.fatesg.sage.entidade.ColaboradorEmpresa;
+import br.com.ambientinformatica.fatesg.sage.entidade.Empresa;
 import br.com.ambientinformatica.fatesg.sage.persistencia.ColaboradorEmpresaDao;
+import br.com.ambientinformatica.fatesg.sage.persistencia.EmpresaDao;
 
 @Controller("ColaboradorEmpresaControl")
 @Scope("conversation")
@@ -22,12 +25,15 @@ public class ColaboradorEmpresaControl {
 
 	@Autowired
 	private ColaboradorEmpresaDao colaboradorDao;
+	
+	@Autowired
+	private EmpresaDao empresaDao;
 
 	private List<ColaboradorEmpresa> colaboradores = new ArrayList<ColaboradorEmpresa>();
 
 	@PostConstruct
 	public void init() {
-		listar(null);
+		//listar(null);
 	}
 
 	public void incluir(ActionEvent evt) {
@@ -36,7 +42,7 @@ public class ColaboradorEmpresaControl {
 				UtilFaces.addMensagemFaces("Favor Preencher todos os campos!");
 			} else {
 				colaboradorDao.incluir(colaborador);
-				listar(evt);
+				listaColaboradores(colaborador.getEmpresa());
 				colaborador = new ColaboradorEmpresa();
 				
 				UtilFaces.addMensagemFaces("Colaborador cadastrado com sucesso!");
@@ -46,12 +52,28 @@ public class ColaboradorEmpresaControl {
 		}
 	}
 
-	public void listar(ActionEvent evt) {
+	public void listaColaboradores(SelectEvent evt) {
 		try {
-			colaboradores = colaboradorDao.listar();
+			colaboradores = colaboradorDao.listarPorEmpresa(colaborador.getEmpresa());
 		} catch (Exception e) {
 			UtilFaces.addMensagemFaces("Houve erro ao listar os colaboradores!");
 		}
+	}
+	public void listaColaboradores(Empresa emp) {
+		try {
+			colaboradores = colaboradorDao.listarPorEmpresa(emp);
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces("Houve erro ao listar os colaboradores!");
+		}
+	}
+	public List<Empresa> listarEmpresas(String query) {
+		List<Empresa> empresas = new ArrayList<Empresa>();
+		try {
+			empresas = empresaDao.listarPorNome(query);
+		} catch (Exception e) {
+			UtilFaces.addMensagemFaces("Houve erro ao listar as empresas!");
+		}
+		return empresas;
 	}
 
 	public ColaboradorEmpresa getColaborador() {
